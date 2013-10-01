@@ -61,7 +61,8 @@
         "../../scripts/setup-vagrant.sh",
         "../../scripts/vbox-additions.sh",
         "../../scripts/ganeti.sh",
-        "../../scripts/cleanup.sh"
+        "../../scripts/cleanup.sh",
+        "../../scripts/zerodisk.sh"
       ],
       "override": {
         "debian-6": {
