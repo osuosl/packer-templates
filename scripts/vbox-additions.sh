@@ -1,7 +1,7 @@
 #!/bin/bash
 . /tmp/common.sh
 set -x
-if [ ! -e /root/.vbox_version ] ; then
+if [ ! -e /home/vagrant/.vbox_version ] ; then
     exit 0
 fi
 
