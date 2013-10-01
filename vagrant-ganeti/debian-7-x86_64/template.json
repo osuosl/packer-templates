@@ -1,0 +1,74 @@
+{
+  "builders": [
+    {
+      "type": "virtualbox",
+      "name": "debian-7",
+      "boot_wait": "10s",
+      "disk_size": 40960,
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "guest_os_type": "Debian_64",
+      "headless": true,
+      "http_directory": "http",
+      "iso_checksum": "80f498a1f9daa76bc911ae13692e4495",
+      "iso_checksum_type": "md5",
+      "iso_url": "http://debian.osuosl.org/debian-cdimage/7.1.0/amd64/iso-cd/debian-7.1.0-amd64-netinst.iso",
+      "shutdown_command": "echo 'halt -p' > shutdown.sh; echo 'vagrant'|sudo -S sh 'shutdown.sh'",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_username": "vagrant",
+      "ssh_wait_timeout": "10000s",
+      "virtualbox_version_file": ".vbox_version",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "512"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "2"
+        ]
+      ],
+      "boot_command": [
+        "<esc><wait>",
+        "install <wait>",
+        "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg <wait>",
+        "debian-installer=en_US auto locale=en_US <wait>",
+        "kbd-chooser/method=us netcfg/get_hostname={{ .Name }} <wait>",
+        "netcfg/get_domain=vagrantup.com fb=false <wait>",
+        "debconf/frontend=noninteractive <wait>",
+        "console-setup/ask_detect=false <wait>",
+        "console-keymaps-at/keymap=us <wait>",
+        "<enter><wait>",
+        "<Wait><Wait><Wait><Wait><wait>",
+        "<enter><wait>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "../../scripts/common.sh",
+      "destination": "/tmp/common.sh"
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "../../scripts/puppet-apt.sh",
+        "../../scripts/setup-vagrant.sh",
+        "../../scripts/vbox-additions.sh",
+        "../../scripts/ganeti.sh",
+        "../../scripts/cleanup.sh"
+      ],
+      "override": {
+        "debian-7": {
+          "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'"
+        }
+      }
+    }
+  ],
+  "post-processors": ["vagrant"]
+}
