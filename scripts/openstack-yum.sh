@@ -15,4 +15,4 @@ cd /boot
 ln -s boot .
 
 # Make sure sudo works properly with openstack
-sed -i "s/^.*requiretty/Defaults !requiretty/" /etc/sudoers
+sed -i "s/^.*requiretty$/Defaults !requiretty/" /etc/sudoers
