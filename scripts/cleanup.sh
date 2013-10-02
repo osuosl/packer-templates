@@ -1,19 +1,19 @@
 #!/bin/bash
 . /tmp/common.sh
 set -x
+# Make sure Udev doesn't block our network
+# http://6.ptmc.org/?p=164
+echo "cleaning up udev rules"
+rm /etc/udev/rules.d/70-persistent-net.rules
+mkdir /etc/udev/rules.d/70-persistent-net.rules
+rm -rf /dev/.udev/
+rm /lib/udev/rules.d/75-persistent-net-generator.rules
+
 # cleanup
 if [ -f /etc/debian_version ] ; then
     # Removing leftover leases and persistent rules
     echo "cleaning up dhcp leases"
     rm /var/lib/dhcp3/*
-
-    # Make sure Udev doesn't block our network
-    # http://6.ptmc.org/?p=164
-    echo "cleaning up udev rules"
-    rm /etc/udev/rules.d/70-persistent-net.rules
-    mkdir /etc/udev/rules.d/70-persistent-net.rules
-    rm -rf /dev/.udev/
-    rm /lib/udev/rules.d/75-persistent-net-generator.rules
 
     # remove annoying resolvconf package
     DEBIAN_FRONTEND=noninteractive apt-get -y remove resolvconf
@@ -25,6 +25,9 @@ if [ -f /etc/debian_version ] ; then
         grep -v $(uname -r) | xargs -r apt-get -y remove
     apt-get -y clean all
 elif [ -f /etc/redhat-release ] ; then
+    # Remove hardware specific settings from eth0
+    sed -i -e 's/^\(HWADDR\|UUID\|IPV6INIT\|NM_CONTROLLED\|MTU\).*//;/^$/d' \
+        /etc/sysconfig/network-scripts/ifcfg-eth0
     # Exclude upgrading kernels
     if [ "$OS" == "centos" ] ; then
         sed -i -e 's/\[updates\]/\[updates\]\nexclude=kernel*/' \
