@@ -2,6 +2,7 @@ packer_cache
 output-*
 *.box
 *.tar.gz
+*.log
 virtualbox
 vmware
 iso
