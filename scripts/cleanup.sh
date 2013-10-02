@@ -38,4 +38,5 @@ elif [ -f /etc/redhat-release ] ; then
         xargs -r yum -y remove
     yum -y clean all
 fi
+echo "set background=dark" >> /etc/vimrc
 rm /tmp/common.sh
