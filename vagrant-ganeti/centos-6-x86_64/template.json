@@ -46,6 +46,7 @@
     {
       "type": "shell",
       "scripts": [
+        "../../scripts/epel.sh",
         "../../scripts/puppet-yum.sh",
         "../../scripts/setup-vagrant.sh",
         "../../scripts/vbox-additions.sh",
