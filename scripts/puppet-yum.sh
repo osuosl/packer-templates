@@ -23,5 +23,5 @@ enabled=1
 gpgcheck=0
 EOM
 
-$yum install puppet facter bash-completion
+$yum install puppet facter
 
