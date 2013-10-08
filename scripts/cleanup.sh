@@ -9,6 +9,9 @@ mkdir /etc/udev/rules.d/70-persistent-net.rules
 rm -rf /dev/.udev/
 rm /lib/udev/rules.d/75-persistent-net-generator.rules
 
+# Remove system ssh-keys so that each machine is unique
+rm -rf /etc/ssh/*key*
+
 # cleanup
 if [ -f /etc/debian_version ] ; then
     # Removing leftover leases and persistent rules
