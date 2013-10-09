@@ -12,12 +12,12 @@
       "iso_checksum": "4a5fa01c81cc300f4729136e28ebe600",
       "iso_checksum_type": "md5",
       "iso_url": "http://centos.osuosl.org/6.4/isos/x86_64/CentOS-6.4-x86_64-minimal.iso",
-      "net_device": "virtio",
       "shutdown_command": "echo '/sbin/halt -h -p' > shutdown.sh; sh 'shutdown.sh'",
       "ssh_password": "osuadmin",
       "ssh_port": 22,
       "ssh_username": "root",
       "ssh_wait_timeout": "10000s",
+      "qemuargs": [ [ "-m", "1024m" ] ],
       "boot_wait": "10s",
       "boot_command": [
         "<tab> text ks=http://10.0.2.2:{{ .HTTPPort }}/preseed.cfg<enter><wait>"
