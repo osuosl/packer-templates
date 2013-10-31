@@ -24,8 +24,8 @@ elif [ -f /etc/redhat-release ] ; then
     $yum install git vim nfs-utils
 fi
 
-# Remove 127.0.1.1 host entry as it confuses ganeti during initialization
-sed -i -e 's/127.0.1.1.*//' /etc/hosts
+# Modify 127.0.1.1 host entry as it confuses ganeti during initialization
+sed -i -e 's/127.0.1.1\(.*\)/127.0.0.1 \1 localhost/' /etc/hosts
 
 # Install ganeti deps
 git clone -q git://github.com/ramereth/vagrant-ganeti.git
