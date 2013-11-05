@@ -66,5 +66,11 @@
       }
     }
   ],
-  "post-processors": ["vagrant"]
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "output": "ganeti-ubuntu-12.04-{{isotime}}.box"
+    }
+  ]
 }
+
