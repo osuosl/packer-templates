@@ -9,8 +9,11 @@ mkdir /etc/udev/rules.d/70-persistent-net.rules
 rm -rf /dev/.udev/
 rm /lib/udev/rules.d/75-persistent-net-generator.rules
 
-# Remove system ssh-keys so that each machine is unique
-rm -rf /etc/ssh/*key*
+# Only on non-vagrant hosts
+if [ ! -f /home/vagrant/.vbox_version ] ; then
+    # Remove system ssh-keys so that each machine is unique
+    rm -rf /etc/ssh/*key*
+fi
 
 # cleanup
 if [ -f /etc/debian_version ] ; then
