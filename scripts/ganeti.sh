@@ -25,7 +25,7 @@ elif [ -f /etc/redhat-release ] ; then
 fi
 
 # Modify 127.0.1.1 host entry as it confuses ganeti during initialization
-sed -i -e 's/127.0.1.1\(.*\)/127.0.0.1 \1 localhost/' /etc/hosts
+sed -i -e 's/127.0.1.1\(.*\)/33.33.33.11 \1 /' /etc/hosts
 
 # Install ganeti deps
 git clone -q git://github.com/ramereth/vagrant-ganeti.git
