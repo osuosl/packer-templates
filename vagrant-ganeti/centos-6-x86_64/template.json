@@ -61,5 +61,10 @@
       }
     }
   ],
-  "post-processors": ["vagrant"]
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "output": "ganeti-centos-6-{{isotime}}.box"
+    }
+  ]
 }
