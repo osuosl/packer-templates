@@ -7,7 +7,7 @@
       "disk_size": 10952,
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "guest_os_type": "Debian_64",
-      "headless": false,
+      "headless": true,
       "http_directory": "http",
       "iso_checksum": "d675b89fa6b241e6e40783296a5bd92e",
       "iso_checksum_type": "md5",
