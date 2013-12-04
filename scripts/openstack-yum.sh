@@ -41,6 +41,7 @@ cd linux-rootfs-resize
 chmod +x install
 bash install
 rm -rf linux-rootfs-resize
+$yum erase git
 sed -i -e 's/rhgb.*/console=ttyS0,115200n8 console=tty0 quiet/' /boot/grub/grub.conf
 cd /boot
 ln -s boot .
