@@ -13,6 +13,8 @@ rm /lib/udev/rules.d/75-persistent-net-generator.rules
 if [ ! -f /home/vagrant/.vbox_version ] ; then
     # Remove system ssh-keys so that each machine is unique
     rm -rf /etc/ssh/*key*
+    # Cleanup old log files
+    find /var/log -type f -exec rm -f {} \;
 fi
 
 # cleanup
