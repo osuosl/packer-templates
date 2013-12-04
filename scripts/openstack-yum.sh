@@ -40,7 +40,9 @@ git clone https://github.com/flegmatik/linux-rootfs-resize.git
 cd linux-rootfs-resize
 chmod +x install
 bash install
+cd
 rm -rf linux-rootfs-resize
+rm -f anaconda* install.log* shutdown.sh
 $yum erase git
 sed -i -e 's/rhgb.*/console=ttyS0,115200n8 console=tty0 quiet/' /boot/grub/grub.conf
 cd /boot
