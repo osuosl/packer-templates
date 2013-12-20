@@ -9,12 +9,13 @@ mkdir /etc/udev/rules.d/70-persistent-net.rules
 rm -rf /dev/.udev/
 rm /lib/udev/rules.d/75-persistent-net-generator.rules
 
+# Remove log files from the VM
+find /var/log -type f -exec rm -f {} \;
+
+
 # Only on non-vagrant hosts
 if [ ! -f /home/vagrant/.vbox_version ] ; then
     # Remove system ssh-keys so that each machine is unique
-    rm -rf /etc/ssh/*key*
-    # Cleanup old log files
-    find /var/log -type f -exec rm -f {} \;
 fi
 
 # cleanup
