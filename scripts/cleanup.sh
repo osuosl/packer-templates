@@ -14,8 +14,7 @@ find /var/log -type f -exec rm -f {} \;
 
 
 # Only on non-vagrant hosts
-if [ ! -f /home/vagrant/.vbox_version ] 
-then
+if [ ! -f /home/vagrant/.vbox_version ] ; then
     # Remove system ssh-keys so that each machine is unique
     rm -f /etc/ssh/*key*
 fi
