@@ -8,10 +8,6 @@ $apt remove isc-dhcp-client
 $apt install pump
 
 # Setup wheezy-backports to get cloud-utils (dependancy for initramfs resize)
-cat << EOF >> /etc/apt/sources.list
-# wheezy-backports for cloud-utils and cloud-initramfs-growroot
-deb http://debian.osuosl.org/debian wheezy-backports main
-EOF
 
 $apt update
 $apt install cloud-utils git ca-certificates bash-completion
