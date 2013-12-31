@@ -12,6 +12,9 @@ rm /lib/udev/rules.d/75-persistent-net-generator.rules
 # Remove log files from the VM
 find /var/log -type f -exec rm -f {} \;
 
+# Remove locale seed
+rm -f /root/locale-preseed.cfg
+
 
 # Only on non-vagrant hosts
 if [ ! -f /home/vagrant/.vbox_version ] ; then

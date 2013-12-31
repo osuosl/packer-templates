@@ -51,5 +51,6 @@ exit 0
 EOF
 
 $apt clean
+rm -f /root/shutdown.sh
 
 mkdir /var/log/firstboot
