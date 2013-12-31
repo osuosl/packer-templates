@@ -32,8 +32,13 @@
     },
     {
       "type": "file",
-      "source": "../../scripts/firstboot.sh",
+      "source": "../files/debian/firstboot.sh",
       "destination": "/etc/firstboot.sh"
+    },
+    {
+      "type": "file",
+      "source": "../files/debian/locale-preseed.cfg",
+      "destination": "/root/locale-preseed.cfg"
     },
     {
       "type": "shell",

@@ -7,7 +7,14 @@ set -x
 $apt remove isc-dhcp-client
 $apt install pump
 
-# Setup wheezy-backports to get cloud-utils (dependancy for initramfs resize)
+# Fix issue where debian doesn't set locale correctly
+export LANGUAGE=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+locale-gen en_US.UTF-8
+export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true
+
+debconf-set-selections /root/locale-preseed.cfg
 
 $apt update
 $apt install cloud-utils git ca-certificates bash-completion
