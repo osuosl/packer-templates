@@ -31,8 +31,8 @@ if [ -f /etc/debian_version ] ; then
     # remove annoying resolvconf package
     DEBIAN_FRONTEND=noninteractive apt-get -y remove resolvconf
 
-    echo "Adding a 2 sec delay to the interface up, to make the dhclient happy"
-    echo "pre-up sleep 2" >> /etc/network/interfaces
+    echo "Adding a 3 sec delay to the interface up, to make the dhclient and cloud-init happy"
+    echo "pre-up sleep 5" >> /etc/network/interfaces
     # Remove all kernels except the current version
     dpkg-query -l 'linux-image-[0-9]*' | grep ^ii | awk '{print $2}' | \
         grep -v $(uname -r) | xargs -r apt-get -y remove

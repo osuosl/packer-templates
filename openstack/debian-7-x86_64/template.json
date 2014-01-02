@@ -32,13 +32,13 @@
     },
     {
       "type": "file",
-      "source": "../files/debian/firstboot.sh",
-      "destination": "/etc/firstboot.sh"
+      "source": "../../files/debian/cloud.cfg",
+      "destination": "/tmp/cloud.cfg"
     },
     {
       "type": "file",
-      "source": "../files/debian/locale-preseed.cfg",
-      "destination": "/root/locale-preseed.cfg"
+      "source": "../../files/debian/packages-preseed.cfg",
+      "destination": "/tmp/packages-preseed.cfg"
     },
     {
       "type": "shell",
