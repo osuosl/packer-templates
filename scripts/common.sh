@@ -25,6 +25,11 @@ if [ -x /usr/bin/lsb_release ] ; then
 elif [ -f /etc/redhat-release ] ; then
     OSRELEASE="$(awk '{print $3}' /etc/redhat-release | sed -e 's/\..*//')"
     OS="$(awk '{print tolower($1)}' /etc/redhat-release)"
+    run_cmd=""
+    rootfs=""
+    cf_class="vagrant_centos_cfengine"
 elif [ -f /etc/gentoo-release ] ; then
+    run_cmd="chroot_cmd"
+    rootfs="/mnt/gentoo"
     OS="gentoo"
 fi

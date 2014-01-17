@@ -1,0 +1,72 @@
+{
+  "variables": {
+    "cfengine_host": "{{env `CFENGINE_HOST`}}"
+   } ,
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "name": "centos-6-cfengine-x86_64",
+      "boot_wait": "10s",
+      "disk_size": 10952,
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "guest_os_type": "RedHat_64",
+      "headless": false,
+      "http_directory": "http",
+      "iso_checksum": "0d9dc37b5dd4befa1c440d2174e88a87",
+      "iso_checksum_type": "md5",
+      "iso_url": "http://centos.osuosl.org/6.5/isos/x86_64/CentOS-6.5-x86_64-minimal.iso",
+      "shutdown_command": "echo '/sbin/halt -h -p' > shutdown.sh; echo 'vagrant'|sudo -S sh 'shutdown.sh'",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_username": "vagrant",
+      "ssh_wait_timeout": "10000s",
+      "virtualbox_version_file": ".vbox_version",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "512"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "1"
+        ]
+      ],
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg<enter><wait>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "../../scripts/common.sh",
+      "destination": "/tmp/common.sh"
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "../../scripts/osuosl-packages-centos.sh",
+        "../../scripts/vbox-additions.sh",
+        "../../scripts/setup-vagrant.sh",
+        "../../scripts/cfengine.sh",
+        "../../scripts/cfengine-cleanup.sh",
+        "../../scripts/cleanup.sh",
+        "../../scripts/zerodisk.sh"
+      ],
+      "environment_vars": [
+        "cfengine_host={{user `cfengine_host`}}"
+      ],
+      "execute_command": "echo 'vagrant'| {{ .Vars }} sudo -E -S  sh '{{ .Path }}'"
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "output": "centos-6-cfengine-{{isotime}}.box"
+    }
+  ]
+}
