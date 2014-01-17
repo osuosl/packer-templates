@@ -19,6 +19,9 @@ if [ -x /usr/bin/lsb_release ] ; then
     OS="$(lsb_release -s -i | tr '[A-Z]' '[a-z]')"
     if [ "$OS" = "centos" ] ; then
         OSRELEASE="$(lsb_release -s -r | sed -e 's/\..*//')"
+        run_cmd=""
+        rootfs=""
+        cf_class="vagrant_centos_cfengine"
     else
         OSRELEASE="$(lsb_release -s -c)"
     fi
