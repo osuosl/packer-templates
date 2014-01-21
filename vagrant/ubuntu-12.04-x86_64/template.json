@@ -1,7 +1,7 @@
 {
   "builders": [
     {
-      "type": "virtualbox",
+      "type": "virtualbox-iso",
       "name": "ubuntu-12.04",
       "boot_wait": "4s",
       "disk_size": 10952,
@@ -60,11 +60,7 @@
         "../../scripts/cleanup.sh",
         "../../scripts/zerodisk.sh"
       ],
-      "override": {
-        "ubuntu-12.04": {
-          "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'"
-        }
-      }
+        "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'"
     }
   ],
   "post-processors": [
