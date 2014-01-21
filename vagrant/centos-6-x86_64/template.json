@@ -53,12 +53,13 @@
         "../../scripts/cleanup.sh",
         "../../scripts/zerodisk.sh"
       ],
-      "override": {
-        "centos-6-vagrant-x86_64": {
-          "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'"
-        }
-      }
+       "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'"
     }
   ],
-  "post-processors": ["vagrant"]
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "output": "centos-6-{{isotime}}.box"
+    }
+  ]
 }
