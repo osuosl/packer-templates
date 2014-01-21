@@ -1,7 +1,7 @@
 {
   "builders": [
     {
-      "type": "virtualbox",
+      "type": "virtualbox-iso",
       "name": "debian-7-vagrant",
       "boot_wait": "10s",
       "disk_size": 10952,
@@ -9,9 +9,9 @@
       "guest_os_type": "Debian_64",
       "headless": true,
       "http_directory": "http",
-      "iso_checksum": "b86774fe4de88be6378ba3d71b8029bd",
+      "iso_checksum": "72473e8a5e65b61acc7efde90d9f71d1",
       "iso_checksum_type": "md5",
-      "iso_url": "http://debian.osuosl.org/debian-cdimage/7.2.0/amd64/iso-cd/debian-7.2.0-amd64-netinst.iso",
+      "iso_url": "http://debian.osuosl.org/debian-cdimage/7.3.0/amd64/iso-cd/debian-7.3.0-amd64-netinst.iso",
       "shutdown_command": "echo '/sbin/halt -h -p' > shutdown.sh; echo 'vagrant'|sudo -S sh 'shutdown.sh'",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -63,12 +63,13 @@
         "../../scripts/cleanup.sh",
         "../../scripts/zerodisk.sh"
       ],
-      "override": {
-        "debian-7-vagrant": {
-          "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'"
-        }
-      }
+        "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'"
     }
   ],
-  "post-processors": ["vagrant"]
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "output": "debian-7-{{isotime}}.box"
+    }
+  ]
 }
