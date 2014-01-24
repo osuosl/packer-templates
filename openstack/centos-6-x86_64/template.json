@@ -2,8 +2,8 @@
   "builders": [
     {
       "type": "qemu",
-      "name": "centos-6-openstack-x86_64",
-      "vm_name": "centos-6-openstack-x86_64",
+      "name": "centos-6-x86_64",
+      "vm_name": "centos-6-x86_64",
       "accelerator": "kvm",
       "disk_size": 2048,
       "format": "qcow2",
