@@ -1,0 +1,64 @@
+{
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "name": "fedora-20-vagrant-x86_64",
+      "boot_wait": "10s",
+      "disk_size": 10952,
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "guest_os_type": "RedHat_64",
+      "headless": false,
+      "http_directory": "http",
+      "iso_checksum": "376be7d4855ad6281cb139430606a782fd6189dcb01d7b61448e915802cc350f",
+      "iso_checksum_type": "sha256",
+      "iso_url": "http://fedora.osuosl.org/linux/releases/20/Fedora/x86_64/iso/Fedora-20-x86_64-netinst.iso",
+      "shutdown_command": "echo '/sbin/halt -h -p' > shutdown.sh; echo 'vagrant'|sudo -S sh 'shutdown.sh'",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_username": "vagrant",
+      "ssh_wait_timeout": "10000s",
+      "virtualbox_version_file": ".vbox_version",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "512"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "1"
+        ]
+      ],
+      "boot_command": [
+        "<tab> biosdevname=0 net.ifnames=0 text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg<enter><wait>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "../../scripts/common.sh",
+      "destination": "/tmp/common.sh"
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "../../scripts/puppet-yum.sh",
+        "../../scripts/vbox-additions.sh",
+        "../../scripts/setup-vagrant.sh",
+        "../../scripts/cleanup.sh",
+        "../../scripts/zerodisk.sh"
+      ],
+      "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'"
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "output": "fedora-20-{{isotime}}.box"
+    }
+  ]
+}
