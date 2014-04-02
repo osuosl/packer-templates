@@ -4,6 +4,11 @@
 url="https://raw.githubusercontent.com/osuosl/packer-templates/master/scripts/"
 files="openstack-yum cleanup zerodisk"
 
+function finish {
+    rm -f /tmp/*.sh
+    poweroff
+}
+
 wget -q -O /tmp/common.sh ${url}/common.sh
 
 for file in $files ; do
@@ -11,5 +16,5 @@ for file in $files ; do
     source /tmp/${file}.sh
 done
 
-rm -f /tmp/*.sh /root/postinstall-openstack-yum.sh
-poweroff
+# run finish function on exit
+trap finish EXIT
