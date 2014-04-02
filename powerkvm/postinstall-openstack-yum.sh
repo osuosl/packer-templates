@@ -9,12 +9,12 @@ function finish {
     poweroff
 }
 
+# run finish function on exit
+trap finish EXIT
+
 wget -q -O /tmp/common.sh ${url}/common.sh
 
 for file in $files ; do
     wget -q -O /tmp/${file}.sh ${url}/${file}.sh
     source /tmp/${file}.sh
 done
-
-# run finish function on exit
-trap finish EXIT
