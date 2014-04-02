@@ -15,7 +15,13 @@ fi
 
 # install cloud packages
 $yum update
-$yum install cloud-init cloud-utils cloud-utils-growpart git
+if [ "$(uname -m)" == "ppc64" ] ; then
+    # install custom cloud-init to work around RH bug #1025071
+    $yum install http://ftp.osuosl.org/pub/osl/powerkvm/rpms/cloud-init-0.7.2-7.fc20.noarch.rpm
+    $yum install cloud-utils cloud-utils-growpart git
+else
+    $yum install cloud-init cloud-utils cloud-utils-growpart git
+fi
 
 if [ "$OS" == "centos" ] ; then
     # Change default user to centos and add to wheel
@@ -49,15 +55,19 @@ EOF
 fi
 
 $yum erase git
-if [ -e /boot/grub/grub.conf ] ; then
-    sed -i -e 's/rhgb.*/console=ttyS0,115200n8 console=tty0 quiet/' /boot/grub/grub.conf
-    cd /boot
-    ln -s boot .
-elif [ -e /etc/default/grub ] ; then
-    sed -i -e \
-        's/GRUB_CMDLINE_LINUX=\"\(.*\)/GRUB_CMDLINE_LINUX=\"console=ttyS0,115200n8 console=tty0 quiet \1/g' \
-        /etc/default/grub
-    grub2-mkconfig -o /boot/grub2/grub.cfg
+
+# Don't edit grub on ppc64
+if [ "$(uname -m)" != "ppc64" ] ; then
+    if [ -e /boot/grub/grub.conf ] ; then
+        sed -i -e 's/rhgb.*/console=ttyS0,115200n8 console=tty0 quiet/' /boot/grub/grub.conf
+        cd /boot
+        ln -s boot .
+    elif [ -e /etc/default/grub ] ; then
+        sed -i -e \
+            's/GRUB_CMDLINE_LINUX=\"\(.*\)/GRUB_CMDLINE_LINUX=\"console=ttyS0,115200n8 console=tty0 quiet \1/g' \
+            /etc/default/grub
+        grub2-mkconfig -o /boot/grub2/grub.cfg
+    fi
 fi
 
 # Make sure sudo works properly with openstack
