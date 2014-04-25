@@ -17,7 +17,7 @@ fi
 $yum update
 if [ "$(uname -m)" == "ppc64" ] ; then
     # install custom cloud-init to work around RH bug #1025071
-    $yum install http://ftp.osuosl.org/pub/osl/powerkvm/rpms/cloud-init-0.7.2-7.fc20.noarch.rpm
+    $yum install http://ftp.osuosl.org/pub/osl/openpower/rpms/cloud-init-0.7.2-7.fc20.noarch.rpm
     $yum install cloud-utils cloud-utils-growpart
 else
     $yum install cloud-init cloud-utils cloud-utils-growpart git
