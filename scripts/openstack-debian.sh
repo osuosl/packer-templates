@@ -19,8 +19,11 @@ $apt purge exim4*
 $apt install sudo rsync curl less
 
 # change GRUB so log tab and console tab in openstack work
-sed -i -e 's/quiet/console=ttyS0,115200n8 console=tty0 quiet/' /etc/default/grub
-update-grub
+if [ -e /etc/default/grub ] ; then
+    sed -i -e 's/quiet/console=ttyS0,115200n8 console=tty0 quiet/' \
+        /etc/default/grub
+    update-grub
+fi
 
 # Make sure sudo works properly with openstack and vagrant
 sed -i 's/env_reset/env_reset\nDefaults\t\!requiretty/' /etc/sudoers
