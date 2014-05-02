@@ -4,16 +4,14 @@ set -x
 
 # Remove isc-dhcp-client as it does not owrk properly with this right now,
 # it will be replaced with pump for the time being
+$apt update
 $apt remove isc-dhcp-client
 $apt install pump cloud-utils cloud-init cloud-initramfs-growroot bash-completion
-update-initramfs -u
 
-# dpkg-reconfigure cloud-init and locales
-debconf-set-selections /tmp/packages-preseed.cfg
-
+# use our specific config
 mv -f /tmp/cloud.cfg /etc/cloud/cloud.cfg
-
-$apt purge exim4*
+# remove distro installed package to ensure Ec2 is only enabled
+rm -f /etc/cloud/cloud.cfg.d/90_*
 
 # Setup utils for vagrant
 $apt install sudo rsync curl less

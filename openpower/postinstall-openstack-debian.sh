@@ -4,7 +4,7 @@
 scripts_url="https://raw.githubusercontent.com/osuosl/packer-templates/master/scripts"
 files_url="https://raw.githubusercontent.com/osuosl/packer-templates/master/files/debian"
 scripts="openstack-debian cleanup zerodisk"
-files="cloud.cfg packages-preseed.cfg"
+files="cloud.cfg"
 
 function finish {
     rm -f /tmp/*.sh
