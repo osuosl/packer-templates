@@ -23,6 +23,11 @@ if [ -e /etc/default/grub ] ; then
     update-grub
 fi
 
+# Remove reference to a specific device. This breaks on openstack.
+if [ -e /etc/yaboot.conf ] ; then
+    sed -i -e 's/^device\(.*\)/#device\1/g' /etc/yaboot.conf
+fi
+
 # Make sure sudo works properly with openstack and vagrant
 sed -i 's/env_reset/env_reset\nDefaults\t\!requiretty/' /etc/sudoers
 
