@@ -45,6 +45,7 @@ system_info:
 # vim:syntax=yaml
 EOF
 
+    rm -f anaconda* install.log* shutdown.sh
 fi
 
 # Don't edit grub on ppc64
