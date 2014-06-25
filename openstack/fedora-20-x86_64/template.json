@@ -34,6 +34,7 @@
       "type": "shell",
       "scripts": [
         "../../scripts/openstack-yum.sh",
+        "../../scripts/cloud-init-systemd.sh",
         "../../scripts/cleanup.sh",
         "../../scripts/zerodisk.sh"
       ],
