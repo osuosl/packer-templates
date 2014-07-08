@@ -20,7 +20,8 @@ if [ "$(uname -m)" == "ppc64" ] ; then
     $yum install http://ftp.osuosl.org/pub/osl/openpower/rpms/cloud-init-0.7.2-7.fc20.noarch.rpm
     $yum install cloud-utils cloud-utils-growpart
 else
-    $yum install cloud-init cloud-utils cloud-utils-growpart git
+    $yum install cloud-init cloud-utils dracut-modules-growroot
+    dracut -f
 fi
 
 if [ "$OS" == "centos" ] ; then
@@ -44,17 +45,8 @@ system_info:
 # vim:syntax=yaml
 EOF
 
-    # Update initrd
-    git clone https://github.com/flegmatik/linux-rootfs-resize.git
-    cd linux-rootfs-resize
-    chmod +x install
-    bash install
-    cd
-    rm -rf linux-rootfs-resize
     rm -f anaconda* install.log* shutdown.sh
 fi
-
-$yum erase git
 
 # Don't edit grub on ppc64
 if [ "$(uname -m)" != "ppc64" ] ; then
