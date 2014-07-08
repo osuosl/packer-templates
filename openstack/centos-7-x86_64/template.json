@@ -7,7 +7,7 @@
       "accelerator": "kvm",
       "disk_size": 2048,
       "format": "qcow2",
-      "headless": false,
+      "headless": true,
       "http_directory": "http",
       "iso_checksum": "96de4f38a2f07da51831153549c8bd0c",
       "iso_checksum_type": "md5",
