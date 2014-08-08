@@ -2,7 +2,7 @@
 
 # Helper script to run scripts packer would normally run
 url="https://raw.githubusercontent.com/osuosl/packer-templates/master/scripts/"
-files="openstack-yum cloud-init-systemd cleanup zerodisk"
+files="openstack-yum cloud-init-systemd serial-hvc1 cleanup zerodisk"
 
 function finish {
     rm -f /tmp/*.sh

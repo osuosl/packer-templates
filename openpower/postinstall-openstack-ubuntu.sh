@@ -3,7 +3,7 @@
 # Helper script to run scripts packer would normally run
 scripts_url="https://raw.githubusercontent.com/osuosl/packer-templates/master/scripts"
 files_url="https://raw.githubusercontent.com/osuosl/packer-templates/master/files/ubuntu"
-scripts="openstack-debian cleanup zerodisk"
+scripts="openstack-debian serial-hvc1 cleanup zerodisk"
 
 function finish {
     rm -f /tmp/*.sh
