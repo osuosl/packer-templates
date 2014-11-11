@@ -15,10 +15,8 @@ fi
 
 # install cloud packages
 $yum update
-if [ "$(uname -m)" == "ppc64" ] ; then
-    # install custom cloud-init to work around RH bug #1025071
-    $yum install http://ftp.osuosl.org/pub/osl/openpower/rpms/cloud-init-0.7.2-7.fc20.noarch.rpm
-    $yum install cloud-utils cloud-utils-growpart
+if [ "$(uname -m)" == "ppc64" -o "$(uname -m)" == "ppc64le" ] ; then
+    $yum install cloud-init cloud-utils cloud-utils-growpart
 else
     $yum install cloud-init cloud-utils dracut-modules-growroot
     dracut -f
@@ -49,7 +47,7 @@ EOF
 fi
 
 # Don't edit grub on ppc64
-if [ "$(uname -m)" != "ppc64" ] ; then
+if [ "$(uname -m)" != "ppc64" -a "$(uname -m)" != "ppc64le"] ; then
     if [ -e /boot/grub/grub.conf ] ; then
         sed -i -e 's/rhgb.*/console=ttyS0,115200n8 console=tty0 quiet/' /boot/grub/grub.conf
         cd /boot
