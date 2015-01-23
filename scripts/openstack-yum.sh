@@ -2,17 +2,6 @@
 . /tmp/common.sh
 set -x
 
-if [ "$OS" == "centos" ] ; then
-    # Setup the cloud-init repo for cloud-init 0.7.x
-    cat << EOF >> /etc/yum.repos.d/cloud-init.repo
-[cloud-init]
-Name=Cloud Init Repo
-baseurl=http://repos.fedorapeople.org/repos/openstack/cloud-init/epel-6/
-gpgcheck=0
-enabled=1
-EOF
-fi
-
 # install cloud packages
 $yum update
 if [ "$(uname -m)" == "ppc64" -o "$(uname -m)" == "ppc64le" ] ; then
