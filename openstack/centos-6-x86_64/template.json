@@ -9,15 +9,15 @@
       "format": "qcow2",
       "headless": true,
       "http_directory": "http",
-      "iso_checksum": "0d9dc37b5dd4befa1c440d2174e88a87",
+      "iso_checksum": "eb3c8be6ab668e6d83a118323a789e6c",
       "iso_checksum_type": "md5",
-      "iso_url": "http://centos.osuosl.org/6.5/isos/x86_64/CentOS-6.5-x86_64-minimal.iso",
+      "iso_url": "http://centos.osuosl.org/6.6/isos/x86_64/CentOS-6.6-x86_64-minimal.iso",
       "shutdown_command": "echo '/sbin/halt -h -p' > shutdown.sh; sh 'shutdown.sh'",
       "ssh_password": "osuadmin",
       "ssh_port": 22,
       "ssh_username": "root",
       "ssh_wait_timeout": "10000s",
-      "qemuargs": [ [ "-m", "1024m" ] ],
+      "qemuargs": [ [ "-m", "1024" ] ],
       "boot_wait": "10s",
       "boot_command": [
         "<tab> text ks=http://10.0.2.2:{{ .HTTPPort }}/preseed.cfg<enter><wait>"
