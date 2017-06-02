@@ -18,7 +18,7 @@
       "ssh_port": 22,
       "ssh_username": "root",
       "ssh_wait_timeout": "10000s",
-      "qemuargs": [ [ "-m", "1024m" ] ],
+      "qemuargs": [ [ "-m", "1024M" ] ],
       "boot_wait": "10s",
       "boot_command": [
         "<tab> text ks=http://10.0.2.2:{{ .HTTPPort }}/preseed.cfg<enter><wait>"
