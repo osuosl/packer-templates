@@ -1,0 +1,36 @@
+{
+  "env_run_lists": {},
+  "run_list": [
+    "role[openstack]",
+    "recipe[openstack_test]",
+    "role[openstack_ops_identity]",
+    "recipe[openstack_test::gluster]",
+    "recipe[osl-openstack::controller]",
+    "recipe[osl-openstack::compute]",
+    "recipe[osl-openstack::block_storage]",
+    "recipe[openstack-integration-test::setup]"
+  ],
+  "chef_type": "role",
+  "override_attributes": {
+    "osl-openstack": {
+      "cinder": {
+        "iscsi_role": "openstack",
+        "iscsi_ips": [
+          "127.0.2.1",
+          "127.0.3.1"
+        ]
+      }
+    },
+    "openstack": {
+      "block-storage": {
+        "volume": {
+          "create_volume_group": true
+        }
+      }
+    }
+  },
+  "default_attributes": {},
+  "json_class": "Chef::Role",
+  "description": "Openstack x86 All-in-One Role",
+  "name": "openstack-aio"
+}

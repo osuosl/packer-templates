@@ -1,0 +1,10 @@
+log_location      STDOUT
+local_mode        true
+chef_zero.enabled true
+ssl_verify_mode   "verify_peer"
+role_path         "{{user `chef_dir`}}/roles"
+data_bag_path     "{{user `chef_dir`}}/data_bags"
+environment_path  "{{user `chef_dir`}}/environments"
+cookbook_path     [ "{{user `chef_dir`}}/cookbooks" ]
+node_name         "{{user `node_name`}}"
+environment       "_default"

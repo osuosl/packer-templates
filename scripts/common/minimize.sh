@@ -7,6 +7,7 @@ readonly swappart=$(readlink -f /dev/disk/by-uuid/"$swapuuid")
 /sbin/swapoff "$swappart"
 dd if=/dev/zero of="$swappart" bs=1M || echo "dd exit code $? is suppressed" 
 /sbin/mkswap -U "$swapuuid" "$swappart"
+rm -rf /tmp/*
 
 dd if=/dev/zero of=/EMPTY bs=1M
 rm -f /EMPTY

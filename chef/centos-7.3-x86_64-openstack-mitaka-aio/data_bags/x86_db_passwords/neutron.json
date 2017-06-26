@@ -1,0 +1,10 @@
+{
+  "id": "neutron",
+  "neutron": {
+    "encrypted_data": "Didj0WHqfopvLhQuuXlBFXFDbh8KnFaBvA1ynfo+H8I=\n",
+    "hmac": "zNVXAnIEhDsO8HM3QO55r189/j/6hsJi31+ilUYNbtw=\n",
+    "iv": "4Pqw8Xormnv+Ctc/sJ5zVg==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  }
+}

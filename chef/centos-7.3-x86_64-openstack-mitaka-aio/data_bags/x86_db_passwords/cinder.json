@@ -1,0 +1,10 @@
+{
+  "cinder": {
+    "encrypted_data": "Nzi52fGwRo3zUPa9bCwYlr6zCn6eS0aTpcDEw+3+5uY=\n",
+    "hmac": "a5FYwK1KM41lD5BEoKe8MEMMfNo2sDnf3Dl2k4r4jiU=\n",
+    "iv": "rtuPe8GL55vAT8lxlyMEow==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  },
+  "id": "cinder"
+}

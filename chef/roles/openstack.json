@@ -1,0 +1,70 @@
+{
+  "env_run_lists": {},
+  "run_list": [
+    "recipe[openstack_test::hosts]",
+    "recipe[openstack_test::cacert]",
+    "recipe[osl-openstack]"
+  ],
+  "chef_type": "role",
+  "override_attributes": {
+    "osl-openstack": {
+      "database_suffix": "x86",
+      "databag_prefix": "x86",
+      "endpoint_hostname": "controller.example.com",
+      "db_hostname": "controller.example.com",
+      "bind_service": "127.0.0.1",
+      "vxlan_interface": {
+        "controller": {
+          "default": "lo"
+        }
+      },
+      "nova_public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDYOuLkP1F/Sm/dCJAA7kme+ObO4J8x2HrZU40W8QqW4yFqRPKnW5HYLeUpRzIFzWen/LIn6R6lxTfSAnnD8qEEuKbFjH5WRqJYCJeAyaTBTRyU1FHlcTR/EQ/HVZ38TQwCztZgboFb5zmWqYc3/BYBHGA6XeYN5jRcHvZbyaGL+YA1/KPIjpbQfqIPXdHfodoSNX4qQQccYBq2c/rq3Puh7Q9oVph6a2lq0wWsqYyq0vTGHPKFYShVpwDl2Z3c8eB3P7yFRzOR2VNuezJlOgoHz6D/mBObLj1n+yi07bcGbpwAH/rLEyiy4gVdru2qQAcbDL9Yibk96lovim/IH4dV nova-migration"
+    },
+    "openstack_test": {
+      "gluster_host": "controller.example.com"
+    },
+    "openstack": {
+      "image": {
+        "image_upload": true
+      },
+      "identity": {
+        "conf": {
+          "keystone_authtoken": {
+            "insecure": true
+          }
+        }
+      },
+      "mq": {
+        "user": "admin"
+      },
+      "compute": {
+        "metering": true,
+        "conf": {
+          "libvirt": {
+            "virt_type": "qemu"
+          }
+        }
+      }
+    },
+    "mysql": {
+      "server_root_password": "rootpass",
+      "server_debian_password": "debpass",
+      "server_repl_password": "replpass",
+      "allow_remote_root": true,
+      "root_network_acl": [
+        "%"
+      ]
+    },
+    "yum": {
+      "epel": {
+        "baseurl": "http://epel.osuosl.org/7/$basearch",
+        "enabled": true,
+        "gpgkey": "http://epel.osuosl.org/RPM-GPG-KEY-EPEL-7"
+      }
+    }
+  },
+  "default_attributes": {},
+  "json_class": "Chef::Role",
+  "description": "Openstack x86 Role",
+  "name": "openstack"
+}

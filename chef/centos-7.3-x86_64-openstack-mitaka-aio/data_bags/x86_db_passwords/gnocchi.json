@@ -1,0 +1,10 @@
+{
+  "id": "gnocchi",
+  "gnocchi": {
+    "encrypted_data": "t3+W5rdMwjgBTgImRnZ3BDYLknHSv26/VzBO2QiWmsA=\n",
+    "hmac": "DHsOMcJDpA3+fYThMCF8yoPO8CYEbzeVjvFo8VSSTPo=\n",
+    "iv": "/WX7XqVSGRbB0OIvFqVFWw==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  }
+}

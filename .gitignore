@@ -6,3 +6,6 @@ output-*
 virtualbox
 vmware
 iso
+chef/berkshelf
+chef/*/cookbooks
+chef/*/Berksfile.lock

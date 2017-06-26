@@ -1,0 +1,10 @@
+{
+  "id": "openstack-image",
+  "openstack-image": {
+    "encrypted_data": "WubeKWIBJzXMNi/oPBJkSnk4YIrim5w2wb2C4C7shBCtSlXnwEQB2ZlxRGi/\nmCNG\n",
+    "hmac": "hst+Kxs86N0fvNB7Yjtt1zpPJ4rebDi+y2Lk/39juig=\n",
+    "iv": "9u8oTFI0YibEUR5/rjsbPw==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  }
+}

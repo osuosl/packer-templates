@@ -1,0 +1,16 @@
+{
+    "chef_type": "role",
+    "default_attributes": {},
+    "description": "OpenStack Identity Operations Role",
+    "env_run_lists": {},
+    "json_class": "Chef::Role",
+    "name": "openstack_ops_identity",
+    "override_attributes": {},
+    "run_list": [
+      "role[openstack]",
+      "recipe[osl-openstack::ops_database]",
+      "recipe[certificate::wildcard]",
+      "recipe[openstack_test::cacert]",
+      "recipe[osl-openstack::identity]"
+    ]
+}
