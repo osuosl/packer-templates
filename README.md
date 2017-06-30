@@ -1,10 +1,12 @@
 packer-templates
 ================
 
-Packer templates used to build base box images at the OSL
+Packer templates used to build base box images at the OSL for OpenStack and
+Ganeti.
 
-Before using, I recommend you set the following in your `.bashrc` or
-`.bash_profile`. It will ensure all of the ISO's downloaded reside in a single
-location instead of saving them in each folder.
+The target architectures are:
 
-    export PACKER_CACHE_DIR="/home/lance/packer_cache"
+* x86-64
+* ppc64
+* ppc64le
+
