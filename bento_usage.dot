@@ -1,4 +1,27 @@
-digraph {
+digraph bento_pipeline {
+  subgraph taste_workflow {
+    bgcolor=blue;
+    color=blue;
+    style=filled;
+
+    labelloc = b;
+    label="taste_workflow";
+    "!taste trigger from github";
+    "jenkins_job";
+    "payload_processor";
+    "linter";
+    "image_builder";
+    "deploy";
+    "openstack_taster";
+  }
+
+  subgraph deploy_workflow {
+    color=green;
+    style=filled;
+    "!deploy trigger from github";
+    "deploy";
+  }
+
   "!taste trigger from github" -> "jenkins_job";
   
   "jenkins_job" -> "payload_processor";
@@ -22,6 +45,6 @@ digraph {
   "deploy" -> "!deploy trigger from github";
 
   "!taste trigger from github" [color=red];
-  "!deploy trigger from github" [color=red];
+  "!deploy trigger from github" [color=green];
   "deploy" [tooltip="stores results as artifacts for reuse"];
 }
