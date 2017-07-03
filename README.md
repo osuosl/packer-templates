@@ -6,7 +6,7 @@ Ganeti.
 
 The target architectures are:
 
-* x86-64
+* x86_64
 * ppc64
 * ppc64le
 
