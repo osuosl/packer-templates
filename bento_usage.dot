@@ -1,5 +1,5 @@
 digraph {
-  "taste! trigger from github" -> "jenkins_job";
+  "!taste trigger from github" -> "jenkins_job";
   
   "jenkins_job" -> "payload_processor";
   
@@ -8,22 +8,20 @@ digraph {
    
   "linter" -> "image_builder" ;
 
-  "image_builder" -> "openstack_taster"; 
+  "image_builder" -> "deploy" -> "openstack_taster";
 
   edge [label="tasting result\n also stored as artifact"];
-  "openstack_taster" -> "taste! trigger from github";
+  "openstack_taster" -> "!taste trigger from github";
   
-  edge [label=""];
-  "image_builder" -> "deploy"
-  
-  edge [label="testing\n success_results\n failure_results"];
-  "deploy" -> "image_builder"
+  //edge [label="testing\n success_results\n failure_results"];
+  //"deploy" -> "image_builder"
   
   edge [label=production];
-  "deploy! trigger from github" -> "deploy";
+  "!deploy trigger from github" -> "deploy";
   edge [label=""];
-  "deploy" -> "deploy! trigger from github";
+  "deploy" -> "!deploy trigger from github";
 
-  "taste! trigger from github" [color=red];
-  "deploy! trigger from github" [color=red];
+  "!taste trigger from github" [color=red];
+  "!deploy trigger from github" [color=red];
+  "deploy" [tooltip="stores results as artifacts for reuse"];
 }
