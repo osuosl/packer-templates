@@ -12,6 +12,7 @@
       "boot_wait": "6s",
       "disk_size": 3072,
       "headless": true,
+      "vnc_bind_address":"0.0.0.0",
       "http_directory": "http",
       "iso_checksum": "dc71169b8f5ded685bdec39439f8154a",
       "iso_checksum_type": "md5",
