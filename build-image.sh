@@ -33,6 +33,8 @@ while getopts "hcv:t:" opt ; do
 done
 
 [ -z "$TEMPLATE" ] && echo "Error: Template file not set" && exit 1
+# use the ppc64/le packer for the right one
+[[ $TEMPLATE == *'ppc'* ]] && alias packer='~/bento/packer/bin/packer'
 
 DIR_NAME="packer-$(basename -s .json $TEMPLATE)"
 IMAGE_NAME=$(grep vm_name $TEMPLATE | awk '{print $2}' | sed -e 's/\"//g' | sed -e 's/,//g')
