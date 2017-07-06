@@ -1,8 +1,8 @@
 #!/bin/bash
 CHEF_VERSION="provisionerless"
 TEMPLATE=
-PPC64LE_PACKER='~/bento/packer/bin/packer'
-X86_64_PACKER='/usr/local/bin/packer'
+PPC64LE_PACKER=~/bento/packer/bin/packer
+X86_64_PACKER=/usr/local/bin/packer
 
 run_help() {
   echo " Usage: $0 [-c] [-v CHEF_VERSION] -t path/to/template.json"
