@@ -34,9 +34,6 @@
   ],
   "provisioners": [
     {
-      "environment_vars": [
-        "CHEF_VERSION={{user `chef_version`}}"
-      ],
       "execute_command": "echo 'fedora' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "scripts": [
         "scripts/fedora/fix-slow-dns.sh",
@@ -51,8 +48,8 @@
     }
   ],
   "variables": {
-    "chef_version": "provisionerless",
-    "mirror": "http://fedora-secondary.osuosl.org"
+    "mirror": "http://fedora-secondary.osuosl.org",
+    "image_name": "Fedora 25 BE"
   }
 }
 
