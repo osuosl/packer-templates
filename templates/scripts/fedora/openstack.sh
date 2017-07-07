@@ -1,5 +1,10 @@
 #!/bin/bash -eux
 
+if [ $(uname -m)=="ppc64" -o $(uname -m)=="ppc64le" ]
+  then
+    yum -y install ppc64-diag
+fi
+
 if [ -e /usr/bin/dnf ] ; then
   dnf -y install cloud-init cloud-utils yum
 else
