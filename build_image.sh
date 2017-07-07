@@ -1,8 +1,7 @@
 #!/bin/bash
 CHEF_VERSION="provisionerless"
 TEMPLATE=
-PPC64LE_PACKER=~/bento/packer/bin/packer
-X86_64_PACKER=/usr/local/bin/packer
+export PATH=/opt/packer/bin:$PATH
 
 run_help() {
   echo " Usage: $0 [-c] [-v CHEF_VERSION] -t path/to/template.json"
@@ -35,18 +34,6 @@ while getopts "hcv:t:" opt ; do
 done
 
 [ -z "$TEMPLATE" ] && echo "Error: Template file not set" && exit 1
-# use the ppc64/le packer for the right one
-packer()
-{
-  if [[ $TEMPLATE == *'ppc'* ]]; then
-    echo "Using ppc64le packer for arguments $*"
-    $PPC64LE_PACKER $*
-  else
-    $X86_64_PACKER $*
-  fi
-}
-
-export -f packer
 
 DIR_NAME="packer-$(basename -s .json $TEMPLATE)"
 IMAGE_NAME=$(grep vm_name $TEMPLATE | awk '{print $2}' | sed -e 's/\"//g' | sed -e 's/,//g')
