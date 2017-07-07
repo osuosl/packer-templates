@@ -38,7 +38,6 @@ done
 DIR_NAME="packer-$(basename -s .json $TEMPLATE)"
 IMAGE_NAME=$(grep vm_name $TEMPLATE | awk '{print $2}' | sed -e 's/\"//g' | sed -e 's/,//g')
 set -xe
-cd templates
 packer build -var "chef_version=$CHEF_VERSION" $(basename $TEMPLATE)
 
 if [ "$(packer version | grep ^Packer)" == "Packer v0.7.5" ] ; then
