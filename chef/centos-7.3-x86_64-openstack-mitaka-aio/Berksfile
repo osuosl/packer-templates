@@ -39,5 +39,5 @@ cookbook 'openstack_test', path: '../cookbooks/openstack_test'
 ).each do |cb|
   cookbook "openstack-#{cb}",
            github: "openstack/cookbook-openstack-#{cb}",
-           branch: 'stable/mitaka'
+           tag: 'mitaka-eol'
 end

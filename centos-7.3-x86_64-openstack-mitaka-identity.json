@@ -2,7 +2,7 @@
   "builders": [
     {
       "boot_command": [
-        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-7.3/ks-openstack.cfg<enter><wait>"
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-7.3/ks-x86_64.cfg<enter><wait>"
       ],
       "accelerator": "kvm",
       "boot_wait": "10s",
@@ -82,7 +82,7 @@
   ],
   "variables": {
     "chef_version": "provisionerless",
-    "local_chef_dir": "../chef",
+    "local_chef_dir": "chef",
     "chef_dir": "/tmp/packer-chef-client",
     "node_name": "controller.example.com",
     "mirror": "http://centos.osuosl.org"
