@@ -52,6 +52,6 @@
   ],
   "variables": {
     "mirror": "http://centos-altarch.osuosl.org",
-    "image_name": "CentOS 7.2 BE"
+    "image_name": "CentOS 7.2 Big Endian"
   }
 }
