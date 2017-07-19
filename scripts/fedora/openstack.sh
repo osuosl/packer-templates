@@ -12,6 +12,11 @@ else
 fi
 dracut -f
 
+if [ $(uname -m)=="ppc64" -o $(uname -m)=="ppc64le" ]
+  then
+    yum -y install ppc64-diag
+fi
+
 if [ -e /boot/grub/grub.conf ] ; then
   sed -i -e 's/rhgb.*/console=ttyS0,115200n8 console=tty0 quiet/' /boot/grub/grub.conf
   sed -i -e 's/^timeout=.*/timeout=0/' /boot/grub/grub.conf

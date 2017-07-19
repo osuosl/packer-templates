@@ -1,9 +1,11 @@
 #!/bin/bash -eux
 if [ -x /usr/bin/dnf ] ; then
-  dnf -y remove gcc cpp kernel-devel kernel-headers perl
+  echo "using dnf"
+  dnf -y remove gcc cpp kernel-devel kernel-headers
   dnf -y clean all
 else
-  yum -y remove gcc cpp kernel-devel kernel-headers perl
+  echo "using yum"
+  yum -y remove gcc cpp kernel-devel kernel-headers
   yum -y clean all
 fi
 rm -rf VBoxGuestAdditions_*.iso VBoxGuestAdditions_*.iso.?
