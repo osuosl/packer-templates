@@ -9,7 +9,6 @@ dracut -f
 
 if [ $(uname -m)=="ppc64" -o $(uname -m)=="ppc64le" ]
   then
-    yum -y update
     yum -y install ppc64-diag
 fi
 
