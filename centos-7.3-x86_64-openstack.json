@@ -46,6 +46,6 @@
   "variables": {
     "chef_version": "provisionerless",
     "mirror": "http://centos.osuosl.org",
-    "image_name": "CentOS 7.3 LE"
+    "image_name": "CentOS 7.3 x86_64"
   }
 }
