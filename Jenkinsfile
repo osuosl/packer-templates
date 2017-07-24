@@ -72,8 +72,7 @@ def clone_repo_and_checkout_pr_branch() {
    stage('clone_repo_and_checkout_pr_branch') {
        //checkout all templates
        git 'https://github.com/osuosl/packer-templates'
-       dir 'packer-templates'
-       sh "git pr $env.pr"
+          sh "git pr $env.pr"
    }
 }
 
@@ -87,8 +86,6 @@ def run_linter(templates) {
 }
 
 def build_image(templates) {
-   dir 'packer-templates'
-
    //TODO: this will go in a try-catch block
    stage('build_image') {
       for ( t in templates ) {
@@ -100,22 +97,18 @@ def build_image(templates) {
 def deploy_image_for_testing(templates) {
    //do for each openstack_environment
    stage('deploy_for_testing') {
-      dir 'packer-templates'
-
-      //deploy!
-      for ( t in templates ) {
-         image_name = "packer-$t".replace('.json','')
-         image_path = "./$image_name/${image_name}.qcow2"
-         sh (returnStdout: true, script: "./bin/deploy.sh -f $image_path -r $env.pr")
-      }
+   //deploy!
+   for ( t in templates ) {
+      image_name = "packer-$t".replace('.json','')
+      image_path = "./$image_name/${image_name}.qcow2"
+      sh (returnStdout: true, script: "./bin/deploy.sh -f $image_path -r $env.pr")
+   }
    }
 }
 
 def run_tests() {
    //run wrapper_script
    stage('openstack_taster') {
-      dir 'packer_templates'
-
       // TODO: put this in try-catch
       for ( t in templates ) {
          image_name = sh (returnStdout: true, script: "./bin/wrapper.sh $t -f image_name")
