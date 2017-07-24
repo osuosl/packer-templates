@@ -19,26 +19,70 @@ node 'master' {
    stage('start_builds_on_right_nodes') {  
       def jsonSlurper = new JsonSlurper()
       def data = jsonSlurper.parseText("${payload_parsed_JSON}")
-      
-      env.pr = data['pr']
-      /* if ( data.containsKey('ppc64') ) {
-          println "We are going to call ppc64 node with ${data['ppc64']}"
-          env.ppc64_templates_affected = data.ppc64
-      }
-      
-      if ( data.containsKey('x86_64') ) {
-          env.x86_64_templates_affected = data.x86_64
-          println "We are going to call x86_64 node with ${data['x86_64']}"
-      }*/
+      env.data = data
 
-   }
+      #set path to the packer binary
+      env.packer = '~/bin/packer'
+
+      //lets worry about only a single branch of workflow and a single arch for now.
+
+      def templates = data.x86_64
+
+      //do following things on the node.
+      clone_repo_and_checkout_pr_branch()
+      run_linter()
+      build_image()
+      deploy_image_for_testing()
+      run_tests()
+      //deploy_on_production() -- seperate!
 }
 
-def linter() {
+def clone_repo_and_checkout_pr_branch() {
    //checkout all templates
    git 'https://github.com/osuosl/packer-templates'
    dir 'packer-templates'
    sh "git pr $env.pr"
-    
-   sh "~/bin/packer validate 
 }
+
+def run_linter(templates) {
+   //run linter
+
+   for ( t in templates ) {
+      sh (returnStdout: true, script: "$env.packer validate $t")
+   }
+}
+
+def build_image(templates) {
+   dir 'packer-templates'
+
+   //TODO: this will go in a try-catch block
+   for ( t in templates ) {
+      sh (returnStatus: true, script: "./bin/build_image.sh -t $t"
+   }
+}
+
+def deploy_image_for_testing(templates) {
+   #do for each openstack_environment
+
+   dir 'packer-templates'
+
+   #deploy!
+   for ( t in templates ) {
+      image_name = "packer-$t".replace('.json','')
+      image_path = "./$image_name/${image_name}.qcow2"
+      sh (returnStdout: true, script: "./bin/deploy.sh -f $image_path -r $env.pr")
+   }
+}
+
+def run_tests {
+   # run wrapper_script
+
+   dir 'packer_templates'
+
+   // TODO: put this in try-catch
+   for ( t in templates ) {
+      image_name = sh (returnStdout: true, script: "./bin/wrapper.sh $t -f image_name")
+      sh (returnStdout: true, script: "openstack_taster $image_name")
+   }
+}
+
