@@ -11,7 +11,7 @@ node ('master'){
       //pass this output to our script
       env.payload_parsed_JSON = sh(returnStdout: true, script: """ 
         export PACKER_TEMPLATES_DIR=$WORKSPACE
-        cat /tmp/packer_pipeline_job_build_$BUILD_NUMBER | $WORKSPACE/files/default/bin/packerpipeline.rb
+        cat /tmp/packer_pipeline_job_build_$BUILD_NUMBER | $WORKSPACE/files/default/bin/packer_pipeline.rb
       """).trim()
       writeFile file: "/tmp/${JOB_NAME}-${BUILD_NUMBER}.json", text: env.payload_parsed_JSON
    }   
@@ -69,17 +69,20 @@ def get_from_payload(v) {
 }
 
 def clone_repo_and_checkout_pr_branch() {
-   //checkout all templates
-   git 'https://github.com/osuosl/packer-templates'
-   dir 'packer-templates'
-   sh "git pr $env.pr"
+   stage('clone_repo_and_checkout_pr_branch') {
+       //checkout all templates
+       git 'https://github.com/osuosl/packer-templates'
+       dir 'packer-templates'
+       sh "git pr $env.pr"
+   }
 }
 
 def run_linter(templates) {
    //run linter
-
-   for ( t in templates ) {
-      sh (returnStdout: true, script: "$env.packer validate $t")
+   stage('linter') {
+       for ( t in templates ) {
+          sh (returnStdout: true, script: "$env.packer validate $t")
+       }
    }
 }
 
@@ -87,33 +90,37 @@ def build_image(templates) {
    dir 'packer-templates'
 
    //TODO: this will go in a try-catch block
-   for ( t in templates ) {
-      sh (returnStatus: true, script: "./bin/build_image.sh -t $t")
+   stage('build_image') {
+      for ( t in templates ) {
+         sh (returnStatus: true, script: "./bin/build_image.sh -t $t")
+      }
    }
 }
 
 def deploy_image_for_testing(templates) {
    //do for each openstack_environment
+   stage('deploy_for_testing') {
+      dir 'packer-templates'
 
-   dir 'packer-templates'
-
-   //deploy!
-   for ( t in templates ) {
-      image_name = "packer-$t".replace('.json','')
-      image_path = "./$image_name/${image_name}.qcow2"
-      sh (returnStdout: true, script: "./bin/deploy.sh -f $image_path -r $env.pr")
+      //deploy!
+      for ( t in templates ) {
+         image_name = "packer-$t".replace('.json','')
+         image_path = "./$image_name/${image_name}.qcow2"
+         sh (returnStdout: true, script: "./bin/deploy.sh -f $image_path -r $env.pr")
+      }
    }
 }
 
 def run_tests() {
    //run wrapper_script
+   stage('openstack_taster') {
+      dir 'packer_templates'
 
-   dir 'packer_templates'
-
-   // TODO: put this in try-catch
-   for ( t in templates ) {
-      image_name = sh (returnStdout: true, script: "./bin/wrapper.sh $t -f image_name")
-      sh (returnStdout: true, script: "openstack_taster $image_name")
+      // TODO: put this in try-catch
+      for ( t in templates ) {
+         image_name = sh (returnStdout: true, script: "./bin/wrapper.sh $t -f image_name")
+         sh (returnStdout: true, script: "openstack_taster $image_name")
+      }
    }
 }
 
