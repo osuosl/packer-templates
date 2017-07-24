@@ -1,7 +1,7 @@
 #!groovy
 import groovy.json.JsonSlurper
 
-node {
+node ('master'){
    stage('payload_processing') { 
       git url: 'https://github.com/osuosl-cookbooks/osl-jenkins', branch: 'samarendra/bento_pipeline'
     
