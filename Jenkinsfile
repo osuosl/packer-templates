@@ -3,7 +3,7 @@ import groovy.json.JsonSlurper
 
 node {
    stage('payload_processing') { 
-      //git 'https://github.com/osuosl-cookbooks/osl-jenkins'
+      git url: 'https://github.com/osuosl-cookbooks/osl-jenkins', branch: 'samarendra/bento_pipeline'
     
       //write payload to a file
       writeFile file: "/tmp/packer_pipeline_job_build_$BUILD_NUMBER", text: "$params.payload"
@@ -11,31 +11,37 @@ node {
       //pass this output to our script
       env.payload_parsed_JSON = sh(returnStdout: true, script: """ 
         export PACKER_TEMPLATES_DIR=$WORKSPACE
-        cat /tmp/packer_pipeline_job_build_$BUILD_NUMBER | /tmp/osl-jenkins/files/default/bin/packerpipeline.rb
+        cat /tmp/packer_pipeline_job_build_$BUILD_NUMBER | $WORKSPACE/files/default/bin/packerpipeline.rb
       """).trim()
       writeFile file: "/tmp/${JOB_NAME}-${BUILD_NUMBER}.json", text: env.payload_parsed_JSON
    }   
 
    stage('start_builds_on_right_nodes') {  
-      def templates = [:]
-      templates['x86_64'] = get_from_payload('x86_64')
-      templates['ppc64'] = get_from_payload('ppc64')
-      pr = get_from_payload('pr')
-
       //set path to the packer binary
       env.packer = '~/bin/packer'
-
-      //lets worry about only a single branch of workflow and a single arch for now.
+      env.pr = get_from_payload('pr')
       
-      for ( arch in templates.keySet() ) {
-   
-          if ( arch == null ) {
-            continue
-          }
-          echo "Starting execution for $arch"
+      x86_64_templates = get_from_payload('x86_64')
+      if ( x86_64_templates != null ) {
+          echo "Starting execution for x86_64"
           
           //do following things on the node.
-          node (label:arch) {
+          node ('x86_64') {
+            clone_repo_and_checkout_pr_branch()
+            run_linter()
+            build_image()
+            deploy_image_for_testing()
+            run_tests()
+            //deploy_on_production() -- seperate!
+          }
+      }
+      
+      ppc64_templates = get_from_payload('ppc64')
+      if ( ppc64_templates != null ) {
+          echo "Starting execution for ppc64"
+          
+          //do following things on the node.
+          node ('ppc64') {
             clone_repo_and_checkout_pr_branch()
             run_linter()
             build_image()
