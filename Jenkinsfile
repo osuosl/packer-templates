@@ -17,21 +17,24 @@ node {
    }   
 
    stage('start_builds_on_right_nodes') {  
-      x86_templates = get_from_payload('x86_64')
-      ppc64_templates = get_from_payload('pp64')
+      def templates = [:]
+      templates['x86_64'] = get_from_payload('x86_64')
+      templates['ppc64'] = get_from_payload('ppc64')
       pr = get_from_payload('pr')
 
       //set path to the packer binary
       env.packer = '~/bin/packer'
 
       //lets worry about only a single branch of workflow and a single arch for now.
-      println data['ppc64']
       
-      //def templates = data.x86_64
-      for ( arch in data.keySet() ) {
+      for ( arch in templates.keySet() ) {
+   
+          if ( arch == null ) {
+            continue
+          }
           echo "Starting execution for $arch"
+          
           //do following things on the node.
-           
           node (label:arch) {
             clone_repo_and_checkout_pr_branch()
             run_linter()
@@ -42,9 +45,6 @@ node {
           }
       }
       
-      //unset everything we don't need (and can't serialize)
-      jsonSlurper = null
-      data = null
    }
 }
 
@@ -56,7 +56,7 @@ def get_from_payload(v) {
       r = data[v]
    }
    else {
-      r = data
+      r = null
    }
    println "Returning $r"
    return r
