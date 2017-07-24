@@ -52,7 +52,7 @@ def get_from_payload(v) {
    def jsonSlurper = new JsonSlurper()
    def data = jsonSlurper.parseText("${payload_parsed_JSON}")
 
-   if data.containsKey(v) {
+   if ( data.containsKey(v) ) {
       r = data[v]
    }
    else {
