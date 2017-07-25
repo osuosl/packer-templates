@@ -18,24 +18,27 @@ node ('master'){
 
    stage('start_builds_on_right_nodes') {  
       //set path to the packer binary
-      env.packer = '~/bin/packer'
       env.pr = get_from_payload('pr')
       
-      x86_64_templates = get_from_payload('x86_64')
-      if ( x86_64_templates != null ) {
-          echo "Starting execution for x86_64"
-          
-          //do following things on the node.
-          node ('x86_64') {
-            clone_repo_and_checkout_pr_branch()
-            run_linter()
-            build_image()
-            deploy_image_for_testing()
-            run_tests()
-            //deploy_on_production() -- seperate!
-          }
+      env.packer = '/usr/local/bin/packer'
+      for ( arch in ['x86_64'] ) {
+            templates = get_from_payload(arch)
+            if ( templates != null ) {
+                echo "Starting execution for $arch"
+
+                //do following things on the node.
+                node (arch) {
+                  clone_repo_and_checkout_pr_branch()
+                  run_linter(arch)
+                  build_image(arch)
+                  deploy_image_for_testing(arch)
+                  run_tests(arch)
+                  //deploy_on_production() -- seperate!
+                }
+            }
       }
-      
+
+      env.packer = '~/bin/packer'
       ppc64_templates = get_from_payload('ppc64')
       if ( ppc64_templates != null ) {
           echo "Starting execution for ppc64"
@@ -76,37 +79,44 @@ def clone_repo_and_checkout_pr_branch() {
    }
 }
 
-def run_linter(templates) {
+def run_linter(arch) {
+   def templates = get_from_payload(arch)
    //run linter
    stage('linter') {
        for ( t in templates ) {
           sh (returnStdout: true, script: "$env.packer validate $t")
        }
    }
+   templates = null
 }
 
-def build_image(templates) {
+def build_image(arch) {
+   def templates = get_from_payload(arch)
    //TODO: this will go in a try-catch block
    stage('build_image') {
       for ( t in templates ) {
-         sh (returnStatus: true, script: "./bin/build_image.sh -t $t")
+         sh (returnStdout: true, script: "./bin/build_image.sh -t $t")
       }
    }
+   templates = null
 }
 
-def deploy_image_for_testing(templates) {
-   //do for each openstack_environment
+def deploy_image_for_testing(arch) {
+   def templates = get_from_payload(arch)
+   //TODO do for each openstack_environment
    stage('deploy_for_testing') {
    //deploy!
-   for ( t in templates ) {
-      image_name = "packer-$t".replace('.json','')
-      image_path = "./$image_name/${image_name}.qcow2"
-      sh (returnStdout: true, script: "./bin/deploy.sh -f $image_path -r $env.pr")
+      for ( t in templates ) {
+         image_name = "packer-$t".replace('.json','')
+         image_path = "./$image_name/${image_name}.qcow2"
+         sh (returnStdout: true, script: "./bin/deploy.sh -f $image_path -r $env.pr")
+      }
    }
-   }
+   templates = null
 }
 
-def run_tests() {
+def run_tests(arch) {
+   def templates = get_from_payload(arch)
    //run wrapper_script
    stage('openstack_taster') {
       // TODO: put this in try-catch
@@ -115,5 +125,5 @@ def run_tests() {
          sh (returnStdout: true, script: "openstack_taster $image_name")
       }
    }
+   templates = null
 }
-
