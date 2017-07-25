@@ -35,6 +35,7 @@ node ('master'){
                   build_image(arch)
                   deploy_image_for_testing(arch)
                   run_tests(arch)
+                  archive '*'
                   //deploy_on_production() -- seperate!
                 }
             }
