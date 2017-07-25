@@ -38,7 +38,7 @@ done
 DIR_NAME="packer-$(basename -s .json $TEMPLATE)"
 IMAGE_NAME=$(grep vm_name $TEMPLATE | awk '{print $2}' | sed -e 's/\"//g' | sed -e 's/,//g')
 set -xe
-packer build -var "chef_version=$CHEF_VERSION" $(basename $TEMPLATE)
+PACKER_LOG=1 && packer build -debug -var "chef_version=$CHEF_VERSION" $(basename $TEMPLATE)
 
 if [ "$(packer version | grep ^Packer)" == "Packer v0.7.5" ] ; then
   qemu-img convert -o compat=0.10 -O qcow2 -c ${DIR_NAME}/${IMAGE_NAME}.qcow2 \
