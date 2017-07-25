@@ -21,6 +21,8 @@ node ('master'){
       env.pr = get_from_payload('pr')
       
       env.packer = '/usr/local/bin/packer'
+      env.PATH = "/usr/libexec:${env.PATH}"
+
       for ( arch in ['x86_64'] ) {
             templates = get_from_payload(arch)
             if ( templates != null ) {
