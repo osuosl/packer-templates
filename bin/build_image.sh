@@ -36,8 +36,14 @@ done
 [ -z "$TEMPLATE" ] && echo "Error: Template file not set" && exit 1
 
 DIR_NAME="packer-$(basename -s .json $TEMPLATE)"
+TEMPLATE_NAME="$(basename -s .json $TEMPLATE)"
 IMAGE_NAME=$(grep vm_name $TEMPLATE | awk '{print $2}' | sed -e 's/\"//g' | sed -e 's/,//g')
 set -xe
+if [ -e chef/${TEMPLATE_NAME}/Berksfile ] ; then
+  export BERKSHELF_PATH="chef/berkshelf"
+  rm -rf $BERKSHELF_PATH chef/${TEMPLATE_NAME}/cookbooks chef/${TEMPLATE_NAME}/Berksfile.lock
+  berks vendor -b chef/${TEMPLATE_NAME}/Berksfile chef/${TEMPLATE_NAME}/cookbooks
+fi
 packer build -var "chef_version=$CHEF_VERSION" $(basename $TEMPLATE)
 
 if [ "$(packer version | grep ^Packer)" == "Packer v0.7.5" ] ; then

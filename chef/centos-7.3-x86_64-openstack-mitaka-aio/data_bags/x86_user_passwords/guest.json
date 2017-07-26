@@ -1,0 +1,10 @@
+{
+  "guest": {
+    "encrypted_data": "E+dGeHjwQR8JSdXQZ0du+tZnncoKMjGuQR/YkVTrcus=\n",
+    "hmac": "Mnz7MANqc38QyTgK9b9qwSB8GC7VPCtVGfwIu6PCfPs=\n",
+    "iv": "fw1QMIoMeaoWyCkMSQALHw==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  },
+  "id": "guest"
+}

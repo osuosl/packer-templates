@@ -1,0 +1,10 @@
+{
+  "id": "openstack-block-storage",
+  "openstack-block-storage": {
+    "encrypted_data": "E4tc8GaaLOIY0n9iaRSyvd0EBEWAUdjBufuLrImxM71JwLFahvPjCdZDCpOS\numYF\n",
+    "hmac": "4kmR7P6gI5Z5bGSgKJT2TQPiCd4gce+MfNaD+ssXV4A=\n",
+    "iv": "IPnFVYHs5opa8hHqyTbF8g==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  }
+}

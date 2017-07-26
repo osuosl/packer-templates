@@ -1,0 +1,10 @@
+{
+  "id": "rbd",
+  "rbd": {
+    "encrypted_data": "64+Fkw20E0YVQU541hDSq2/OjShj96fIUJ7Bn8tOt6s=\n",
+    "hmac": "3W0NnPFPmmwVWwb994G+54hivtE6r22b2N/jpOCxJ7c=\n",
+    "iv": "1wMbdaiaIGz63oN9iOpFAQ==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "horizon": {
+    "encrypted_data": "rmqQIFpSqTsvKzbkm15t8GBA/+Wiq2J9Zb3tJTQz1Jo=\n",
+    "hmac": "QHJtXDtOacmh3ySdq9cYoIm8qmmpghNCLVBHVIgkc5o=\n",
+    "iv": "E6c+f5wvwqWUvsY/n+cKZw==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  },
+  "id": "horizon"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "keystone",
+  "keystone": {
+    "encrypted_data": "TWvl/M820YDs7yjJLkIHFDiuFVz0I0meyI0k4Rb+bfc=\n",
+    "hmac": "jxo2N/BekeILv3OEpv0iekiv9cSbiWZIEkMdqg4aZLA=\n",
+    "iv": "L7Ay2DdLeHAqEnA8NtMQmg==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  }
+}

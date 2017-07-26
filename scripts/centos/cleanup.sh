@@ -8,6 +8,8 @@ rm -f /tmp/chef*rpm
 # Remove EPEL remove if it exists
 yum -y remove epel-release
 
+chkconfig kdump off
+
 # clean up redhat interface persistence
 rm -f /etc/udev/rules.d/70-persistent-net.rules
 

@@ -1,0 +1,10 @@
+{
+  "id": "nova_api",
+  "nova_api": {
+    "encrypted_data": "BrFqrsHZH1dyVUaOjAmFntWuXiH89cfVcYrnwJ70I60=\n",
+    "hmac": "6oOE+TVzPoVWlgVScFM2PmGizIKvg0lZvNsb3SVCxI0=\n",
+    "iv": "ZeR4vku5BpgYov8dNP7lAg==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  }
+}
