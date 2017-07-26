@@ -1,4 +1,5 @@
 source 'https://supermarket.chef.io'
+solver :ruby, :required
 
 # OSL Base deps
 cookbook 'aliases', git: 'git@github.com:osuosl-cookbooks/aliases'
@@ -8,6 +9,7 @@ cookbook 'osl-openstack', git: 'git@github.com:osuosl-cookbooks/osl-openstack'
 cookbook 'osl-nrpe', git: 'git@github.com:osuosl-cookbooks/osl-nrpe'
 cookbook 'osl-apache', git: 'git@github.com:osuosl-cookbooks/osl-apache'
 cookbook 'osl-munin', git: 'git@github.com:osuosl-cookbooks/osl-munin'
+cookbook 'osl-rsync', git: 'git@github.com:osuosl-cookbooks/osl-rsync'
 cookbook 'resource_from_hash', git: 'git@github.com:osuosl-cookbooks/resource_from_hash'
 cookbook 'statsd', github: 'att-cloud/cookbook-statsd'
 cookbook 'yum-qemu-ev', git: 'git@github.com:osuosl-cookbooks/yum-qemu-ev.git'
