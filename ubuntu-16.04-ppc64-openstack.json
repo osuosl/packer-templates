@@ -2,8 +2,21 @@
   "builders": [
     {
       "boot_command": [
-        "<wait5>",
+        "<wait>",
         "install-powerpc64",
+        " console-setup/ask_detect=false",
+        " console-setup/layoutcode=us",
+        " console-setup/modelcode=pc105",
+        " debconf/frontend=noninteractive",
+        " debian-installer=en_US.UTF-8",
+        " fb=false",
+        " kbd-chooser/method=us",
+        " keyboard-configuration/layout=USA",
+        " keyboard-configuration/variant=USA",
+        " locale=en_US.UTF-8",
+        " netcfg/get_hostname=unassigned-hostname",
+        " netcfg/get_domain=unassigned-domain",
+        " url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu-16.04/preseed-ppc64.cfg<wait>",
         "<enter><wait>"
       ],
       "accelerator": "kvm",
