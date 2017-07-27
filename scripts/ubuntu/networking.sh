@@ -1,17 +1,17 @@
 #!/bin/sh -eux
 
-ubuntu_version="`lsb_release -r | awk '{print $2}'`";
-major_version="`echo $ubuntu_version | awk -F. '{print $1}'`";
+echo "Disabling automatic udev rules for network interfaces in Ubuntu"
+# Disable automatic udev rules for network interfaces in Ubuntu,
+# appends cmdline options to the linux kernel
+sed -i 's/append\=\"/append\=\"net\.ifnames\=0\ /' /etc/yaboot.conf
 
-if [ "$major_version" -le "15" ]; then
-  echo "Disabling automatic udev rules for network interfaces in Ubuntu"
-  # Disable automatic udev rules for network interfaces in Ubuntu,
-  # source: http://6.ptmc.org/164/
-  rm -f /etc/udev/rules.d/70-persistent-net.rules;
-  mkdir -p /etc/udev/rules.d/70-persistent-net.rules;
-  rm -f /lib/udev/rules.d/75-persistent-net-generator.rules;
-  rm -rf /dev/.udev/ /var/lib/dhcp3/* /var/lib/dhcp/*;
-fi
+# Fix ethernet address for network interfaces
+sed -i 's/auto\ en.*/auto\ eth0/' /etc/network/interfaces
+sed -i 's/iface\ en.*/iface\ eth0\ inet\ dhcp/' /etc/network/interfaces
 
-# Adding a 2 sec delay to the interface up, to make the dhclient happy
-echo "pre-up sleep 2" >>/etc/network/interfaces;
+# Adding a 5 sec delay to the interface up, to make the dhclient happy
+echo "pre-up sleep 5" >>/etc/network/interfaces;
+
+# Disable cloud-init networking configuration
+mkdir -p /etc/cloud/cloud.cfg.d
+echo "network: {config: disabled}" > /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
