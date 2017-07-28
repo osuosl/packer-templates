@@ -10,7 +10,7 @@ sed -i 's/auto\ en.*/auto\ eth0/' /etc/network/interfaces
 sed -i 's/iface\ en.*/iface\ eth0\ inet\ dhcp/' /etc/network/interfaces
 
 # Adding a 5 sec delay to the interface up, to make the dhclient happy
-echo "pre-up sleep 5" >>/etc/network/interfaces;
+echo "pre-up sleep 5" >> /etc/network/interfaces;
 
 # Disable cloud-init networking configuration
 mkdir -p /etc/cloud/cloud.cfg.d
