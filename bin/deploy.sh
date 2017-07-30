@@ -71,4 +71,3 @@ else
   openstack image set --name "$IMG_NAME" --public "$NEW_IMAGE_ID"
  exit 0
 fi
-
