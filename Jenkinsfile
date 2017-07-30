@@ -21,8 +21,8 @@ node ('master'){
       env.pr = get_from_payload('pr')
       
       env.packer = '/usr/local/bin/packer'
-      env.PATH = "/usr/libexec:${env.PATH}"
-
+      env.PATH = "/usr/libexec:/usr/local/bin:${env.PATH}"
+      /*
       for ( arch in ['x86_64'] ) {
             templates = get_from_payload(arch)
             if ( templates != null ) {
@@ -40,19 +40,20 @@ node ('master'){
                 }
             }
       }
+      */
 
-      env.packer = '~/bin/packer'
       ppc64_templates = get_from_payload('ppc64')
+      arch = 'ppc64'
       if ( ppc64_templates != null ) {
           echo "Starting execution for ppc64"
           
           //do following things on the node.
           node ('ppc64') {
             clone_repo_and_checkout_pr_branch()
-            run_linter()
-            build_image()
-            deploy_image_for_testing()
-            run_tests()
+            run_linter(arch)
+            build_image(arch)
+            deploy_image_for_testing(arch)
+            run_tests(arch)
             //deploy_on_production() -- seperate!
           }
       }
