@@ -3,7 +3,7 @@ import groovy.json.JsonSlurper
 
 node ('master'){
    stage('payload_processing') { 
-      git url: 'https://github.com/osuosl-cookbooks/osl-jenkins', branch: 'samarendra/bento_pipeline'
+      git url: 'https://github.com/osuosl-cookbooks/osl-jenkins', branch: 'master'
     
       //write payload to a file
       writeFile file: "/tmp/packer_pipeline_job_build_$BUILD_NUMBER", text: "$params.payload"
