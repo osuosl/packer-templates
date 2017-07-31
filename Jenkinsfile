@@ -113,7 +113,7 @@ def deploy_image_for_testing(arch) {
       for ( t in templates ) {
          image_name = "packer-$t".replace('.json','')
          image_path = "./$image_name/${image_name}.qcow2"
-         sh (returnStdout: true, script: "./bin/deploy.sh -f $image_path -r $env.pr")
+         sh (returnStdout: true, script: "./bin/deploy.sh -f $image_path -n $image_name -r $env.pr")
       }
    }
    templates = null
