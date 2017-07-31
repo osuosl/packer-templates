@@ -43,8 +43,10 @@ FINAL_QCOW_FILE_NAME="${DIR_NAME}/${IMAGE_NAME}-compressed.qcow2"
 set -xe
 
 if [ -f $FINAL_QCOW_FILE_NAME ] ; then
-   echo "A built qcow2 already present for $IMAGE_NAME. Skipping!"
-   exit 1
+   echo
+   echo "A built qcow2 already present for $TEMPLATE_NAME. Skipping!"
+   echo
+   exit 0
 fi
 
 if [ -e chef/${TEMPLATE_NAME}/Berksfile ] ; then
