@@ -52,6 +52,6 @@
   ],
   "variables": {
     "mirror": "http://centos-altarch.osuosl.org",
-    "image_name": "CentOS 7.3 LE"
+    "image_name": "CentOS 7.3 Little Endian and not Big Endian"
   }
 }
