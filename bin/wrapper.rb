@@ -21,7 +21,7 @@ end
 
 params = parser.parse!
 params.each do |t|
-  j = JSON.parse(open(t.to_s))
+  j = JSON.parse(open(t).read.to_s)
 
   case fieldname
   when 'image_name'
