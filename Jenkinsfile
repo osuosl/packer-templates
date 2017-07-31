@@ -21,7 +21,7 @@ node ('master'){
       env.pr = get_from_payload('pr')
       
       env.packer = '/usr/local/bin/packer'
-      env.PATH = "/usr/libexec:/usr/local/bin:${env.PATH}"
+      env.PATH = "/usr/libexec:/usr/local/bin:/opt/chef/embedded/bin:${env.PATH}"
       /*
       for ( arch in ['x86_64'] ) {
             templates = get_from_payload(arch)
@@ -111,9 +111,8 @@ def deploy_image_for_testing(arch) {
    stage('deploy_for_testing') {
    //deploy!
       for ( t in templates ) {
-         image_name = "packer-$t".replace('.json','')
-         image_path = "./$image_name/${image_name}.qcow2"
-         sh (returnStdout: true, script: "./bin/deploy_wrapper.rb -t $t -p $env.pr")
+         deploy_output = sh (returnStdout: true, script: "./bin/deploy_wrapper.rb -t $t -s /home/alfred/openstack_credentials.json -r $env.pr")
+         println deploy_output
       }
    }
    templates = null
@@ -125,8 +124,8 @@ def run_tests(arch) {
    stage('openstack_taster') {
       // TODO: put this in try-catch
       for ( t in templates ) {
-         image_name = sh (returnStdout: true, script: "./bin/wrapper.sh $t -f image_name")
-         sh (returnStdout: true, script: "openstack_taster $image_name")
+         image_name = sh (returnStdout: true, script: "./bin/wrapper.rb $t -f image_name").trim()
+         sh (returnStdout: true, script: "openstack_taster \"$image_name\"")
       }
    }
    templates = null
