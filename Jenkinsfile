@@ -21,7 +21,7 @@ node ('master'){
       env.pr = get_from_payload('pr')
       
       env.packer = '/usr/local/bin/packer'
-      env.PATH = "/usr/libexec:/usr/local/bin:${env.PATH}"
+      env.PATH = "/usr/libexec:/usr/local/bin:/opt/chef/embedded/bin:${env.PATH}"
       /*
       for ( arch in ['x86_64'] ) {
             templates = get_from_payload(arch)
@@ -125,7 +125,7 @@ def run_tests(arch) {
    stage('openstack_taster') {
       // TODO: put this in try-catch
       for ( t in templates ) {
-         image_name = sh (returnStdout: true, script: "./bin/wrapper.sh $t -f image_name")
+         image_name = sh (returnStdout: true, script: "./bin/wrapper.rb $t -f image_name")
          sh (returnStdout: true, script: "openstack_taster $image_name")
       }
    }
