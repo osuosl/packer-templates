@@ -3,7 +3,8 @@
     {
       "boot_command": [
         "<wait>",
-        "install-powerpc64",
+        "c<enter>",
+        "linux /install/vmlinux",
         " console-setup/ask_detect=false",
         " console-setup/layoutcode=us",
         " console-setup/modelcode=pc105",
@@ -17,7 +18,11 @@
         " netcfg/get_hostname=unassigned-hostname",
         " netcfg/get_domain=unassigned-domain",
         " url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu-16.04/preseed-ppc64.cfg<wait>",
-        "<enter><wait>"
+        " ---",
+        "<enter><wait>",
+        "initrd /install/initrd.gz",
+        "<enter><wait>",
+        "boot<enter><wait>"
       ],
       "accelerator": "kvm",
       "boot_wait": "6s",
