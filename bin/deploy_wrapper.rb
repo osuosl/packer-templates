@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/opt/chef/embedded/bin/ruby
 # wrapper around the deploy.sh for deploying things properly.
 
 require 'json'
