@@ -57,13 +57,8 @@ done
 [ -z "$IMG_NAME" ] && echo "Error: IMG_NAME not set. Try '$0 -h'" && exit 1
 [ -z "$PR_NUM" ] && echo "Error: PR_NUM not set. Try '$0 -h'" && exit 1
 
-#Give the exact path to the file
-FILE="../$FILE"
-
-set -xe
-
 if [ "$PUBLISH" == 0 ]; then
-    [ -r "$FILE" ] || echo "Error: FILE not set. Try '$0 -h'" && exit 1
+    if [ ! -r "$FILE" ]; then echo "Error: FILE not set. Try '$0 -h'" && exit 1; fi
     openstack image create --file "$FILE" --property chef-version="$CHEF_VER" --disk-format qcow2 "$IMG_NAME - PR#$PR_NUM"
     exit 0
 else

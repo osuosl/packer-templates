@@ -45,8 +45,8 @@ puts "Processing #{template_file}"
 template_json = JSON.parse(open(template_file).read.to_s)
 image_name = template_json['variables']['image_name']
 
-template_name = "packer-#{template_file}".sub('openstack.json','')
-image_path = "./#{template_name}/#{template_name}-compressed.qcow2"
+template_name = "packer-#{template_file}".sub('.json','')
+image_path = "./#{template_name}/#{template_name.sub('-openstack','')}-compressed.qcow2"
 #TODO: check for existence of the built image
 
 #open openstack_credentials and run deploy for each cluster
