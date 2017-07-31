@@ -8,6 +8,10 @@ grep -q "^PermitRootLogin" /etc/ssh/sshd_config\
   && sed -i 's/PermitRootLogin .*/PermitRootLogin no/Ig' /etc/ssh/sshd_config\
   || echo "PermitRootLogin no" >> /etc/ssh/sshd_config;
 
+grep -q "^PasswordAuthentication" /etc/ssh/sshd_config\
+  && sed -i 's/PasswordAuthentication .*/PasswordAuthentication no/Ig' /etc/ssh/sshd_config\
+  || echo "PasswordAuthentication no" >> /etc/ssh/sshd_config;
+
 grep -q "^GSSAPIAuthentication" /etc/ssh/sshd_config\
   && sed -i 's/GSSAPIAuthentication .*/GSSAPIAuthentication no/Ig' /etc/ssh/sshd_config\
   || echo "GSSAPIAuthentication no" >> /etc/ssh/sshd_config;
