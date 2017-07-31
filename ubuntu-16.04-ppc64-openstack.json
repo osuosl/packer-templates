@@ -54,6 +54,7 @@
         "scripts/common/vmtools.sh",
         "scripts/ubuntu/openstack.sh",
         "scripts/ubuntu/sudoers.sh",
+        "scripts/ubuntu/ppc.sh",
         "scripts/ubuntu/cleanup.sh",
         "scripts/common/minimize.sh"
       ],
