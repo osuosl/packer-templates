@@ -111,7 +111,7 @@ def deploy_image_for_testing(arch) {
    stage('deploy_for_testing') {
    //deploy!
       for ( t in templates ) {
-         sh (returnStdout: true, script: "./bin/deploy_wrapper.rb -t $t -p $env.pr")
+         sh (returnStdout: true, script: "./bin/deploy_wrapper.rb -t $t -s /home/alfred/openstack_credentials.json -r $env.pr")
       }
    }
    templates = null

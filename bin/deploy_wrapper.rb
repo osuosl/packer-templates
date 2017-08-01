@@ -14,7 +14,7 @@ template_file = ''
 #TODO: fix this parser to make things mandatory and collect parameters properly
 
 parser = OptionParser.new do |opts|
-  opts.banner = 'Usage: deploy_wrapper.rb -t <template_file>'
+  opts.banner = 'Usage: deploy_wrapper.rb -t <template_file> -s OPENSTACK_CREDENTIALS_FILE -r PR'
 
   opts.separator('')
   opts.on('-t TEMPLATE_FILE', 
@@ -29,7 +29,7 @@ parser = OptionParser.new do |opts|
     openstack_credentials_file = j || OPENSTACK_CREDENTIALS_DEFAULT_LOCATION
   end
 
-  opts.on('-p PR', 
+  opts.on('-r PR',
           '--pull_request PR',
           'Specify the PR number for which we are deploying this.') do |r|
     pr_number = r || 29
