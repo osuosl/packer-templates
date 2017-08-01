@@ -25,7 +25,7 @@ def extract_variable_from_template(template, variable)
     t_builders.select! { |p| p['type'] == 'qemu' }
     return t['builders'][0]['output_directory']
 
-  when 'vm_name'
+  when 'vm_name','openstack_image_name'
     t_builders = t.dig('builders')
     # .dig returns nil if it doesn't find that path in the hash.
     return nil if t_builders.nil?
@@ -33,6 +33,7 @@ def extract_variable_from_template(template, variable)
     t_builders.select! { |p| p['type'] == 'qemu' }
     puts "WARNING: Returning vm_name from builder 0 of #{t_builders.count}" if t_builders.count > 1
     return t['builders'][0]['vm_name']
+
   else
     return nil
   end
