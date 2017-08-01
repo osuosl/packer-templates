@@ -111,8 +111,6 @@ def deploy_image_for_testing(arch) {
    stage('deploy_for_testing') {
    //deploy!
       for ( t in templates ) {
-         image_name = "packer-$t".replace('.json','')
-         image_path = "./$image_name/${image_name}.qcow2"
          sh (returnStdout: true, script: "./bin/deploy_wrapper.rb -t $t -p $env.pr")
       }
    }

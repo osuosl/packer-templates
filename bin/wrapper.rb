@@ -8,6 +8,8 @@ require 'json'
 require 'optparse'
 require 'csv'
 
+OPENSTACK_CREDENTIALS_DEFAULT_LOCATION = '/home/alfred/openstack_credentials.json'
+
 fieldname = ''
 parser = OptionParser.new do |opts|
   opts.banner = 'Usage: wrapper.rb <template_file1>...<template_fileN> \
@@ -19,24 +21,40 @@ parser = OptionParser.new do |opts|
   end
 end
 
-params = parser.parse!
-params.each do |t|
-  j = JSON.parse(open(t).read.to_s)
+def extract_variable_from_template(template, variable)
+  t = JSON.parse(open(template).read.to_s)
 
-  case fieldname
+  case variable
   when 'image_name'
-    puts j['variables']['image_name']
+    return t['variables']['image_name']
   when 'output_directory'
-    puts j['builders'][0]['output_directory']
+    t_builders = t_data.dig('builders')
+    # .dig returns nil if it doesn't find that path in the hash.
+    next if t_builders.nil?
+
+    t_builders.select! { |p| p['type'] == 'qemu' }
+    return t['builders'][0]['output_directory']
   else
-    data = {}
+    return nil
+  end
+end
 
-    data['image_name'] = j['variables']['image_name']
-    data['output_directory'] = j['builders'][0]['output_directory']
-    csv_string = CSV.generate(force_quotes: true) do |csv|
-      csv << data.values
-    end
+def execute_on_each_cluster(
+    openstack_credential_file = OPENSTACK_CREDENTIALS_DEFAULT_LOCATION,
+    function
+  )
+  t = JSON.parse!
 
-    puts csv_string
+  #open openstack_credentials and run deploy for each cluster
+  openstack_clusters = JSON.parse(open(openstack_credentials_file).read.to_s)
+
+  openstack_clusters.keys.each do |cluster|
+    puts cluster
+    puts pr_number
+    #bring the credentials to the environment
+    ENV.update openstack_clusters[cluster]
+
+    puts "Calling #{function}"
+    function()
   end
 end

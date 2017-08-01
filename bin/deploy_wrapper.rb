@@ -3,6 +3,7 @@
 
 require 'json'
 require 'optparse'
+load 'bin/common.rb'
 
 options = {}
 OPENSTACK_CREDENTIALS_DEFAULT_LOCATION = '/home/alfred/openstack_credentials.json'
@@ -10,6 +11,7 @@ openstack_credentials_file = OPENSTACK_CREDENTIALS_DEFAULT_LOCATION
 pr_number = 29
 
 template_file = ''
+#TODO: fix this parser to make things mandatory and collect parameters properly
 
 parser = OptionParser.new do |opts|
   opts.banner = 'Usage: deploy_wrapper.rb -t <template_file>'
@@ -34,34 +36,23 @@ parser = OptionParser.new do |opts|
   end
 end
 
-
 params = parser.parse!
 puts params
 
-#template_file = params[0]
-puts "Processing #{template_file}"
+run_on_each_cluster(openstack_credentials_file) do |cluster|
+  # name which would have been used to create the qcow2 image and the dir containing it
+  vm_name = extract_variable_from_template(template_file, 'vm_name')
 
-#TODO: check for existence of template file 
-template_json = JSON.parse(open(template_file).read.to_s)
-image_name = template_json['variables']['image_name']
+  # TODO: check for existence of the built image
+  image_path = "./#{vm_name}/#{vm_name}-compressed.qcow2"
+  puts "going to look for image at \n #{image_path}"
 
-template_name = "packer-#{template_file}".sub('.json','')
-image_path = "./#{template_name}/#{template_name.sub('-openstack','')}-compressed.qcow2"
-#TODO: check for existence of the built image
+  # name to use when deploying the image on OpenStack
+  openstack_image_name = extract_variable_from_template(template_file, 'image_name')
 
-#open openstack_credentials and run deploy for each cluster
-openstack_clusters = JSON.parse(open(openstack_credentials_file).read.to_s)
-
-openstack_clusters.keys.each do |cluster|
-
-  puts cluster
-  puts pr_number
-  #bring the credentials to the environment
-  ENV.update openstack_clusters[cluster]
-
-  command = "./bin/deploy.sh -f \"#{image_path}\" -n \"#{image_name}\" -r #{pr_number}"
+  command = "./bin/deploy.sh -f #{image_path} -n \"#{openstack_image_name}\" -r #{pr_number}"
   puts command 
-  deploy_output = `#{command}`
 
+  deploy_output = `#{command}`
   puts deploy_output
 end
