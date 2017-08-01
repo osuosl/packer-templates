@@ -41,14 +41,14 @@ puts params
 
 run_on_each_cluster(openstack_credentials_file) do |cluster|
   # name which would have been used to create the qcow2 image and the dir containing it
-  vm_name = extract_variable_from_template(template_file, 'vm_name')
+  vm_name = parse_from_template(template_file, 'vm_name')
 
   # TODO: check for existence of the built image
   image_path = "./#{vm_name}/#{vm_name}-compressed.qcow2"
   puts "going to look for image at \n #{image_path}"
 
   # name to use when deploying the image on OpenStack
-  openstack_image_name = extract_variable_from_template(template_file, 'image_name')
+  openstack_image_name = parse_from_template(template_file, 'image_name')
 
   command = "./bin/deploy.sh -f #{image_path} -n \"#{openstack_image_name}\" -r #{pr_number}"
   puts command 

@@ -6,7 +6,7 @@ require 'json'
 require 'optparse'
 require 'csv'
 
-def extract_variable_from_template(template, variable)
+def parse_from_template(template, variable)
   t = JSON.parse(open(template).read.to_s)
 
   case variable
