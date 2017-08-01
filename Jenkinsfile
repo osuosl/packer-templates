@@ -88,7 +88,7 @@ def run_linter(arch) {
    //run linter
    stage('linter') {
        for ( t in templates ) {
-          sh (returnStdout: true, script: "$env.packer validate $t")
+          sh (returnStdout: true, script: "$env.packer validate -syntax-only $t")
        }
    }
    templates = null
