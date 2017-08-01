@@ -1,8 +1,19 @@
 #!groovy
 import groovy.json.JsonSlurper
 
+/*
+receive, store, process and actually call the right jenkin nodes
+to process the template files based on the architecture
+
+everything runs on whatever is labeled as 'master'
+
+*/
+
 node ('master'){
-   stage('payload_processing') { 
+   /* receives the payload, parses it and gets us the PR number, templates to process and arch */
+   stage('payload_processing') {
+
+      //clone the osl-jenkins on master branch to use the latest version of scripts
       git url: 'https://github.com/osuosl-cookbooks/osl-jenkins', branch: 'master'
     
       //write payload to a file
@@ -16,51 +27,62 @@ node ('master'){
       writeFile file: "/tmp/${JOB_NAME}-${BUILD_NUMBER}.json", text: env.payload_parsed_JSON
    }   
 
-   stage('start_builds_on_right_nodes') {  
-      //set path to the packer binary
+   /* actually starts processing the templates on the right nodes */
+   stage('start_processing_on_right_nodes') {
+
       env.pr = get_from_payload('pr')
       
+
+      //TODO: this should be set from the job
+      //set path to the packer binary
       env.packer = '/usr/local/bin/packer'
       env.PATH = "/usr/libexec:/usr/local/bin:/opt/chef/embedded/bin:${env.PATH}"
-      /*
-      for ( arch in ['x86_64'] ) {
-            templates = get_from_payload(arch)
-            if ( templates != null ) {
-                echo "Starting execution for $arch"
 
-                //do following things on the node.
-                node (arch) {
-                  clone_repo_and_checkout_pr_branch()
-                  run_linter(arch)
-                  build_image(arch)
-                  deploy_image_for_testing(arch)
-                  run_tests(arch)
-                  archive '*'
-                  //deploy_on_production() -- seperate!
-                }
-            }
-      }
-      */
+      //TODO: this should be set from the job as an env variable
+      //this should *ALWAYS* match what lib/packer_pipeline.rb return
+      archs = ['x86_64', 'ppc64']
 
-      ppc64_templates = get_from_payload('ppc64')
-      arch = 'ppc64'
-      if ( ppc64_templates != null ) {
-          echo "Starting execution for ppc64"
-          
-          //do following things on the node.
-          node ('ppc64') {
-            clone_repo_and_checkout_pr_branch()
-            run_linter(arch)
-            build_image(arch)
-            deploy_image_for_testing(arch)
-            run_tests(arch)
-            //deploy_on_production() -- seperate!
-          }
+      for ( arch in archs ) {
+         env.arch = arch
+         templates = get_from_payload(env.arch)
+         if ( ! templates.empty && templates != null ) {
+             echo "Starting execution for $env.arch"
+             //do following things on the node.
+             node (env.arch) {
+               clone_repo_and_checkout_pr_branch()
+               run_linter(env.arch)
+               build_image(env.arch)
+               deploy_image_for_testing(env.arch)
+               run_tests(env.arch)
+               archive '*'
+               //deploy_on_production() -- seperate!
+             }
+         }
+         else
+         {
+            echo "No templates for $env.arch!"
+         }
       }
-      
    }
 }
 
+/*
+get_from_payload(variable_name) :
+   read the parsed payload JSON from the disk
+   and return variables in a form that's easy to process
+
+   this always runs on the master.
+
+Why do we need this function?
+-----------------------------
+
+Jenkins requires any variable to be serializable so that
+even if the master is restarted, the state is maintained.
+A JSON object in memory is represented as a Map which does not
+implement the Serializable interface.
+
+So we implement our own "serializer-deserializer" in this manner.
+*/
 def get_from_payload(v) {
    def jsonSlurper = new JsonSlurper()
    def data = jsonSlurper.parseText("${payload_parsed_JSON}")
@@ -75,6 +97,8 @@ def get_from_payload(v) {
    return r
 }
 
+
+// clone the packer-templates repo and checkout the branch which we want to use
 def clone_repo_and_checkout_pr_branch() {
    stage('clone_repo_and_checkout_pr_branch') {
        //checkout all templates
@@ -83,6 +107,7 @@ def clone_repo_and_checkout_pr_branch() {
    }
 }
 
+// run linter on each of the template
 def run_linter(arch) {
    def templates = get_from_payload(arch)
    //run linter
@@ -91,12 +116,14 @@ def run_linter(arch) {
           sh (returnStdout: true, script: "$env.packer validate -syntax-only $t")
        }
    }
+
+   // remove this line and you shall get an error. why ? because templates is non-serializable
+   // and anything left unserialized is bad!
    templates = null
 }
 
 def build_image(arch) {
    def templates = get_from_payload(arch)
-   //TODO: this will go in a try-catch block
    stage('build_image') {
       for ( t in templates ) {
          sh (returnStdout: true, script: "./bin/build_image.sh -t $t")
@@ -107,7 +134,6 @@ def build_image(arch) {
 
 def deploy_image_for_testing(arch) {
    def templates = get_from_payload(arch)
-   //TODO do for each openstack_environment
    stage('deploy_for_testing') {
    //deploy!
       for ( t in templates ) {
@@ -124,8 +150,8 @@ def run_tests(arch) {
    stage('openstack_taster') {
       // TODO: put this in try-catch
       for ( t in templates ) {
-         image_name = sh (returnStdout: true, script: "./bin/wrapper.rb $t -f image_name").trim()
-         sh (returnStdout: true, script: "openstack_taster \"$image_name\"")
+         taste_output = sh (returnStdout: true, script: "./bin/taster_wrapper.rb -t $t -s /home/alfred/openstack_credentials.json -r $env.pr").trim()
+         println taste_output
       }
    }
    templates = null
