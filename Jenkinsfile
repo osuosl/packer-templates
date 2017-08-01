@@ -124,8 +124,8 @@ def run_tests(arch) {
    stage('openstack_taster') {
       // TODO: put this in try-catch
       for ( t in templates ) {
-         image_name = sh (returnStdout: true, script: "./bin/wrapper.rb $t -f image_name").trim()
-         sh (returnStdout: true, script: "openstack_taster \"$image_name\"")
+         taste_output = sh (returnStdout: true, script: "./bin/taster_wrapper.rb -t $t -s /home/alfred/openstack_credentials.json -r $env.pr").trim()
+         println taste_output
       }
    }
    templates = null
