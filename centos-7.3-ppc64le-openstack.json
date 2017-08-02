@@ -29,6 +29,7 @@
       "ssh_port": 22,
       "ssh_username": "centos",
       "ssh_wait_timeout": "10000s",
+      "vnc_bind_address": "0.0.0.0",
       "type": "qemu",
       "vm_name": "packer-centos-7.3-ppc64le"
     }
