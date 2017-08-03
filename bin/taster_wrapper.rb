@@ -46,7 +46,7 @@ run_on_each_cluster(openstack_credentials_file) do |cluster|
 
   puts ENV['OS_USERNAME']
   puts ENV['OS_TENANT_NAME']
-  `export -p > /home/alfred/#{cluster}.rc' `
+  `export -p > /home/alfred/#{cluster}.rc`
 
   command = "openstack_taster \"#{openstack_image_name}\""
   puts command 
