@@ -55,6 +55,7 @@
       "execute_command": "echo 'debian' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
       "scripts": [
         "scripts/debian/update.sh",
+        "scripts/debian/openstack.sh",
         "scripts/common/sshd.sh",
         "scripts/debian/networking.sh",
         "scripts/debian/sudoers.sh",
