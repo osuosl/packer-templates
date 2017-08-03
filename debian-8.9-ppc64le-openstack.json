@@ -12,6 +12,7 @@
         " debian-installer=en_US.UTF-8",
         " fb=false",
         " kbd-chooser/method=us",
+        " keyboard-configuration/xkb-keymap=us",
         " keyboard-configuration/layout=USA",
         " keyboard-configuration/variant=USA",
         " locale=en_US.UTF-8",
