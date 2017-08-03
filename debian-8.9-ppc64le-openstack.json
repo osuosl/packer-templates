@@ -59,6 +59,7 @@
         "scripts/debian/sudoers.sh",
         "scripts/common/vmtools.sh",
         "scripts/debian/systemd.sh",
+        "scripts/debian/ppc.sh",
         "scripts/debian/cleanup.sh",
         "scripts/common/minimize.sh"
       ],
