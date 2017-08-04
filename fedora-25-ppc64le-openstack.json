@@ -4,7 +4,7 @@
       "boot_command": [
         "c<wait10>",
         "linux /ppc/ppc64/vmlinuz ro ",
-	"ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-25/ks-ppc64le-openstack.cfg ",
+        "ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-25/ks-ppc64le-openstack.cfg ",
         "inst.zram=0 <enter>",
         "initrd /ppc/ppc64/initrd.img<enter>",
         "boot<enter><wait>"
