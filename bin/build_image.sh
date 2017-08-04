@@ -55,7 +55,7 @@ if [ -e chef/${TEMPLATE_NAME}/Berksfile ] ; then
   berks vendor -b chef/${TEMPLATE_NAME}/Berksfile chef/${TEMPLATE_NAME}/cookbooks
 fi
 export PACKER_LOG=1
-packer build -debug -var "chef_version=$CHEF_VERSION" $(basename $TEMPLATE)
+packer build -force -debug -var "chef_version=$CHEF_VERSION" $(basename $TEMPLATE)
 
 
 if [ "$(packer version | grep ^Packer)" == "Packer v0.7.5" ] ; then

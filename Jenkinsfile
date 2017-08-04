@@ -42,6 +42,7 @@ node ('master'){
       //this should *ALWAYS* match what lib/packer_pipeline.rb return
       archs = ['x86_64', 'ppc64']
 
+      //TODO: parallelize this -- both archs can be processed seperately after all!
       for ( arch in archs ) {
          env.arch = arch
          templates = get_from_payload(env.arch)
@@ -107,7 +108,12 @@ def clone_repo_and_checkout_pr_branch() {
    }
 }
 
-// run linter on each of the template
+/* run_linter(arch)
+
+   run linter on each template of the given architecture
+
+   #TODO: failure in any template is a hard failure.
+*/
 def run_linter(arch) {
    def templates = get_from_payload(arch)
    //run linter
@@ -122,6 +128,12 @@ def run_linter(arch) {
    templates = null
 }
 
+/* build_image(arch)
+
+   builds deployable qcow2 images for templates of the given arch
+
+   #TODO: failure to build a single image should be a hard failure
+*/
 def build_image(arch) {
    def templates = get_from_payload(arch)
    stage('build_image') {
@@ -132,6 +144,14 @@ def build_image(arch) {
    templates = null
 }
 
+/* deploy_image_for_testing(arch)
+
+   deploys qcow2 images on the various clusters for the given arch.
+   cluster credentials come from packer_pipeline_credentials.json
+   in alfred's home
+
+   TODO: failure while deploying any image is a soft failure
+*/
 def deploy_image_for_testing(arch) {
    def templates = get_from_payload(arch)
    stage('deploy_for_testing') {
@@ -143,6 +163,16 @@ def deploy_image_for_testing(arch) {
    }
    templates = null
 }
+
+/* run_tests(arch)
+
+   runs tastes using openstack_taster on all deployed images of a given arch.
+
+   this function takes a template, deciphers the name with which it would have been deployed,
+   and runs the test suites against that image name.
+
+   TODO: failure while tasting any image is a hard failure.
+*/
 
 def run_tests(arch) {
    def templates = get_from_payload(arch)
