@@ -63,7 +63,7 @@
   ],
   "variables": {
     "mirror": "http://cdimage.ubuntu.com",
-    "image_name": "Ubuntu 16.04 BE"
+    "image_name": "Ubuntu 16.04 Big Endian"
   }
 }
 
