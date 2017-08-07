@@ -46,7 +46,7 @@ if [ -e chef/${TEMPLATE_NAME}/Berksfile ] ; then
   berks vendor -b chef/${TEMPLATE_NAME}/Berksfile chef/${TEMPLATE_NAME}/cookbooks
 fi
 export PACKER_LOG=1
-packer build -force -debug $(basename $TEMPLATE)
+packer build -color=false -force -debug $(basename $TEMPLATE)
 
 if [ "$(packer version | grep ^Packer)" == "Packer v0.7.5" ] ; then
   qemu-img convert -o compat=0.10 -O qcow2 -c ${DIR_NAME}/${IMAGE_NAME}.qcow2 \
