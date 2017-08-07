@@ -30,9 +30,9 @@
       "headless": true,
       "vnc_bind_address": "0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "ea8c4ace32e94962d9c34dbfc0a6bfb9",
+      "iso_checksum": "1d7320e716b9730a3a4e440d0006bd5c",
       "iso_checksum_type": "md5",
-      "iso_url": "{{user `mirror`}}/releases/16.04/release/ubuntu-16.04.2-server-ppc64el.iso",
+      "iso_url": "{{user `mirror`}}/releases/16.04/release/ubuntu-16.04.3-server-ppc64el.iso",
       "output_directory": "packer-ubuntu-16.04-ppc64le-openstack",
       "shutdown_command": "echo 'ubuntu' | sudo -S shutdown -P now",
       "qemuargs": [
