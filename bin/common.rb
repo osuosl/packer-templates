@@ -67,33 +67,42 @@ end
 def parse_from_template(template, variable)
   t = JSON.parse(open(template).read.to_s)
 
-  case variable
+  begin
+    case variable
 
-  when 'image_name'
-    return t['variables']['image_name']  if t['variables'].key? 'image_name'
+    when 'image_name'
+      return t['variables']['image_name'] if t['variables'].key? 'image_name'
 
-    puts "image_name custom variable not pre-set in #{template}!"
-    return t['builders'][0]['vm_name'].sub('-', ' ').sub('packer', '').strip
+      puts "image_name custom variable not pre-set in #{template}!"
+      return t['builders'][0]['vm_name'].sub('-', ' ').sub('packer', '').strip
 
-  when 'output_directory'
-    t_builders = t.dig('builders')
-    # .dig returns nil if it doesn't find that path in the hash.
-    return nil if t_builders.nil?
+    when 'output_directory'
+      t_builders = t.dig('builders')
 
-    t_builders.select! { |p| p['type'] == 'qemu' }
-    return t['builders'][0]['output_directory']
+      # process only qemu type of builder -- this accomodates any other builders we add in future.
+      t_builders.select! { |p| p['type'] == 'qemu' }
+      return t['builders'][0]['output_directory']
 
-  when 'vm_name', 'openstack_image_name'
-    t_builders = t.dig('builders')
-    # .dig returns nil if it doesn't find that path in the hash.
-    return nil if t_builders.nil?
+    when 'vm_name', 'openstack_image_name'
+      t_builders = t.dig('builders')
 
-    t_builders.select! { |p| p['type'] == 'qemu' }
-    puts "WARNING: Returning vm_name from builder 0 of #{t_builders.count}" if t_builders.count > 1
-    return t['builders'][0]['vm_name']
+      # process only qemu type of builder -- this accomodates any other builders we add in future.
+      t_builders.select! { |p| p['type'] == 'qemu' }
+      puts "WARNING: Returning vm_name from builder 0 of #{t_builders.count}" if t_builders.count > 1
+      return t['builders'][0]['vm_name']
 
-  else
-    return nil
+    when 'chef_version'
+      return t['variables']['chef_version']
+
+    else
+      # When a variable we do not handle is requested, return nil
+      return nil
+    end
+
+  # When a variable is not found, inform and return a blank string
+  rescue NoMethodError
+    puts "Returning blank string because we could not find #{variable}!"
+    return ''
   end
 end
 

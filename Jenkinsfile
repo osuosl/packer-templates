@@ -18,14 +18,23 @@ node ('master'){
     
       //write payload to a file
       writeFile file: "/tmp/packer_pipeline_job_build_$BUILD_NUMBER", text: "$params.payload"
-    
-      //pass this output to our script
-      env.payload_parsed_JSON = sh(returnStdout: true, script: """ 
-        export PACKER_TEMPLATES_DIR=$WORKSPACE
+
+      //what is the pr number ?
+      pr = new JsonSlurper().parseText("${params.payload}")['number']
+
+      //checkout the packer-templates PR so that our script can look at the files
+      dir('packer-templates') {
+          git 'https://github.com/osuosl/packer-templates'
+            sh "git pr $pr"
+      }
+
+      //pass this payload to our script so that it can return info which we can actually use
+      env.payload_parsed_JSON = sh(returnStdout: true, script: """
+        export PACKER_TEMPLATES_DIR=$WORKSPACE/packer-templates
         cat /tmp/packer_pipeline_job_build_$BUILD_NUMBER | $WORKSPACE/files/default/bin/packer_pipeline.rb
       """).trim()
       writeFile file: "/tmp/${JOB_NAME}-${BUILD_NUMBER}.json", text: env.payload_parsed_JSON
-   }   
+   }
 
    /* actually starts processing the templates on the right nodes */
    stage('start_processing_on_right_nodes') {

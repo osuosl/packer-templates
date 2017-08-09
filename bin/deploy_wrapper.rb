@@ -22,8 +22,13 @@ run_on_each_cluster(options[:openstack_credentials_file]) do
 
   # name to use when deploying the image on OpenStack
   openstack_image_name = parse_from_template(options[:template_file], 'image_name')
+  chef_version = parse_from_template(options[:template_file], 'chef_version')
 
   command = "./bin/deploy.sh -f #{image_path} -n \"#{openstack_image_name}\" -r #{options[:pr_number]}"
+
+  # when the command is not specified in the template
+  command += "-c #{chef_version}" unless chef_version.nil?
+
   puts command
 
   deploy_output = `#{command}`
