@@ -46,8 +46,8 @@ def option_parser(for_program, argv)
      !options.key?(:openstack_credentials_file) ||
      !options.key?(:pr_number)
 
-     puts "All parameters are mandatory but you just passed #{options}!"
-     exit 1
+    puts "All parameters are mandatory but you just passed #{options}!"
+    exit 1
   end
 
   unless File.readable? options[:openstack_credentials_file]

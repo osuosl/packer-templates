@@ -19,6 +19,8 @@ Metrics/BlockLength:
 Metrics/ParameterLists:
   Enabled: false
 
+Metrics/CyclomaticComplexity:
+  Max: 8
 
 Style/IfUnlessModifier:
   MaxLineLength: 120
