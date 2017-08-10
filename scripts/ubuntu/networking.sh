@@ -1,4 +1,4 @@
-#!/bin/sh -eux
+#!/bin/bash
 
 echo "Disabling automatic udev rules for network interfaces in Ubuntu"
 # Disable automatic udev rules for network interfaces in Ubuntu,

@@ -1,4 +1,4 @@
-#!/bin/sh -eux
+#!/bin/bash
 
 ubuntu_version="`lsb_release -r | awk '{print $2}'`";
 ubuntu_major_version="`echo $ubuntu_version | awk -F. '{print $1}'`";
