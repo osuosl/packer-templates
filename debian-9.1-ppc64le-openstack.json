@@ -1,0 +1,76 @@
+{
+  "builders": [
+    {
+      "boot_command": [
+        "<wait>",
+        "c<enter>",
+        "linux /install/vmlinux",
+        " console-setup/ask_detect=false",
+        " console-setup/layoutcode=us",
+        " console-setup/modelcode=pc105",
+        " debconf/frontend=noninteractive",
+        " debian-installer=en_US.UTF-8",
+        " fb=false",
+        " kbd-chooser/method=us",
+        " keyboard-configuration/xkb-keymap=us",
+        " keyboard-configuration/layout=USA",
+        " keyboard-configuration/variant=USA",
+        " locale=en_US.UTF-8",
+        " netcfg/get_hostname=unassigned-hostname",
+        " netcfg/get_domain=unassigned-domain",
+        " url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-9.1/preseed-ppc64.cfg<wait>",
+        " ---",
+        "<enter><wait>",
+        "initrd /install/initrd.gz",
+        "<enter><wait>",
+        "boot<enter><wait>"
+      ],
+      "accelerator": "kvm",
+      "boot_wait": "10s",
+      "disk_size": "3072",
+      "headless": true,
+      "vnc_bind_address":"0.0.0.0",
+      "http_directory": "http",
+      "iso_checksum": "ef9b57587a5339105e4bbe0c7d10a35c",
+      "iso_checksum_type": "md5",
+      "iso_url": "{{user `mirror`}}/release/9.1.0/ppc64el/iso-cd/debian-9.1.0-ppc64el-netinst.iso",
+      "output_directory": "packer-debian-9.1-ppc64le-openstack",
+      "shutdown_command": "echo 'debian' | sudo -S /sbin/shutdown -hP now",
+      "ssh_password": "debian",
+      "ssh_port": 22,
+      "ssh_username": "debian",
+      "ssh_wait_timeout": "10000s",
+      "qemuargs": [
+        [ "-m", "2048M" ],
+        [ "-boot", "strict=on" ]
+      ],
+      "qemu_binary": "/usr/libexec/qemu-kvm",
+      "machine_type": "pseries",
+      "type": "qemu",
+      "vm_name": "packer-debian-9.1-ppc64le-openstack"
+    }
+  ],
+  "provisioners": [
+    {
+      "execute_command": "echo 'debian' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
+      "scripts": [
+        "scripts/debian/update.sh",
+        "scripts/debian/openstack.sh",
+        "scripts/common/sshd.sh",
+        "scripts/debian/networking.sh",
+        "scripts/debian/sudoers.sh",
+        "scripts/common/vmtools.sh",
+        "scripts/debian/systemd.sh",
+        "scripts/debian/ppc.sh",
+        "scripts/debian/cleanup.sh",
+        "scripts/common/minimize.sh"
+      ],
+      "type": "shell"
+    }
+  ],
+  "variables": {
+    "mirror": "http://cdimage.debian.org/cdimage",
+    "image_name": "Debian 9.1 LE"
+  }
+}
+
