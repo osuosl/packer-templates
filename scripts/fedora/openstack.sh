@@ -1,8 +1,7 @@
 #!/bin/bash -eux
 
-if [ $(uname -m)=="ppc64" -o $(uname -m)=="ppc64le" ]
-  then
-    dnf -y install ppc64-diag
+if [ $(uname -m)=="ppc64" -o $(uname -m)=="ppc64le" ] ; then
+  dnf -y install ppc64-diag
 fi
 
 if [ -e /usr/bin/dnf ] ; then
@@ -11,11 +10,6 @@ else
   yum -y install cloud-init cloud-utils dracut-modules-growroot
 fi
 dracut -f
-
-if [ $(uname -m)=="ppc64" -o $(uname -m)=="ppc64le" ]
-  then
-    yum -y install ppc64-diag
-fi
 
 if [ -e /boot/grub/grub.conf ] ; then
   sed -i -e 's/rhgb.*/console=ttyS0,115200n8 console=tty0 quiet/' /boot/grub/grub.conf
