@@ -33,7 +33,7 @@
       "http_directory": "http",
       "iso_checksum": "6a74107efb2a70d1b1c790c599d7387b",
       "iso_checksum_type": "md5",
-      "iso_url": "{{user `mirror`}}/8.9.0/ppc64el/iso-cd/debian-8.9.0-ppc64el-CD-1.iso",
+      "iso_url": "{{user `mirror`}}/archive/8.9.0/ppc64el/iso-cd/debian-8.9.0-ppc64el-CD-1.iso",
       "output_directory": "packer-debian-8.9-ppc64le-openstack",
       "shutdown_command": "echo 'debian' | sudo -S /sbin/shutdown -hP now",
       "ssh_password": "debian",
@@ -69,7 +69,7 @@
     }
   ],
   "variables": {
-    "mirror": "http://cdimage.debian.org/cdimage/archive",
+    "mirror": "http://cdimage.debian.org/cdimage",
     "image_name": "Debian 8.9 LE"
   }
 }

@@ -28,7 +28,7 @@
       "http_directory": "http",
       "iso_checksum": "4f4a2bb7d2d65234835122e1402f3053",
       "iso_checksum_type": "md5",
-      "iso_url": "{{user `mirror`}}/8.9.0/powerpc/iso-cd/debian-8.9.0-powerpc-CD-1.iso",
+      "iso_url": "{{user `mirror`}}/archive/8.9.0/powerpc/iso-cd/debian-8.9.0-powerpc-CD-1.iso",
       "output_directory": "packer-debian-8.9-ppc64-openstack",
       "shutdown_command": "echo 'debian' | sudo -S /sbin/shutdown -hP now",
       "ssh_password": "debian",
@@ -64,7 +64,7 @@
     }
   ],
   "variables": {
-    "mirror": "http://cdimage.debian.org/cdimage/archive",
+    "mirror": "http://cdimage.debian.org/cdimage",
     "image_name": "Debian 8.9 BE"
   }
 }
