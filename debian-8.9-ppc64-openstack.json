@@ -2,9 +2,8 @@
   "builders": [
     {
       "boot_command": [
-        "<wait5>",
-        "c<enter>",
-        "linux /install/vmlinux",
+        "<wait>",
+        "install",
         " console-setup/ask_detect=false",
         " console-setup/layoutcode=us",
         " console-setup/modelcode=pc105",
@@ -19,11 +18,7 @@
         " netcfg/get_hostname=unassigned-hostname",
         " netcfg/get_domain=unassigned-domain",
         " url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-8.9/preseed-ppc64.cfg<wait>",
-        " ---",
-        "<enter><wait>",
-        "initrd /install/initrd.gz",
-        "<enter><wait>",
-        "boot<enter><wait>"
+        "<enter><wait>"
       ],
       "accelerator": "kvm",
       "boot_wait": "10s",
