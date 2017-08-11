@@ -1,25 +1,19 @@
-#!/bin/bash -eux
+#!/bin/bash
 
-grep -q "^UseDNS" /etc/ssh/sshd_config\
-  && sed -i 's/UseDNS .*/UseDNS no/Ig' /etc/ssh/sshd_config\
-  || echo "UseDNS no" >> /etc/ssh/sshd_config;
+SSH_CONFIG=/etc/ssh/sshd_config
 
-grep -q "^PermitRootLogin" /etc/ssh/sshd_config\
-  && sed -i 's/PermitRootLogin .*/PermitRootLogin no/Ig' /etc/ssh/sshd_config\
-  || echo "PermitRootLogin no" >> /etc/ssh/sshd_config;
+# Check if a directive exists:
+#   yes: ensure it's correct
+#   no: add it to the config
+checkDirective() {
+  grep -q "^$1" $SSH_CONFIG\
+    && sed -i "s/^$1.*/$1 $2/Ig" $SSH_CONFIG\
+    || echo "$1 $2" >> $SSH_CONFIG;
+}
 
-grep -q "^PasswordAuthentication" /etc/ssh/sshd_config\
-  && sed -i 's/PasswordAuthentication .*/PasswordAuthentication no/Ig' /etc/ssh/sshd_config\
-  || echo "PasswordAuthentication no" >> /etc/ssh/sshd_config;
-
-grep -q "^GSSAPIAuthentication" /etc/ssh/sshd_config\
-  && sed -i 's/GSSAPIAuthentication .*/GSSAPIAuthentication no/Ig' /etc/ssh/sshd_config\
-  || echo "GSSAPIAuthentication no" >> /etc/ssh/sshd_config;
-
-grep -q "^KbdInteractiveAuthentication" /etc/ssh/sshd_config\
-  && sed -i 's/KbdInteractiveAuthentication .*/KbdInteractiveAuthentication no/Ig' /etc/ssh/sshd_config\
-  || echo "KbdInteractiveAuthentication no" >> /etc/ssh/sshd_config;
-
-grep -q "^ChallengeResponseAuthentication" /etc/ssh/sshd_config\
-  && sed -i 's/ChallengeResponseAuthentication .*/ChallengeResponseAuthentication no/Ig' /etc/ssh/sshd_config\
-  || echo "ChallengeResponseAuthentication no" >> /etc/ssh/sshd_config;
+checkDirective UseDNS no
+checkDirective PermitRootLogin no
+checkDirective PasswordAuthentication no
+checkDirective GSSAPIAuthentication no
+checkDirective KbdInteractiveAuthentication no
+checkDirective ChallengeResponseAuthentication no
