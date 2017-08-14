@@ -12,3 +12,6 @@ datasource:
     timeout: 5 # (defaults to 50 seconds)
     max_wait: 10 # (defaults to 120 seconds)
 EOF
+
+# Remove default datasource_list
+rm -f /etc/cloud/cloud.cfg.d/90_dpkg.cfg
