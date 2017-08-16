@@ -1,16 +1,16 @@
 apt-get -y install pump cloud-utils cloud-init cloud-initramfs-growroot \
     bash-completion
 
-# Speed up cloud-init by only using Ec2 and a specific metadata url
-cat >> /etc/cloud/cloud.cfg.d/91_Ec2_override.cfg << EOF
+# Speed up cloud-init by only using OpenStack and a specific metadata url
+cat >> /etc/cloud/cloud.cfg.d/91_openstack_override.cfg << EOF
 
-# Force only Ec2 being enabled
-datasource_list: ['Ec2']
+# Force only OpenStack being enabled
+datasource_list: ['OpenStack']
 datasource:
   Ec2:
     metadata_urls: [ 'http://169.254.169.254' ]
-    timeout: 5 # (defaults to 50 seconds)
-    max_wait: 10 # (defaults to 120 seconds)
+    timeout: 5
+    max_wait: 10
 EOF
 
 # Remove default datasource_list
