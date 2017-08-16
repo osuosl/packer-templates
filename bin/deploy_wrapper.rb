@@ -25,8 +25,7 @@ run_on_each_cluster(options[:openstack_credentials_file]) do
   chef_version = parse_from_template(options[:template_file], 'chef_version')
 
   command = "./bin/deploy.sh -f #{image_path} -n \"#{openstack_image_name}\" -r #{options[:pr_number]}"
-
-  # when the command is not specified in the template
+  # when the chef_version is not specified in the template, don't use it!
   command += "-c #{chef_version}" unless chef_version.nil?
 
   puts command

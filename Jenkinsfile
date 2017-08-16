@@ -40,7 +40,6 @@ node ('master'){
    stage('start_processing_on_right_nodes') {
 
       env.pr = get_from_payload('pr')
-      
 
       //TODO: this should be set from the job
       //set path to the packer binary
@@ -50,6 +49,10 @@ node ('master'){
       //TODO: this should be set from the job as an env variable
       //this should *ALWAYS* match what lib/packer_pipeline.rb return
       archs = ['x86_64', 'ppc64']
+
+      //we will store the results here in a LinkedHashMap implementation
+      def pipeline_results = readJSON text: "{}"
+      writeJSON file: 'final_results.json', json: pipeline_results
 
       //TODO: parallelize this -- both archs can be processed seperately after all!
       for ( arch in archs ) {
@@ -64,15 +67,102 @@ node ('master'){
                build_image(env.arch)
                deploy_image_for_testing(env.arch)
                run_tests(env.arch)
-               archive '*'
+               //archive '*' //store all the files
                //deploy_on_production() -- seperate!
+               node_results = readJSON file: "${arch}_results.json"
+               deleteDir()
+               //TODO: delete the directory if this build succeeds complteley
              }
+             update_final_results(arch, node_results)
          }
          else
          {
             echo "No templates for $env.arch!"
          }
       }
+   }
+}
+/* update_final_results(arch, node_results)
+   
+   appends the given node results to the results.json file on the master node for the arch
+*/
+
+def update_final_results(arch, rs) {
+   
+   final_results = readJSON file: 'final_results.json'
+   echo "Final results are $final_results and we are going to add $rs to it"
+   final_results.accumulate(arch, rs)
+   echo "Now final results are $final_results"
+   writeJSON file: 'final_results.json', json: final_results
+}
+
+
+/*
+update_template_result(arch, template_name, stage, result)
+
+   updates the results of a given stage for a given template in the 
+   global pipeline_results array for a given architecture
+
+   result can be either true or false
+
+   does not validate the template_name OR the stage  OR the the result
+*/ 
+
+def update_template_result(arch, t, stage, result) {
+   //TODO: enclose in a try-catch block
+   json_file = "${arch}_results.json"
+   try {
+      pipeline_results = readJSON file: json_file
+   } 
+   catch (java.io.FileNotFoundException e) {
+      echo "$json_file does not exist on $NODE_NAME. Creating it..."
+      pipeline_results = readJSON text: "{}"
+   }
+   finally {
+      echo "Updating result of $stage for $t as $result in $pipeline_results"
+      if ( ! (t in pipeline_results.keySet()) ) {
+         //if the template hasn't been already included in results, create an entry for it
+         pipeline_results."$t" = [:]
+      }
+      //store the result after converting toString() because apparently 
+      //sometimes returnStatus gives us an object! 
+
+      pipeline_results[t]."$stage" = result.toString()
+   }
+  
+   writeJSON file: json_file, json: pipeline_results
+}
+
+/*
+check_template_result(template_name, stage) 
+   tells what was the result of a stage on a given template
+   template_name is a string
+   stage is one of ['linter','builder','deploy_test','taster']
+
+   if a stage does not exist (which might mean that the template never went through the state)
+   we will simply return false
+
+   NOTE: This will convert the 0 exit status to True and anything non-zero to false before returning
+
+*/
+def check_template_result(arch, t, stage) {
+   pipeline_results = readJSON file: "${arch}_results.json"
+   echo "We have $pipeline_results"
+   try {
+      r = pipeline_results[t][stage]
+      echo "$stage had the exit status of $r for template $t"
+
+      //remember, we are comparing string representation of the exit status
+      if ( r == "0" || r == "true" ) {
+         return true
+      }
+      else {
+         return false
+      }
+   }
+   catch(Exception e) {
+      println e 
+      return false
    }
 }
 
@@ -128,7 +218,9 @@ def run_linter(arch) {
    //run linter
    stage('linter') {
        for ( t in templates ) {
-          sh (returnStdout: true, script: "$env.packer validate -syntax-only $t")
+          result = sh (returnStatus: true, script: "$env.packer validate -syntax-only $t")
+          update_template_result(arch, t, 'linter', result)
+          println "processed $t as $result"
        }
    }
 
@@ -147,7 +239,14 @@ def build_image(arch) {
    def templates = get_from_payload(arch)
    stage('build_image') {
       for ( t in templates ) {
-         sh (returnStdout: true, script: "./bin/build_image.sh -t $t")
+         //check whether this template passed linting and that it was not already built!
+         if ( check_template_result(arch, t, 'linter') && !check_template_result(arch, t, 'builder') ) {
+            result = sh (returnStatus: true, script: "./bin/build_image.sh -t $t")
+            update_template_result(arch, t, 'builder', result)
+         }
+         else {
+            println "Skipping $t because it did not pass the linter"
+         }
       }
    }
    templates = null
@@ -164,10 +263,14 @@ def build_image(arch) {
 def deploy_image_for_testing(arch) {
    def templates = get_from_payload(arch)
    stage('deploy_for_testing') {
-   //deploy!
       for ( t in templates ) {
-         deploy_output = sh (returnStdout: true, script: "./bin/deploy_wrapper.rb -t $t -s /home/alfred/openstack_credentials.json -r $env.pr")
-         println deploy_output
+         //check whether this template was successfully built into an image and it was not already deployed!
+         if ( check_template_result(arch, t, 'builder') && !check_template_result(arch, t, 'deploy_test' ) ) {
+            result = sh (returnStatus: true, script: "./bin/deploy_wrapper.rb -t $t -s /home/alfred/openstack_credentials.json -r $env.pr")
+            update_template_result(arch, t, 'deploy_test', result)
+         } else {
+            println "Skipping $t because it was not successfully built!"
+         }
       }
    }
    templates = null
@@ -189,8 +292,12 @@ def run_tests(arch) {
    stage('openstack_taster') {
       // TODO: put this in try-catch
       for ( t in templates ) {
-         taste_output = sh (returnStdout: true, script: "./bin/taster_wrapper.rb -t $t -s /home/alfred/openstack_credentials.json -r $env.pr").trim()
-         println taste_output
+         if ( check_template_result(arch, t, 'deploy_test') && !check_template_result(arch, t, 'taster')) {
+            result = sh (returnStatus: true, script: "./bin/taster_wrapper.rb -t $t -s /home/alfred/openstack_credentials.json -r $env.pr")
+            update_template_result(arch, t, 'taster', result)
+         } else {
+            println  "Not tasting $t because it was not successfully deployed"
+         }
       }
    }
    templates = null
