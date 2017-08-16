@@ -17,3 +17,4 @@ checkDirective PasswordAuthentication no
 checkDirective GSSAPIAuthentication no
 checkDirective KbdInteractiveAuthentication no
 checkDirective ChallengeResponseAuthentication no
+
