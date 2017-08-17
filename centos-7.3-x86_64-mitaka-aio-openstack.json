@@ -21,7 +21,8 @@
       "ssh_username": "centos",
       "ssh_wait_timeout": "10000s",
       "type": "qemu",
-      "vm_name": "packer-centos-7.3-x86_64-mitaka-aio-openstack"
+      "vm_name": "packer-centos-7.3-x86_64-mitaka-aio-openstack",
+      "vnc_bind_address": "0.0.0.0"
     }
   ],
   "provisioners": [
