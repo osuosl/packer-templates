@@ -29,10 +29,6 @@ run_on_each_cluster(options[:openstack_credentials_file]) do
   command += "-c #{chef_version}" unless chef_version.nil?
 
   puts command
-  openstack_image_name = parse_from_template(template_file, 'image_name')
-
-  command = "./bin/deploy.sh -f #{image_path} -n \"#{openstack_image_name}\" -r #{pr_number}"
-  puts command
 
   deploy_output = `#{command}`
   puts deploy_output
