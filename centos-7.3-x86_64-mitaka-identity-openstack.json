@@ -82,7 +82,7 @@
     }
   ],
   "variables": {
-    "chef_version": "provisionerless",
+    "chef_version": "12.18.31",
     "local_chef_dir": "chef",
     "chef_dir": "/tmp/packer-chef-client",
     "node_name": "controller.example.com",
