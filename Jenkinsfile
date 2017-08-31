@@ -14,7 +14,7 @@ node ('master'){
    stage('payload_processing') {
 
       //clone the osl-jenkins on master branch to use the latest version of scripts
-      git url: 'https://github.com/osuosl-cookbooks/osl-jenkins', branch: 'master'
+      git url: 'https://github.com/osuosl-cookbooks/osl-jenkins', branch: 'samarendra/set_commit_status_on_packer_pipeline'
     
       //write payload to a file
       writeFile file: "/tmp/packer_pipeline_job_build_$BUILD_NUMBER", text: "$params.payload"
@@ -28,10 +28,15 @@ node ('master'){
             sh "git pr $pr"
       }
 
+      //If this isn't set we can't set a status!
+      println "the GIT_COMMIT says ${env.GIT_COMMIT}"
+      env.GIT_COMMIT = new JsonSlurper().parseText("${params.payload}")['pull_request']['head']['sha']
+      println "the GIT_COMMIT says ${env.GIT_COMMIT}"
+
       //pass this payload to our script so that it can return info which we can actually use
       env.payload_parsed_JSON = sh(returnStdout: true, script: """
         export PACKER_TEMPLATES_DIR=$WORKSPACE/packer-templates
-        cat /tmp/packer_pipeline_job_build_$BUILD_NUMBER | $WORKSPACE/files/default/bin/packer_pipeline.rb
+        $WORKSPACE/files/default/bin/packer_pipeline.rb -p /tmp/packer_pipeline_job_build_$BUILD_NUMBER
       """).trim()
       writeFile file: "/tmp/${JOB_NAME}-${BUILD_NUMBER}.json", text: env.payload_parsed_JSON
    }
@@ -80,6 +85,12 @@ node ('master'){
             echo "No templates for $env.arch!"
          }
       }
+
+      //set status on the commit using the PackerPipeline class
+      result = sh(returnStdout: true, script: """
+         $WORKSPACE/files/default/bin/packer_pipeline.rb -f $WORKSPACE/final_results.json
+     """)
+      echo result
    }
 }
 /* update_final_results(arch, node_results)
