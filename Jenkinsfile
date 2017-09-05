@@ -87,10 +87,15 @@ node ('master'){
       }
 
       //set status on the commit using the PackerPipeline class
-      result = sh(returnStdout: true, script: """
-         $WORKSPACE/files/default/bin/packer_pipeline.rb -f $WORKSPACE/final_results.json
-     """)
-      echo result
+      withCredentials([usernamePassword(credentialsId: 'packer_pipeline', usernameVariable: '', passwordVariable: 'GITHUB_TOKEN')]) {
+         //available as an env variable
+         sh 'echo "$GITHUB_TOKEN should appear as masked and not null"'
+         result = sh(returnStdout: true, script: """
+              cat $WORKSPACE/final_results.json;
+               $WORKSPACE/files/default/bin/packer_pipeline.rb -f $WORKSPACE/final_results.json
+         """)
+         echo result
+      }
    }
 }
 /* update_final_results(arch, node_results)
