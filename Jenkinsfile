@@ -44,6 +44,7 @@ node ('master'){
    /* actually starts processing the templates on the right nodes */
    stage('start_processing_on_right_nodes') {
 
+      //some constants
       env.pr = get_from_payload('pr')
 
       //TODO: this should be set from the job
@@ -64,9 +65,31 @@ node ('master'){
          env.arch = arch
          templates = get_from_payload(env.arch)
          if ( ! templates.empty && templates != null ) {
-             echo "Starting execution for $env.arch"
-             //do following things on the node.
-             node (env.arch) {
+            echo "Checking whether the node for $env.arch is actually available..."
+            //check whether the node is actually up.
+
+            try {
+               timeout(time: 30, unit: 'SECONDS') {
+               node(env.arch)
+                  {
+                     if (isUnix()) {
+                     echo "Yep, the node is up and is a *nix node!"
+                     }
+                     else {
+                        echo "Node for $env.arch is not a *nix node! Going to skip it"
+                        throw new Exception("Node for $env.arch is not a *nix node! Going to skip it")
+                     }
+                  }
+               }
+            } catch (err) {
+               echo "Caught an error ${err} while trying to build on ${arch}"
+               echo "Skipping to next arch!"
+               continue
+            }
+
+            echo "Starting execution for $env.arch"
+            //do actual things on the node.
+            node (env.arch) {
                clone_repo_and_checkout_pr_branch()
                run_linter(env.arch)
                build_image(env.arch)
