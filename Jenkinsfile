@@ -14,7 +14,7 @@ node ('master'){
    stage('payload_processing') {
 
       //clone the osl-jenkins on master branch to use the latest version of scripts
-      git url: 'https://github.com/osuosl-cookbooks/osl-jenkins', branch: 'samarendra/set_commit_status_on_packer_pipeline'
+      git url: 'https://github.com/osuosl-cookbooks/osl-jenkins', branch: 'master'
     
       //write payload to a file
       writeFile file: "/tmp/packer_pipeline_job_build_$BUILD_NUMBER", text: "$params.payload"
