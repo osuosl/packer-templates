@@ -82,9 +82,13 @@ node ('master'){
                   }
                }
             } catch (err) {
-               echo "Caught an error ${err} while trying to build on ${arch}"
-               echo "Skipping to next arch!"
+               echo "Caught an error '${err}' while trying to acess node for ${arch}"
+               echo "Marking all templates for ${env.arch} as un-processable!"
+               mark_templates_as_unprocessable(env.arch, 127)
+               node_results = readJSON file: "${arch}_results.json"
+               update_final_results(arch, node_results)
                continue
+               echo "Skipping to next arch!"
             }
 
             echo "Starting execution for $env.arch"
@@ -176,7 +180,7 @@ def update_template_result(arch, t, stage, result) {
 check_template_result(template_name, stage) 
    tells what was the result of a stage on a given template
    template_name is a string
-   stage is one of ['linter','builder','deploy_test','taster']
+   stage is one of ['node_state', 'linter','builder','deploy_test','taster']
 
    if a stage does not exist (which might mean that the template never went through the state)
    we will simply return false
@@ -236,6 +240,20 @@ def get_from_payload(v) {
    return r
 }
 
+/* mark_templates_as_unprocessable(arch)
+
+   This marks all templates for a given arch as un-processable
+
+   This might happen in cases when the node designated to process template is
+   either in an error state or is simply unavailable.
+*/
+def mark_templates_as_unprocessable(arch, error_code = 127) {
+   def templates = get_from_payload(arch)
+   for ( t in templates ) {
+      update_template_result(arch, t, 'node_state', error_code)
+      println "Marked $t as $error_code for node state"
+   }
+}
 
 // clone the packer-templates repo and checkout the branch which we want to use
 def clone_repo_and_checkout_pr_branch() {
