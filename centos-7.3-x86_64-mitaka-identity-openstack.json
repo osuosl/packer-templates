@@ -44,7 +44,7 @@
     },
     {
       "type": "file",
-      "source": "{{user `local_chef_dir`}}/centos-7.3-x86_64-openstack-mitaka-aio/cookbooks/",
+      "source": "{{user `local_chef_dir`}}/centos-7.3-x86_64-mitaka-identity-openstack/cookbooks/",
       "destination": "{{user `chef_dir`}}/cookbooks"
     },
     {
@@ -54,12 +54,12 @@
     },
     {
       "type": "file",
-      "source": "{{user `local_chef_dir`}}/centos-7.3-x86_64-openstack-mitaka-aio/data_bags/",
+      "source": "{{user `local_chef_dir`}}/centos-7.3-x86_64-mitaka-identity-openstack/data_bags/",
       "destination": "{{user `chef_dir`}}/data_bags"
     },
     {
       "type": "file",
-      "source": "{{user `local_chef_dir`}}/centos-7.3-x86_64-openstack-mitaka-aio/encrypted_data_bag_secret",
+      "source": "{{user `local_chef_dir`}}/centos-7.3-x86_64-mitaka-identity-openstack/encrypted_data_bag_secret",
       "destination": "/etc/chef/encrypted_data_bag_secret"
     },
     {
