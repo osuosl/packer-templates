@@ -5,7 +5,7 @@ solver :ruby, :required
 cookbook 'aliases', github: 'osuosl-cookbooks/aliases'
 cookbook 'base', github: 'osuosl-cookbooks/base'
 cookbook 'firewall', github: 'osuosl-cookbooks/firewall'
-cookbook 'ibm-power', github: 'osuosl-cookbooks/ibm-power.git'
+cookbook 'ibm-power', github: 'osuosl-cookbooks/ibm-power'
 cookbook 'openstack_test', path: '../cookbooks/openstack_test'
 cookbook 'osl-apache', github: 'osuosl-cookbooks/osl-apache'
 cookbook 'osl-munin', github: 'osuosl-cookbooks/osl-munin'
@@ -14,7 +14,7 @@ cookbook 'osl-openstack', github: 'osuosl-cookbooks/osl-openstack'
 cookbook 'osl-rsync', github: 'osuosl-cookbooks/osl-rsync'
 cookbook 'resource_from_hash', github: 'osuosl-cookbooks/resource_from_hash'
 cookbook 'statsd', github: 'att-cloud/cookbook-statsd'
-cookbook 'yum-qemu-ev', github: 'osuosl-cookbooks/yum-qemu-ev.git'
+cookbook 'yum-qemu-ev', github: 'osuosl-cookbooks/yum-qemu-ev'
 cookbook 'yum', '= 3.5.4'
 
 # WIP patches
