@@ -12,7 +12,7 @@
       "iso_checksum": "f2f7367deb90a25822947660c71638333ca0eceeabecc2d631be6cd508c24494",
       "iso_checksum_type": "sha256",
       "iso_url": "{{user `mirror`}}/7.3.1611/isos/x86_64/CentOS-7-x86_64-NetInstall-1611.iso",
-      "output_directory": "packer-centos-7.3-x86_64-openstack-mitaka-identity",
+      "output_directory": "packer-centos-7.3-x86_64-mitaka-identity-openstack",
       "qemuargs": [ [ "-m", "8192M" ] ],
       "qemu_binary": "qemu-kvm",
       "shutdown_command": "echo 'centos'|sudo -S /sbin/halt -h -p",
