@@ -9,3 +9,5 @@ iso
 *.qcow2
 chef/berkshelf
 chef/*/Berksfile.lock
+chef/*/cookbooks
+packer-*-openstack/
