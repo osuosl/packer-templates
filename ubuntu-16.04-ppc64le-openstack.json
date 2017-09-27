@@ -33,7 +33,6 @@
       "iso_checksum": "1d7320e716b9730a3a4e440d0006bd5c",
       "iso_checksum_type": "md5",
       "iso_url": "{{user `mirror`}}/releases/16.04/release/ubuntu-16.04.3-server-ppc64el.iso",
-      "disk_image": true,
       "output_directory": "packer-ubuntu-16.04-ppc64le-openstack",
       "shutdown_command": "echo 'ubuntu' | sudo -S shutdown -P now",
       "qemuargs": [
