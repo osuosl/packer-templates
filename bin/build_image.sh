@@ -43,7 +43,7 @@ fi
 if [ -e chef/${TEMPLATE_NAME}/Berksfile ] ; then
   export BERKSHELF_PATH="chef/berkshelf"
   rm -rf $BERKSHELF_PATH chef/${TEMPLATE_NAME}/cookbooks chef/${TEMPLATE_NAME}/Berksfile.lock
-  berks vendor -b chef/${TEMPLATE_NAME}/Berksfile chef/${TEMPLATE_NAME}/cookbooks
+  berks vendor --delete -b chef/${TEMPLATE_NAME}/Berksfile chef/${TEMPLATE_NAME}/cookbooks
 fi
 export PACKER_LOG=1
 packer build -color=false -force -debug $(basename $TEMPLATE)
