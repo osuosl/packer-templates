@@ -55,4 +55,3 @@ else
   qemu-img convert -o compat=0.10 -O qcow2 -c ${DIR_NAME}/${IMAGE_NAME} \
     $FINAL_QCOW_FILE_NAME
 fi
-
