@@ -28,10 +28,15 @@ node ('master'){
             sh "git pr $pr"
       }
 
+      //If this isn't set we can't set a status!
+      println "the GIT_COMMIT says ${env.GIT_COMMIT}"
+      env.GIT_COMMIT = new JsonSlurper().parseText("${params.payload}")['pull_request']['head']['sha']
+      println "the GIT_COMMIT says ${env.GIT_COMMIT}"
+
       //pass this payload to our script so that it can return info which we can actually use
       env.payload_parsed_JSON = sh(returnStdout: true, script: """
         export PACKER_TEMPLATES_DIR=$WORKSPACE/packer-templates
-        cat /tmp/packer_pipeline_job_build_$BUILD_NUMBER | $WORKSPACE/files/default/bin/packer_pipeline.rb
+        $WORKSPACE/files/default/bin/packer_pipeline.rb -p /tmp/packer_pipeline_job_build_$BUILD_NUMBER
       """).trim()
       writeFile file: "/tmp/${JOB_NAME}-${BUILD_NUMBER}.json", text: env.payload_parsed_JSON
    }
@@ -39,6 +44,7 @@ node ('master'){
    /* actually starts processing the templates on the right nodes */
    stage('start_processing_on_right_nodes') {
 
+      //some constants
       env.pr = get_from_payload('pr')
 
       //TODO: this should be set from the job
@@ -59,9 +65,35 @@ node ('master'){
          env.arch = arch
          templates = get_from_payload(env.arch)
          if ( ! templates.empty && templates != null ) {
-             echo "Starting execution for $env.arch"
-             //do following things on the node.
-             node (env.arch) {
+            echo "Checking whether the node for $env.arch is actually available..."
+            //check whether the node is actually up.
+
+            try {
+               timeout(time: 30, unit: 'SECONDS') {
+               node(env.arch)
+                  {
+                     if (isUnix()) {
+                     echo "Yep, the node is up and is a *nix node!"
+                     }
+                     else {
+                        echo "Node for $env.arch is not a *nix node! Going to skip it"
+                        throw new Exception("Node for $env.arch is not a *nix node! Going to skip it")
+                     }
+                  }
+               }
+            } catch (err) {
+               echo "Caught an error '${err}' while trying to acess node for ${arch}"
+               echo "Marking all templates for ${env.arch} as un-processable!"
+               mark_templates_as_unprocessable(env.arch, 127)
+               node_results = readJSON file: "${arch}_results.json"
+               update_final_results(arch, node_results)
+               continue
+               echo "Skipping to next arch!"
+            }
+
+            echo "Starting execution for $env.arch"
+            //do actual things on the node.
+            node (env.arch) {
                clone_repo_and_checkout_pr_branch()
                run_linter(env.arch)
                build_image(env.arch)
@@ -79,6 +111,17 @@ node ('master'){
          {
             echo "No templates for $env.arch!"
          }
+      }
+
+      //set status on the commit using the PackerPipeline class
+      withCredentials([usernamePassword(credentialsId: 'packer_pipeline', usernameVariable: '', passwordVariable: 'GITHUB_TOKEN')]) {
+         //available as an env variable
+         sh 'echo "$GITHUB_TOKEN should appear as masked and not null"'
+         result = sh(returnStdout: true, script: """
+              cat $WORKSPACE/final_results.json;
+               $WORKSPACE/files/default/bin/packer_pipeline.rb -f $WORKSPACE/final_results.json
+         """)
+         echo result
       }
    }
 }
@@ -137,7 +180,7 @@ def update_template_result(arch, t, stage, result) {
 check_template_result(template_name, stage) 
    tells what was the result of a stage on a given template
    template_name is a string
-   stage is one of ['linter','builder','deploy_test','taster']
+   stage is one of ['node_state', 'linter','builder','deploy_test','taster']
 
    if a stage does not exist (which might mean that the template never went through the state)
    we will simply return false
@@ -197,6 +240,20 @@ def get_from_payload(v) {
    return r
 }
 
+/* mark_templates_as_unprocessable(arch)
+
+   This marks all templates for a given arch as un-processable
+
+   This might happen in cases when the node designated to process template is
+   either in an error state or is simply unavailable.
+*/
+def mark_templates_as_unprocessable(arch, error_code = 127) {
+   def templates = get_from_payload(arch)
+   for ( t in templates ) {
+      update_template_result(arch, t, 'node_state', error_code)
+      println "Marked $t as $error_code for node state"
+   }
+}
 
 // clone the packer-templates repo and checkout the branch which we want to use
 def clone_repo_and_checkout_pr_branch() {

@@ -12,7 +12,7 @@
       "iso_checksum": "f2f7367deb90a25822947660c71638333ca0eceeabecc2d631be6cd508c24494",
       "iso_checksum_type": "sha256",
       "iso_url": "{{user `mirror`}}/7.3.1611/isos/x86_64/CentOS-7-x86_64-NetInstall-1611.iso",
-      "output_directory": "packer-centos-7.3-x86_64-openstack-mitaka-aio",
+      "output_directory": "packer-centos-7.3-x86_64-mitaka-aio-openstack",
       "qemuargs": [ [ "-m", "8192M" ] ],
       "qemu_binary": "qemu-kvm",
       "shutdown_command": "echo 'centos'|sudo -S /sbin/halt -h -p",
@@ -21,7 +21,8 @@
       "ssh_username": "centos",
       "ssh_wait_timeout": "10000s",
       "type": "qemu",
-      "vm_name": "packer-centos-7.3-x86_64-mitaka-aio-openstack"
+      "vm_name": "packer-centos-7.3-x86_64-mitaka-aio-openstack",
+      "vnc_bind_address": "0.0.0.0"
     }
   ],
   "provisioners": [
@@ -43,7 +44,7 @@
     },
     {
       "type": "file",
-      "source": "{{user `local_chef_dir`}}/centos-7.3-x86_64-openstack-mitaka-aio/cookbooks/",
+      "source": "{{user `local_chef_dir`}}/centos-7.3-x86_64-mitaka-aio-openstack/cookbooks/",
       "destination": "{{user `chef_dir`}}/cookbooks"
     },
     {
@@ -53,12 +54,12 @@
     },
     {
       "type": "file",
-      "source": "{{user `local_chef_dir`}}/centos-7.3-x86_64-openstack-mitaka-aio/data_bags/",
+      "source": "{{user `local_chef_dir`}}/centos-7.3-x86_64-mitaka-aio-openstack/data_bags/",
       "destination": "{{user `chef_dir`}}/data_bags"
     },
     {
       "type": "file",
-      "source": "{{user `local_chef_dir`}}/centos-7.3-x86_64-openstack-mitaka-aio/encrypted_data_bag_secret",
+      "source": "{{user `local_chef_dir`}}//centos-7.3-x86_64-mitaka-aio-openstack/encrypted_data_bag_secret",
       "destination": "/etc/chef/encrypted_data_bag_secret"
     },
     {
@@ -81,7 +82,7 @@
     }
   ],
   "variables": {
-    "chef_version": "provisionerless",
+    "chef_version": "12.18.31",
     "local_chef_dir": "chef",
     "chef_dir": "/tmp/packer-chef-client",
     "node_name": "controller.example.com",
