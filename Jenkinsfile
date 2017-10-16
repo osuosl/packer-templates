@@ -19,10 +19,23 @@ node ('master'){
       //write payload to a file
       writeFile file: "/tmp/packer_pipeline_job_build_$BUILD_NUMBER", text: "$params.payload"
 
+      //what event triggered this build ?
+      event = new JsonSlurper().parseText("${params.payload}")['action']
+
+      println "This build was triggered by the $event event. Look at https://developer.github.com/v3/activity/events/types for more info."
+
+      if ( event != 'synchronize' ) {
+         currentBuild.result = 'ABORTED'
+         error("Stopping because this build was not triggered on a PR's synchronize event which would have all the necessary information for making a build successful")
+      }
+
       //what is the pr number ?
       pr = new JsonSlurper().parseText("${params.payload}")['number']
 
-      event = new JsonSlurper().parseText("${params.payload}")['action']
+      if ( pr == null ) {
+         currentBuild.result = 'ABORTED'
+         error("Cannot build without a PR number in the payload!")
+      }
 
       //checkout the packer-templates PR so that our script can look at the files
       dir('packer-templates') {
@@ -30,7 +43,6 @@ node ('master'){
             sh "git pr $pr"
       }
 
-      println "This build was triggered by the $event Look at https://developer.github.com/v3/activity/events/types for more info"
       //If this isn't set we can't set a status!
       println "the GIT_COMMIT says ${env.GIT_COMMIT}"
       env.GIT_COMMIT = new JsonSlurper().parseText("${params.payload}")['pull_request']['head']['sha']
