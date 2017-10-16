@@ -22,12 +22,15 @@ node ('master'){
       //what is the pr number ?
       pr = new JsonSlurper().parseText("${params.payload}")['number']
 
+      event = new JsonSlurper().parseText("${params.payload}")['action']
+
       //checkout the packer-templates PR so that our script can look at the files
       dir('packer-templates') {
           git 'https://github.com/osuosl/packer-templates'
             sh "git pr $pr"
       }
 
+      println "This build was triggered by the $event Look at https://developer.github.com/v3/activity/events/types for more info"
       //If this isn't set we can't set a status!
       println "the GIT_COMMIT says ${env.GIT_COMMIT}"
       env.GIT_COMMIT = new JsonSlurper().parseText("${params.payload}")['pull_request']['head']['sha']
