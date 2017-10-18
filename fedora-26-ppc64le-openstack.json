@@ -23,7 +23,7 @@
         [ "-m", "2048M" ],
         [ "-boot", "strict=on" ]
       ],
-      "qemu_binary": "qemu-system-ppc64",
+      "qemu_binary": "/usr/libexec/qemu-kvm",
       "machine_type": "pseries",
       "ssh_password": "fedora",
       "ssh_port": 22,
