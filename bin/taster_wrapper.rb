@@ -22,6 +22,7 @@ run_on_each_cluster(options[:openstack_credentials_file]) do
   command = "openstack_taster \"#{openstack_image_name}\""
   puts command
 
-  taste_output = `#{command}`
-  puts taste_output
+  # execute while handing over STDIN,STDOUT and STDERR to the openstack_taster command
+  system(command)
+  exit $?.exitstatus
 end

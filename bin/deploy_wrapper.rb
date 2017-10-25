@@ -35,6 +35,6 @@ run_on_each_cluster(options[:openstack_credentials_file]) do
 
   puts command
 
-  deploy_output = `#{command}`
-  puts deploy_output
+  system(command)
+  exit $?.exitstatus
 end
