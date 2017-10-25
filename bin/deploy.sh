@@ -64,7 +64,6 @@ if [ "$PUBLISH" == 0 ]; then
 else
   OLD_IMAGE_ID=$(openstack image show "$IMG_NAME" -f value -c id)
   NEW_IMAGE_ID=$(openstack image show "$IMG_NAME - PR#$PR_NUM" -f value -c id)
-  openstack image set --name "$IMG_NAME - deprecated by PR#$PR_NUM" --private "$OLD_IMAGE_ID"
-  openstack image set --name "$IMG_NAME" --public "$NEW_IMAGE_ID"
- exit 0
+  openstack image set --name "$IMG_NAME - deprecated by PR#$PR_NUM" --private "$OLD_IMAGE_ID" && openstack image set --name "$IMG_NAME" --public "$NEW_IMAGE_ID"
+  exit $?
 fi
