@@ -60,11 +60,10 @@ done
 if [ "$PUBLISH" == 0 ]; then
     if [ ! -r "$FILE" ]; then echo "Error: Cannot read file '$FILE'. Try '$0 -h'" && exit 1; fi
     openstack image create --file "$FILE" --property chef-version="$CHEF_VER" --disk-format qcow2 "$IMG_NAME - PR#$PR_NUM"
-    exit 0
+    exit $?
 else
   OLD_IMAGE_ID=$(openstack image show "$IMG_NAME" -f value -c id)
   NEW_IMAGE_ID=$(openstack image show "$IMG_NAME - PR#$PR_NUM" -f value -c id)
-  openstack image set --name "$IMG_NAME - deprecated by PR#$PR_NUM" --private "$OLD_IMAGE_ID"
-  openstack image set --name "$IMG_NAME" --public "$NEW_IMAGE_ID"
- exit 0
+  openstack image set --name "$IMG_NAME - deprecated by PR#$PR_NUM" --private "$OLD_IMAGE_ID" && openstack image set --name "$IMG_NAME" --public "$NEW_IMAGE_ID"
+  exit $?
 fi

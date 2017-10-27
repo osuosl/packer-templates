@@ -15,10 +15,15 @@ options = option_parser($PROGRAM_NAME, ARGV)
 run_on_each_cluster(options[:openstack_credentials_file]) do
   # name which would have been used to create the qcow2 image and the dir containing it
   vm_name = parse_from_template(options[:template_file], 'vm_name')
+  output_directory = parse_from_template(options[:template_file], 'output_directory')
 
-  # TODO: check for existence of the built image
-  image_path = "./#{vm_name}/#{vm_name}-compressed.qcow2"
+  image_path = "./#{output_directory}/#{vm_name}-compressed.qcow2"
   puts "going to look for image at \n #{image_path}"
+
+  unless File.exist? image_path
+    puts "No file found at #{image_path}! Quitting."
+    return 2
+  end
 
   # name to use when deploying the image on OpenStack
   openstack_image_name = parse_from_template(options[:template_file], 'image_name')
@@ -30,6 +35,6 @@ run_on_each_cluster(options[:openstack_credentials_file]) do
 
   puts command
 
-  deploy_output = `#{command}`
-  puts deploy_output
+  system(command)
+  exit $?.exitstatus
 end
