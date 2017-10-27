@@ -34,6 +34,12 @@ def option_parser(for_program, argv)
       options[:pr_number] = r
     end
 
+    opts.on('-p',
+            '--publish',
+            'Publish final image on openstack. Depricate old image.') do
+      options[:publish] = true
+    end
+
     opts.on_tail('-h', '--help', 'Prints this help text') do
       puts opts
       exit

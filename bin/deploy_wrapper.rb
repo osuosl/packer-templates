@@ -31,7 +31,9 @@ run_on_each_cluster(options[:openstack_credentials_file]) do
 
   command = "./bin/deploy.sh -f #{image_path} -n \"#{openstack_image_name}\" -r #{options[:pr_number]}"
   # when the chef_version is not specified in the template, don't use it!
-  command += "-c #{chef_version}" unless chef_version.nil?
+  command += " -c #{chef_version}" unless chef_version.nil?
+  # publish image if option is set
+  command += ' -p' if options[:publish]
 
   puts command
 

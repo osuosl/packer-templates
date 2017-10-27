@@ -59,6 +59,7 @@ done
 
 if [ "$PUBLISH" == 0 ]; then
     if [ ! -r "$FILE" ]; then echo "Error: Cannot read file '$FILE'. Try '$0 -h'" && exit 1; fi
+    openstack image delete "$IMG_NAME - PR#$PR_NUM"
     openstack image create --file "$FILE" --property chef-version="$CHEF_VER" --disk-format qcow2 "$IMG_NAME - PR#$PR_NUM"
     exit $?
 else
