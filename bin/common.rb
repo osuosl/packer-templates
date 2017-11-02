@@ -36,7 +36,7 @@ def option_parser(for_program, argv)
 
     opts.on('-p',
             '--publish',
-            'Publish final image on openstack. Depricate old image.') do
+            'Publish final image on openstack. Deprecate old image.') do
       options[:publish] = true
     end
 

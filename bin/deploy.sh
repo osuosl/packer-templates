@@ -61,7 +61,7 @@ if [ "$PUBLISH" == 0 ]; then
     if [ ! -r "$FILE" ]; then echo "Error: Cannot read file '$FILE'. Try '$0 -h'" && exit 1; fi
 
     old_image="$IMG_NAME - PR#$PR_NUM"
-    uuids=`openstack image list | grep $old_image | sed "s/| //" | awk '{print $1}'`
+    uuids=`openstack image list | grep $old_image | cut -d ' ' -f2`
     for id in $uuids; do
       openstack image delete $id;
     done
