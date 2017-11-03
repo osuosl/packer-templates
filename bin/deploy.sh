@@ -53,6 +53,7 @@ while getopts "hpf:c:n:r:" opt ; do
   esac
 done
 
+
 [ -z "$1" ] && run_help
 [ -z "$IMG_NAME" ] && echo "Error: IMG_NAME not set. Try '$0 -h'" && exit 1
 [ -z "$PR_NUM" ] && echo "Error: PR_NUM not set. Try '$0 -h'" && exit 1
@@ -61,7 +62,7 @@ if [ "$PUBLISH" == 0 ]; then
     if [ ! -r "$FILE" ]; then echo "Error: Cannot read file '$FILE'. Try '$0 -h'" && exit 1; fi
 
     old_image="$IMG_NAME - PR#$PR_NUM"
-    uuids=`openstack image list | grep $old_image | cut -d ' ' -f2`
+    uuids=$(openstack image list --property name="$old_image" -f value -c ID)
     for id in $uuids; do
       openstack image delete $id;
     done
