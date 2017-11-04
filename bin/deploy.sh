@@ -53,7 +53,6 @@ while getopts "hpf:c:n:r:" opt ; do
   esac
 done
 
-
 [ -z "$1" ] && run_help
 [ -z "$IMG_NAME" ] && echo "Error: IMG_NAME not set. Try '$0 -h'" && exit 1
 [ -z "$PR_NUM" ] && echo "Error: PR_NUM not set. Try '$0 -h'" && exit 1
