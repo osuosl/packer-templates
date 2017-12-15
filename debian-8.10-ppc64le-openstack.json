@@ -18,7 +18,7 @@
         " locale=en_US.UTF-8",
         " netcfg/get_hostname=unassigned-hostname",
         " netcfg/get_domain=unassigned-domain",
-        " url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-8.9/preseed-ppc64.cfg<wait>",
+        " url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-8.10/preseed-ppc64.cfg<wait>",
         " ---",
         "<enter><wait>",
         "initrd /install/initrd.gz",
@@ -31,10 +31,10 @@
       "headless": true,
       "vnc_bind_address":"0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "6a74107efb2a70d1b1c790c599d7387b",
+      "iso_checksum": "3db8eb9d7bffec1fe0c7f38890ec15ed",
       "iso_checksum_type": "md5",
-      "iso_url": "{{user `mirror`}}/archive/8.9.0/ppc64el/iso-cd/debian-8.9.0-ppc64el-CD-1.iso",
-      "output_directory": "packer-debian-8.9-ppc64le-openstack",
+      "iso_url": "{{user `mirror`}}/archive/8.10.0/ppc64el/iso-cd/debian-8.10.0-ppc64el-CD-1.iso",
+      "output_directory": "packer-debian-8.10-ppc64le-openstack",
       "shutdown_command": "echo 'debian' | sudo -S /sbin/shutdown -hP now",
       "ssh_password": "debian",
       "ssh_port": 22,
@@ -47,7 +47,7 @@
       "qemu_binary": "/usr/libexec/qemu-kvm",
       "machine_type": "pseries",
       "type": "qemu",
-      "vm_name": "packer-debian-8.9-ppc64le-openstack"
+      "vm_name": "packer-debian-8.10-ppc64le-openstack"
     }
   ],
   "provisioners": [
@@ -70,7 +70,7 @@
   ],
   "variables": {
     "mirror": "http://cdimage.debian.org/cdimage",
-    "image_name": "Debian 8.9 LE"
+    "image_name": "Debian 8.10 LE"
   }
 }
 
