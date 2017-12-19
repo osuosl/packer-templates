@@ -6,6 +6,9 @@ apt-get -y purge libx11-data xauth libxmuu1 libxcb1 libx11-6 libxext6;
 # Delete oddities
 apt-get -y purge popularity-contest installation-report friendly-recovery laptop-detect;
 
+# Delete services we don't need installed by default
+apt-get -y purge exim4-base rpcbind
+
 apt-get -y autoremove;
 apt-get -y clean;
 
