@@ -1,0 +1,73 @@
+{
+  "builders": [
+    {
+      "boot_command": [
+        "<wait>",
+        "c<enter>",
+        "linux /install/vmlinux",
+        " console-setup/ask_detect=false",
+        " console-setup/layoutcode=us",
+        " console-setup/modelcode=pc105",
+        " debconf/frontend=noninteractive",
+        " debian-installer=en_US.UTF-8",
+        " fb=false",
+        " kbd-chooser/method=us",
+        " keyboard-configuration/layout=USA",
+        " keyboard-configuration/variant=USA",
+        " locale=en_US.UTF-8",
+        " netcfg/get_hostname=unassigned-hostname",
+        " netcfg/get_domain=unassigned-domain",
+        " url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu-16.04/preseed-ppc64.cfg<wait>",
+        " ---",
+        "<enter><wait>",
+        "initrd /install/initrd.gz",
+        "<enter><wait>",
+        "boot<enter><wait>"
+      ],
+      "accelerator": "kvm",
+      "boot_wait": "6s",
+      "disk_size": 4096,
+      "headless": true,
+      "vnc_bind_address": "0.0.0.0",
+      "http_directory": "http",
+      "iso_checksum": "1d7320e716b9730a3a4e440d0006bd5c",
+      "iso_checksum_type": "md5",
+      "iso_url": "{{user `mirror`}}/releases/16.04/release/ubuntu-16.04.3-server-ppc64el.iso",
+      "output_directory": "packer-ubuntu-16.04-ppc64le-openstack",
+      "shutdown_command": "echo 'ubuntu' | sudo -S shutdown -P now",
+      "qemuargs": [
+        [ "-m", "2048M" ],
+        [ "-boot", "strict=on" ]
+      ],
+      "qemu_binary": "/usr/libexec/qemu-kvm",
+      "machine_type": "pseries",
+      "ssh_password": "ubuntu",
+      "ssh_port": 22,
+      "ssh_username": "ubuntu",
+      "ssh_wait_timeout": "10000s",
+      "type": "qemu",
+      "vm_name": "packer-ubuntu-16.04-ppc64le-openstack"
+    }
+  ],
+  "provisioners": [
+    {
+      "execute_command": "echo 'ubuntu' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
+      "scripts": [
+        "scripts/ubuntu/update.sh",
+        "scripts/ubuntu/networking.sh",
+        "scripts/common/sshd.sh",
+        "scripts/common/vmtools.sh",
+        "scripts/ubuntu/openstack.sh",
+        "scripts/ubuntu/sudoers.sh",
+        "scripts/ubuntu/ppc.sh",
+        "scripts/ubuntu/cleanup.sh",
+        "scripts/common/minimize.sh"
+      ],
+      "type": "shell"
+    }
+  ],
+  "variables": {
+    "mirror": "http://cdimage.ubuntu.com",
+    "image_name": "Ubuntu 16.04 LE"
+  }
+}
