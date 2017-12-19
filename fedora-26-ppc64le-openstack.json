@@ -52,6 +52,6 @@
   ],
   "variables": {
     "mirror": "http://fedora-secondary.osuosl.org",
-    "image_name": "Fedora 26 Little Endian"
+    "image_name": "Fedora 26 LE"
   }
 }
