@@ -6,18 +6,17 @@
         "linux /ppc/ppc64/vmlinuz ro ",
         "ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-26/ks-ppc64-openstack.cfg<enter>",
         "initrd /ppc/ppc64/initrd.img<enter>",
-        "boot<enter><wait10><wait10>",
-        "<wait10><wait10><wait10>r<enter><wait>"
+        "boot<enter>"
       ],
       "accelerator": "kvm",
       "boot_wait": "6s",
-      "disk_size": 3072,
+      "disk_size": 3584,
       "headless": true,
       "http_directory": "http",
       "iso_checksum": "8a431f28f2091a5a36d82f168af6a2ecfd9767b2262b1972828a780b20d3082d",
       "iso_checksum_type": "sha256",
       "iso_url": "{{user `mirror`}}/releases/26/Server/ppc64/iso/Fedora-Server-netinst-ppc64-26-1.5.iso",
-      "output_directory": "packer-fedora-26-ppc64-openstack",
+      "output_directory": "packer-fedora-24-ppc64-openstack",
       "shutdown_command": "echo 'fedora'|sudo -S shutdown -P now",
       "qemuargs": [
         [ "-m", "2048M" ],
