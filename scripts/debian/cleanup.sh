@@ -33,6 +33,9 @@ apt-get -y purge libx11-data xauth libxmuu1 libxcb1 libx11-6 libxext6;
 # Delete obsolete networking
 apt-get -y purge ppp pppconfig pppoeconf;
 
+# Delete services we don't need installed by default
+apt-get -y purge exim4-base rpcbind
+
 # Delete oddities
 apt-get -y purge popularity-contest;
 
