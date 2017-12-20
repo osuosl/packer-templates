@@ -31,7 +31,7 @@
       "ssh_wait_timeout": "10000s",
       "vnc_bind_address": "0.0.0.0",
       "type": "qemu",
-      "vm_name": "packer-fedora-27-ppc64"
+      "vm_name": "packer-fedora-27-ppc64-openstack"
     }
   ],
   "provisioners": [
