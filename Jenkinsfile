@@ -24,9 +24,9 @@ node ('master'){
 
       println "This build was triggered by the $event event. Look at https://developer.github.com/v3/activity/events/types for more info."
 
-      if ( event != 'synchronize' || event != 'opened') {
+      if ( event != 'synchronize' || event != 'opened' || event != 'review_requested' ) {
          currentBuild.result = 'ABORTED'
-         error("Stopping because this build was not triggered on a PR's synchronize or opened event which would have all the necessary information for making a build successful")
+         error("Stopping because this build was not triggered on a PR's synchronize/opened/review_requested event which would have all the necessary information for making a build successful")
       }
 
       //what is the pr number ?
