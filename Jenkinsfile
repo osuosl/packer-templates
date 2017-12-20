@@ -15,7 +15,7 @@ node ('master'){
 
       //clone the osl-jenkins on master branch to use the latest version of scripts
       git url: 'https://github.com/osuosl-cookbooks/osl-jenkins', branch: 'master'
-    
+
       //write payload to a file
       writeFile file: "/tmp/packer_pipeline_job_build_$BUILD_NUMBER", text: "$params.payload"
 
@@ -24,9 +24,9 @@ node ('master'){
 
       println "This build was triggered by the $event event. Look at https://developer.github.com/v3/activity/events/types for more info."
 
-      if ( event != 'synchronize' ) {
+      if ( event != 'synchronize' || event != 'opened') {
          currentBuild.result = 'ABORTED'
-         error("Stopping because this build was not triggered on a PR's synchronize event which would have all the necessary information for making a build successful")
+         error("Stopping because this build was not triggered on a PR's synchronize or opened event which would have all the necessary information for making a build successful")
       }
 
       //what is the pr number ?
@@ -141,12 +141,12 @@ node ('master'){
    }
 }
 /* update_final_results(arch, node_results)
-   
+
    appends the given node results to the results.json file on the master node for the arch
 */
 
 def update_final_results(arch, rs) {
-   
+
    final_results = readJSON file: 'final_results.json'
    echo "Final results are $final_results and we are going to add $rs to it"
    final_results.accumulate(arch, rs)
@@ -158,20 +158,20 @@ def update_final_results(arch, rs) {
 /*
 update_template_result(arch, template_name, stage, result)
 
-   updates the results of a given stage for a given template in the 
+   updates the results of a given stage for a given template in the
    global pipeline_results array for a given architecture
 
    result can be either true or false
 
    does not validate the template_name OR the stage  OR the the result
-*/ 
+*/
 
 def update_template_result(arch, t, stage, result) {
    //TODO: enclose in a try-catch block
    json_file = "${arch}_results.json"
    try {
       pipeline_results = readJSON file: json_file
-   } 
+   }
    catch (java.io.FileNotFoundException e) {
       echo "$json_file does not exist on $NODE_NAME. Creating it..."
       pipeline_results = readJSON text: "{}"
@@ -182,17 +182,17 @@ def update_template_result(arch, t, stage, result) {
          //if the template hasn't been already included in results, create an entry for it
          pipeline_results."$t" = [:]
       }
-      //store the result after converting toString() because apparently 
-      //sometimes returnStatus gives us an object! 
+      //store the result after converting toString() because apparently
+      //sometimes returnStatus gives us an object!
 
       pipeline_results[t]."$stage" = result.toString()
    }
-  
+
    writeJSON file: json_file, json: pipeline_results
 }
 
 /*
-check_template_result(template_name, stage) 
+check_template_result(template_name, stage)
    tells what was the result of a stage on a given template
    template_name is a string
    stage is one of ['node_state', 'linter','builder','deploy_test','taster']
@@ -219,7 +219,7 @@ def check_template_result(arch, t, stage) {
       }
    }
    catch(Exception e) {
-      println e 
+      println e
       return false
    }
 }
