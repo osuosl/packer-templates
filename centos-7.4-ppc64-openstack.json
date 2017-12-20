@@ -4,7 +4,7 @@
       "boot_command": [
         "c<wait5><wait10>",
         "linux /ppc/ppc64/vmlinuz ro ",
-        "ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-7.3/ks-ppc64.cfg<enter>",
+        "ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-7.4/ks-ppc64.cfg<enter>",
         "initrd /ppc/ppc64/initrd.img<enter>",
         "boot<enter><wait>"
       ],
@@ -14,10 +14,10 @@
       "headless": true,
       "vnc_bind_address":"0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "dc71169b8f5ded685bdec39439f8154a",
-      "iso_checksum_type": "md5",
-      "iso_url": "{{user `mirror`}}/7.3.1611/isos/ppc64/CentOS-7-AltArch-ppc64-NetInstall-1611.iso",
-      "output_directory": "packer-centos-7.3-ppc64-openstack",
+      "iso_checksum": "e5b2314c7d054745618e1623f9779436c202c919e2319dcf3255c0a1e7f921c7",
+      "iso_checksum_type": "sha256",
+      "iso_url": "{{user `mirror`}}/7.4.1708/isos/ppc64/CentOS-7-AltArch-ppc64-NetInstall-1708.iso",
+      "output_directory": "packer-centos-7.4-ppc64-openstack",
       "shutdown_command": "echo 'centos'|sudo -S shutdown -P now",
       "qemuargs": [
         [ "-m", "2048M" ],
@@ -30,7 +30,7 @@
       "ssh_username": "centos",
       "ssh_wait_timeout": "10000s",
       "type": "qemu",
-      "vm_name": "packer-centos-7.3-ppc64-openstack"
+      "vm_name": "packer-centos-7.4-ppc64-openstack"
     }
   ],
   "provisioners": [
@@ -52,6 +52,6 @@
   ],
   "variables": {
     "mirror": "http://centos-altarch.osuosl.org",
-    "image_name": "CentOS 7.3 BE"
+    "image_name": "CentOS 7.4 BE"
   }
 }
