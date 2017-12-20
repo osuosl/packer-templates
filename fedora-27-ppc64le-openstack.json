@@ -4,6 +4,7 @@
       "boot_command": [
         "c<wait5>",
         "linux /ppc/ppc64/vmlinuz ro ",
+        "biosdevname=0 net.ifnames=0 ",
         "ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-27/ks-ppc64le-openstack.cfg<enter>",
         "initrd /ppc/ppc64/initrd.img<enter>",
         "boot<enter>"
