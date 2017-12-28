@@ -4,11 +4,7 @@ if [ $(uname -m)=="ppc64" -o $(uname -m)=="ppc64le" ] ; then
   dnf -y install ppc64-diag
 fi
 
-if [ -e /usr/bin/dnf ] ; then
-  dnf -y install cloud-init cloud-utils yum
-else
-  yum -y install cloud-init cloud-utils dracut-modules-growroot
-fi
+dnf -y install cloud-init cloud-utils yum
 dracut -f
 
 if [ -e /boot/grub/grub.conf ] ; then
@@ -24,7 +20,7 @@ elif [ -e /etc/default/grub ] ; then
   # No timeout for grub menu
   sed -i -e 's/^GRUB_TIMEOUT.*/GRUB_TIMEOUT=0/' /etc/default/grub
   # No fancy boot screen
-  grep -q rhgb /etc/default/grub && sed -e 's/rhgb //' /etc/default/grub
+  grep -q rhgb /etc/default/grub && sed -i -e 's/rhgb //' /etc/default/grub
   # Write out the config
   grub2-mkconfig -o /boot/grub2/grub.cfg
 fi
