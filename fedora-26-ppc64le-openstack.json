@@ -39,7 +39,6 @@
       "pause_before": "10s",
       "execute_command": "echo 'fedora' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "scripts": [
-        "scripts/fedora/fix-slow-dns.sh",
         "scripts/common/sshd.sh",
         "scripts/common/chef.sh",
         "scripts/fedora/openstack.sh",
