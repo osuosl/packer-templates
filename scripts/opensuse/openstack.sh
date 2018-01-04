@@ -33,7 +33,7 @@ system_info:
     shell: /bin/bash
 EOF
 
-rm -rf /etc/udev/rules.d/70-persistent-net.rules
+rm -rf /etc/udev/rules.d/70-persistent-net.rules /etc/motd
 
 # Remove older kernel
 if [ "$(rpm -qa | grep ^kernel-default | wc -l)" != "1"  ] ; then
