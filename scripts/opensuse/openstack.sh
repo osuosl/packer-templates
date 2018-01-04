@@ -33,6 +33,10 @@ system_info:
     shell: /bin/bash
 EOF
 
+# Ignore the hostname DHCP gives us
+sed -i -e 's/^DHCLIENT_SET_HOSTNAME.*/DHCLIENT_SET_HOSTNAME="no"/g' \
+  /etc/sysconfig/network/dhcp
+
 rm -rf /etc/udev/rules.d/70-persistent-net.rules /etc/motd
 
 # Remove older kernel
