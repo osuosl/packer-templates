@@ -8,6 +8,7 @@ zypper -n rm rpcbind postfix Mesa* libX11-data libxcb1
 
 if [ $(uname -m)=="ppc64" -o $(uname -m)=="ppc64le" ] ; then
   zypper -n in ppc64-diag
+  systemctl enable rtas_errd
 fi
 
 systemctl enable cloud-init
