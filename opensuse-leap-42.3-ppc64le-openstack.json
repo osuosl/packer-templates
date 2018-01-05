@@ -5,6 +5,7 @@
         "c<wait5>",
         "linux /boot/ppc64le/linux netsetup=dhcp install=cd:/<wait>",
         " lang=en_US autoyast=http://{{ .HTTPIP }}:{{ .HTTPPort }}/opensuse-leap-42.3/autoinst.xml<wait>",
+        " install=http://download.opensuse.org/ports/ppc/distribution/leap/42.3/repo/oss/",
         " textmode=1<enter>",
         "initrd /boot/ppc64le/initrd<enter>",
         "boot<enter><wait>"
