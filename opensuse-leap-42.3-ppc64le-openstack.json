@@ -51,6 +51,6 @@
   ],
   "variables": {
     "mirror": "http://download.opensuse.org",
-    "image_name": "OpenSUSE 43.3 LE"
+    "image_name": "OpenSUSE Leap 42.3 LE"
   }
 }
