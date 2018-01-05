@@ -7,22 +7,22 @@ cookbook 'base', github: 'osuosl-cookbooks/base'
 cookbook 'firewall', github: 'osuosl-cookbooks/firewall'
 cookbook 'ibm-power', github: 'osuosl-cookbooks/ibm-power'
 cookbook 'openstack_test', path: '../cookbooks/openstack_test'
+cookbook 'openstackclient', github: 'cloudbau/cookbook-openstackclient'
 cookbook 'osl-apache', github: 'osuosl-cookbooks/osl-apache'
 cookbook 'osl-munin', github: 'osuosl-cookbooks/osl-munin'
 cookbook 'osl-nrpe', github: 'osuosl-cookbooks/osl-nrpe'
-cookbook 'osl-openstack', github: 'osuosl-cookbooks/osl-openstack', branch: 'stable/mitaka'
+cookbook 'osl-openstack', github: 'osuosl-cookbooks/osl-openstack', branch: 'stable/newton'
 cookbook 'osl-rsync', github: 'osuosl-cookbooks/osl-rsync'
 cookbook 'resource_from_hash', github: 'osuosl-cookbooks/resource_from_hash'
 cookbook 'statsd', github: 'att-cloud/cookbook-statsd'
 cookbook 'yum-qemu-ev', github: 'osuosl-cookbooks/yum-qemu-ev'
-cookbook 'yum', '= 3.5.4'
 
 # WIP patches
 # %w(
 # ).each do |cb|
 #   cookbook "openstack-#{cb}",
 #            github: "osuosl-cookbooks/cookbook-openstack-#{cb}",
-#            branch: 'stable/mitaka'
+#            branch: 'stable/newton'
 # end
 
 # Openstack deps
@@ -42,5 +42,5 @@ cookbook 'yum', '= 3.5.4'
 ).each do |cb|
   cookbook "openstack-#{cb}",
            github: "openstack/cookbook-openstack-#{cb}",
-           tag: 'mitaka-eol'
+           tag: 'stable/newton'
 end
