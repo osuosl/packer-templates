@@ -1,0 +1,56 @@
+{
+  "builders": [
+    {
+      "boot_command": [
+        "c<wait5>",
+        "linux /boot/ppc64le/linux netsetup=dhcp install=cd:/<wait>",
+        " lang=en_US autoyast=http://{{ .HTTPIP }}:{{ .HTTPPort }}/opensuse-leap-42.3/autoinst.xml<wait>",
+        " install=http://download.opensuse.org/ports/ppc/distribution/leap/42.3/repo/oss/",
+        " textmode=1<enter>",
+        "initrd /boot/ppc64le/initrd<enter>",
+        "boot<enter><wait>"
+      ],
+      "boot_wait": "6s",
+      "disk_size": "3072",
+      "headless": true,
+      "vnc_bind_address":"0.0.0.0",
+      "http_directory": "http",
+      "iso_checksum": "597e65090618d0580a16efc7112220d46b605fcc24e8007564e334c638f207d0",
+      "iso_checksum_type": "sha256",
+      "iso_url": "{{user `mirror`}}/ports/ppc/distribution/leap/42.3/iso/openSUSE-Leap-42.3-NET-ppc64le-Build0130-Media.iso",
+      "output_directory": "packer-opensuse-leap-42.3-ppc64le-openstack",
+      "shutdown_command": "echo 'opensuse'|sudo -S /sbin/halt -h -p",
+      "ssh_password": "opensuse",
+      "ssh_port": 22,
+      "ssh_username": "opensuse",
+      "ssh_wait_timeout": "10000s",
+      "qemuargs": [
+        [ "-m", "2048M" ],
+        [ "-boot", "strict=on" ]
+      ],
+      "qemu_binary": "/usr/libexec/qemu-kvm",
+      "machine_type": "pseries",
+      "type": "qemu",
+      "vm_name": "packer-opensuse-leap-42.3-ppc64le-openstack"
+    }
+  ],
+  "provisioners": [
+    {
+      "execute_command": "echo 'opensuse' | {{.Vars}} sudo -S -E sh '{{.Path}}'",
+      "scripts": [
+        "scripts/common/sshd.sh",
+        "scripts/common/vmtools.sh",
+        "scripts/opensuse/sudoers.sh",
+        "scripts/opensuse/zypper-locks.sh",
+        "scripts/opensuse/remove-dvd-source.sh",
+        "scripts/opensuse/openstack.sh",
+        "scripts/common/minimize.sh"
+      ],
+      "type": "shell"
+    }
+  ],
+  "variables": {
+    "mirror": "http://download.opensuse.org",
+    "image_name": "OpenSUSE Leap 42.3 LE"
+  }
+}
