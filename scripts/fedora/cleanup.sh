@@ -12,5 +12,4 @@ fi
 echo "port 0" >> /etc/chrony.conf
 echo "cmdport 0" >> /etc/chrony.conf
 
-rm -rf VBoxGuestAdditions_*.iso VBoxGuestAdditions_*.iso.?
 rm -f /tmp/chef*rpm
