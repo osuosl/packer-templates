@@ -1,5 +1,4 @@
 #!/bin/bash
-
 PUBLISH=0
 CHEF_VER="latest"
 
@@ -9,12 +8,14 @@ run_help() {
   echo "    $0 - deploy target image to OpenStack for further testing."
   echo
   echo " USAGE:"
-  echo "    $0 [-p | -f [FILE] -c [CHEF_VER]] -n [IMG_NAME] -r [PR_NUM]"
+  echo "    $0 [-p -v | -f [FILE] -c [CHEF_VER]] -n [IMG_NAME] -r [PR_NUM]"
   echo
   echo " OPTIONS:"
   echo "    -p          - Publish (publicly) the target image as '\$IMG_NAME', renaming"
   echo "                  the old '\$IMG_NAME' to '\$IMG_NAME - deprecated by PR#\$PR_NUM'"
   echo "                  and making that image private."
+  echo
+  echo "    -v          - Show verbose output."
   echo
   echo " ARGUMENTS:"
   echo "    FILE        - Fully built image to be uploaded to OpenStack if [-p] is not"
@@ -30,13 +31,16 @@ run_help() {
   exit 0
 }
 
-while getopts "hpf:c:n:r:" opt ; do
+while getopts "hpvf:c:n:r:" opt ; do
   case ${opt} in
     h)
       run_help
       ;;
     p)
       PUBLISH=1
+      ;;
+    v)
+      set -x
       ;;
     f)
       FILE="$OPTARG"
@@ -71,6 +75,15 @@ if [ "$PUBLISH" == 0 ]; then
 else
   OLD_IMAGE_ID=$(openstack image show "$IMG_NAME" -f value -c id)
   NEW_IMAGE_ID=$(openstack image show "$IMG_NAME - PR#$PR_NUM" -f value -c id)
-  openstack image set --name "$IMG_NAME - deprecated by PR#$PR_NUM" --private "$OLD_IMAGE_ID" && openstack image set --name "$IMG_NAME" --public "$NEW_IMAGE_ID"
+  if [ -z "$NEW_IMAGE_ID" ] ; then
+    echo "Unable to find new image $IMG_NAME!"
+    exit 1
+  elif [ -z "$OLD_IMAGE_ID" ] ; then
+    openstack image set --name "$IMG_NAME" --public "$NEW_IMAGE_ID"
+  else
+    openstack image set --name "$IMG_NAME - deprecated by PR#$PR_NUM" \
+      --private "$OLD_IMAGE_ID" && \
+    openstack image set --name "$IMG_NAME" --public "$NEW_IMAGE_ID"
+  fi
   exit $?
 fi
