@@ -1,0 +1,10 @@
+{
+  "id": "openstack-object-storage",
+  "openstack-object-storage": {
+    "encrypted_data": "JB/iIEI033wnuYAg/gY2SG7yn+w3vm/v6a9tX8nqjO6F62ZpDvFIfzR+QqQw\nOWU7\n",
+    "hmac": "mXWZTKLnGs1nIgswPtBLydqUz37nlxHamfwYb7BAnbA=\n",
+    "iv": "5hMEnbBV+xc1pJ2WNEEG7g==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  }
+}

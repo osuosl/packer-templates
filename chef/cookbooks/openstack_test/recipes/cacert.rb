@@ -17,6 +17,7 @@ end
 ruby_block 'set ca_file' do
   block do
     require 'net/https'
+    require 'excon'
 
     Net::HTTP.class_eval do
       alias_method :_use_ssl=, :use_ssl=
@@ -26,5 +27,6 @@ ruby_block 'set ca_file' do
         self._use_ssl = boolean
       end
     end
+    Excon.defaults[:ssl_verify_peer] = false
   end
 end

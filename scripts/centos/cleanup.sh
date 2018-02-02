@@ -8,6 +8,12 @@ rm -f /tmp/chef*rpm
 # Remove EPEL remove if it exists
 yum -y remove epel-release
 
+# We don't need nfs or postfix installed by default
+yum -y remove rpcbind postfix
+
+echo "port 0" >> /etc/chrony.conf
+echo "cmdport 0" >> /etc/chrony.conf
+
 chkconfig kdump off
 
 # clean up redhat interface persistence

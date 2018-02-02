@@ -2,17 +2,17 @@
   "builders": [
     {
       "boot_command": [
-        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-7.3/ks-x86_64.cfg<enter><wait>"
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-7.4/ks-x86_64.cfg<enter><wait>"
       ],
       "accelerator": "kvm",
       "boot_wait": "10s",
       "disk_size": 20480,
       "headless": true,
       "http_directory": "http",
-      "iso_checksum": "f2f7367deb90a25822947660c71638333ca0eceeabecc2d631be6cd508c24494",
+      "iso_checksum": "fe3d960cce4d2c1c9f1b66817fe87cc0ee1a1c6c5dd126204cb5c33d51a45620",
       "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}/7.3.1611/isos/x86_64/CentOS-7-x86_64-NetInstall-1611.iso",
-      "output_directory": "packer-centos-7.3-x86_64-mitaka-aio-openstack",
+      "iso_url": "{{user `mirror`}}/7.4.1708/isos/x86_64/CentOS-7-x86_64-NetInstall-1708.iso",
+      "output_directory": "packer-centos-7.4-x86_64-newton-aio-openstack",
       "qemuargs": [ [ "-m", "8192M" ] ],
       "qemu_binary": "qemu-kvm",
       "shutdown_command": "echo 'centos'|sudo -S /sbin/halt -h -p",
@@ -21,7 +21,7 @@
       "ssh_username": "centos",
       "ssh_wait_timeout": "10000s",
       "type": "qemu",
-      "vm_name": "packer-centos-7.3-x86_64-mitaka-aio-openstack",
+      "vm_name": "packer-centos-7.4-x86_64-newton-aio-openstack",
       "vnc_bind_address": "0.0.0.0"
     }
   ],
@@ -44,7 +44,7 @@
     },
     {
       "type": "file",
-      "source": "{{user `local_chef_dir`}}/centos-7.3-x86_64-mitaka-aio-openstack/cookbooks/",
+      "source": "{{user `local_chef_dir`}}/centos-7.4-x86_64-newton-aio-openstack/cookbooks/",
       "destination": "{{user `chef_dir`}}/cookbooks"
     },
     {
@@ -54,12 +54,12 @@
     },
     {
       "type": "file",
-      "source": "{{user `local_chef_dir`}}/centos-7.3-x86_64-mitaka-aio-openstack/data_bags/",
+      "source": "{{user `local_chef_dir`}}/centos-7.4-x86_64-newton-aio-openstack/data_bags/",
       "destination": "{{user `chef_dir`}}/data_bags"
     },
     {
       "type": "file",
-      "source": "{{user `local_chef_dir`}}//centos-7.3-x86_64-mitaka-aio-openstack/encrypted_data_bag_secret",
+      "source": "{{user `local_chef_dir`}}//centos-7.4-x86_64-newton-aio-openstack/encrypted_data_bag_secret",
       "destination": "/etc/chef/encrypted_data_bag_secret"
     },
     {
@@ -86,6 +86,7 @@
     "local_chef_dir": "chef",
     "chef_dir": "/tmp/packer-chef-client",
     "node_name": "controller.example.com",
-    "mirror": "http://centos.osuosl.org"
+    "mirror": "http://centos.osuosl.org",
+    "image_name": "openstack-newton-aio"
   }
 }

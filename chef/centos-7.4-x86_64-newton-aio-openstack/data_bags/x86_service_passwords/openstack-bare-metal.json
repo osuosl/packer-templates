@@ -1,0 +1,10 @@
+{
+  "id": "openstack-bare-metal",
+  "openstack-bare-metal": {
+    "encrypted_data": "fe6sxKycsdTQp4gh/yqRyWrxoJrYi2GtrIsqGOhLPtF0i7pAI2iCcAWfquYF\nwxZ/\n",
+    "hmac": "gz1Yq25ztmKSZ3rEjgR7G5Wxz0bSv2DttlvltXFT79M=\n",
+    "iv": "mIhZY/I9Sso+I8buj7axOQ==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  }
+}

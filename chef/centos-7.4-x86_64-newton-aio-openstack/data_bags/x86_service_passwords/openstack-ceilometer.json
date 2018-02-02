@@ -1,0 +1,10 @@
+{
+  "id": "openstack-ceilometer",
+  "openstack-ceilometer": {
+    "encrypted_data": "6aj2pvZXmqgWAG44cLBkSRhimR36xpRVmhPoAIUD8TN78zcbXO6HSYBVpMTP\nApUJ\n",
+    "hmac": "9G1qGXHFoFkr4nwlEtJGJXAt8F8NeeYHoCf87bXmJwE=\n",
+    "iv": "SCBt4Y/TSnkdOBq7LEwrGQ==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  }
+}

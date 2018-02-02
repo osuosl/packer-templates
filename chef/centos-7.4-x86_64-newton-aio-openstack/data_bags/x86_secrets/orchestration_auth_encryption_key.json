@@ -1,0 +1,10 @@
+{
+  "id": "orchestration_auth_encryption_key",
+  "orchestration_auth_encryption_key": {
+    "encrypted_data": "iRzHJs+EXOxms4FP93RnRgO6KK40l/hId5G81YLvlpCr/WMYgE9bcy6TU/FO\nbRi+G2DoNChbNeMYRXvtmRkMZQ==\n",
+    "hmac": "rwg8yqhGLZVYESj4B28ONBR1yuULBf4Q+TzbBglP2Bo=\n",
+    "iv": "FWb7J1RidvS+npXgN5mSkA==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  }
+}
