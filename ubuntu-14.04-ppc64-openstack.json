@@ -1,0 +1,57 @@
+{
+  "builders": [
+    {
+      "boot_command": [
+        "<wait>",
+        "install-powerpc64-osuosl",
+        "<enter><wait>"
+      ],
+      "accelerator": "kvm",
+      "boot_wait": "6s",
+      "disk_size": 4096,
+      "disk_interface": "virtio-scsi",
+      "headless": true,
+      "vnc_bind_address": "0.0.0.0",
+      "http_directory": "http",
+      "iso_checksum": "d7d3f5a77727f606f9fcea05d2a71df0a25d8c9323e5d8e53742ff59b8e9444f",
+      "iso_checksum_type": "sha256",
+      "iso_url": "{{user `mirror`}}/distfiles/ubuntu-14.04.5-server-powerpc-osuosl.iso",
+      "output_directory": "packer-ubuntu-14.04-ppc64-openstack",
+      "shutdown_command": "echo 'ubuntu' | sudo -S shutdown -P now",
+      "qemuargs": [
+        [ "-m", "2048M" ],
+        [ "-boot", "strict=on" ]
+      ],
+      "qemu_binary": "/usr/libexec/qemu-kvm",
+      "machine_type": "pseries",
+      "ssh_password": "ubuntu",
+      "ssh_port": 22,
+      "ssh_username": "ubuntu",
+      "ssh_wait_timeout": "10000s",
+      "type": "qemu",
+      "vm_name": "packer-ubuntu-14.04-ppc64-openstack"
+    }
+  ],
+  "provisioners": [
+    {
+      "execute_command": "echo 'ubuntu' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
+      "scripts": [
+        "scripts/ubuntu/update.sh",
+        "scripts/ubuntu/networking.sh",
+        "scripts/common/sshd.sh",
+        "scripts/common/vmtools.sh",
+        "scripts/ubuntu/openstack.sh",
+        "scripts/ubuntu/sudoers.sh",
+        "scripts/ubuntu/ppc.sh",
+        "scripts/ubuntu/cleanup.sh",
+        "scripts/common/minimize.sh"
+      ],
+      "type": "shell"
+    }
+  ],
+  "variables": {
+    "mirror": "http://packages.osuosl.org",
+    "image_name": "Ubuntu 14.04 BE "
+  }
+}
+
