@@ -22,6 +22,7 @@ node ('master'){
          error("Stopping because this build was not triggered on a PR's synchronize/opened/review_requested event which would have all the necessary information for making a build successful")
       }
 
+      // The event for a comment is 'create', so here we filter out all comments except '!deploy'
       if ( event == 'created' ){
         comment = new JsonSlurper().parseText("${params.payload}")['comment']['body']
         if ( comment != '!deploy' ){
