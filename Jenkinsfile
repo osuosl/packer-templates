@@ -12,6 +12,24 @@ everything runs on whatever is labeled as 'master'
 node ('master'){
    /* receives the payload, parses it and gets us the PR number, templates to process and arch */
    stage('payload_processing') {
+      //what event triggered this build ?
+      event = new JsonSlurper().parseText("${params.payload}")['action']
+
+      println "This build was triggered by the $event event. Look at https://developer.github.com/v3/activity/events/types for more info."
+
+      if ( event != 'synchronize' || event != 'opened' || event != 'review_requested' || event != 'created' ) {
+         currentBuild.result = 'ABORTED'
+         error("Stopping because this build was not triggered on a PR's synchronize/opened/review_requested event which would have all the necessary information for making a build successful")
+      }
+
+      // The event for a comment is 'create', so here we filter out all comments except '!deploy'
+      if ( event == 'created' ){
+        comment = new JsonSlurper().parseText("${params.payload}")['comment']['body']
+        if ( comment != '!deploy' ){
+          currentBuild.result = 'ABORTED'
+          error("Stopping this build because the comment was not a recognized command.")
+        }
+      }
 
       //clone the osl-jenkins on master branch to use the latest version of scripts
       git url: 'https://github.com/osuosl-cookbooks/osl-jenkins', branch: 'master'
@@ -19,15 +37,6 @@ node ('master'){
       //write payload to a file
       writeFile file: "/tmp/packer_pipeline_job_build_$BUILD_NUMBER", text: "$params.payload"
 
-      //what event triggered this build ?
-      event = new JsonSlurper().parseText("${params.payload}")['action']
-
-      println "This build was triggered by the $event event. Look at https://developer.github.com/v3/activity/events/types for more info."
-
-      if ( event != 'synchronize' || event != 'opened' || event != 'review_requested' ) {
-         currentBuild.result = 'ABORTED'
-         error("Stopping because this build was not triggered on a PR's synchronize/opened/review_requested event which would have all the necessary information for making a build successful")
-      }
 
       //what is the pr number ?
       pr = new JsonSlurper().parseText("${params.payload}")['number']
@@ -109,16 +118,21 @@ node ('master'){
             echo "Starting execution for $env.arch"
             //do actual things on the node.
             node (env.arch) {
-               clone_repo_and_checkout_pr_branch()
-               run_linter(env.arch)
-               build_image(env.arch)
-               deploy_image_for_testing(env.arch)
-               run_tests(env.arch)
-               //archive '*' //store all the files
-               //deploy_on_production() -- seperate!
-               node_results = readJSON file: "${arch}_results.json"
-               deleteDir()
-               //TODO: delete the directory if this build succeeds complteley
+               //This should only run when a comment is made. The action for comments is 'created'.
+               if(get_from_payload('action') == 'created'){
+                 deploy_image_on_production(env.arch)
+               }
+               else{
+                 clone_repo_and_checkout_pr_branch()
+                 run_linter(env.arch)
+                 build_image(env.arch)
+                 deploy_image_for_testing(env.arch)
+                 run_tests(env.arch)
+                 //archive '*' //store all the files
+                 node_results = readJSON file: "${arch}_results.json"
+                 deleteDir()
+                 //TODO: delete the directory if this build succeeds complteley
+               }
              }
              update_final_results(arch, node_results)
          }
@@ -195,7 +209,7 @@ def update_template_result(arch, t, stage, result) {
 check_template_result(template_name, stage)
    tells what was the result of a stage on a given template
    template_name is a string
-   stage is one of ['node_state', 'linter','builder','deploy_test','taster']
+   stage is one of ['node_state', 'linter','builder','deploy_test','taster', 'publish']
 
    if a stage does not exist (which might mean that the template never went through the state)
    we will simply return false
@@ -342,6 +356,30 @@ def deploy_image_for_testing(arch) {
             update_template_result(arch, t, 'deploy_test', result)
          } else {
             println "Skipping $t because it was not successfully built!"
+         }
+      }
+   }
+   templates = null
+}
+
+/* deploy_image_on_production(arch)
+
+   deploys qcow2 images on the various clusters for the given arch.
+   cluster credentials come from packer_pipeline_credentials.json
+   in alfred's home
+
+   TODO: failure while deploying any image is a soft failure
+*/
+def deploy_image_on_production(arch) {
+   def templates = get_from_payload(arch)
+   stage('deploy_publically') {
+      for ( t in templates ) {
+         //check whether this template was already tested
+         if ( check_template_result(arch, t, 'taster' ) ) {
+            result = sh (returnStatus: true, script: "./bin/deploy_wrapper.rb -t $t -s /home/alfred/openstack_credentials.json -r $env.pr -p")
+            update_template_result(arch, t, 'publish', result)
+         } else {
+            println "Skipping $t because it hasn't been tested!"
          }
       }
    }
