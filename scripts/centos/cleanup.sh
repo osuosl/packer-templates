@@ -25,3 +25,10 @@ for ndev in $(ls /etc/sysconfig/network-scripts/ifcfg-*); do
     sed -i '/^UUID/d' ${ndev}
   fi
 done
+
+# Disable any other running services
+
+systemctl stop rpcbind.service rpcbind.socket
+if [ -f /etc/chrony.conf ]
+  echo "\nport 0" >> /etc/chrony.conf
+fi
