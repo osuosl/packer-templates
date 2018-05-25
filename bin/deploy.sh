@@ -8,7 +8,7 @@ run_help() {
   echo "    $0 - deploy target image to OpenStack for further testing."
   echo
   echo " USAGE:"
-  echo "    $0 [-p -v | -f [FILE] -c [CHEF_VER]] -n [IMG_NAME] -r [PR_NUM]"
+  echo "    $0 [-p -v | -d [DISK] -f [FILE] -c [CHEF_VER]] -n [IMG_NAME] -r [PR_NUM] -o [OPTIONS]"
   echo
   echo " OPTIONS:"
   echo "    -p          - Publish (publicly) the target image as '\$IMG_NAME', renaming"
@@ -28,10 +28,14 @@ run_help() {
   echo
   echo "    PR_NUM      - GitHub Pull Request number to suffix private images with."
   echo
+  echo "    DISK        - The lowercase format for the image. ex: qcow2, raw"
+  echo
+  echo "    OPTIONS     - Raw options for the image. i.e. '--property <key1=value> --property <key2=value>'"
+  echo
   exit 0
 }
 
-while getopts "hpvf:c:n:r:" opt ; do
+while getopts "hpvf:c:n:r:d:o:" opt ; do
   case ${opt} in
     h)
       run_help
@@ -54,6 +58,12 @@ while getopts "hpvf:c:n:r:" opt ; do
     r)
       PR_NUM="$OPTARG"
       ;;
+    d)
+      DISK="$OPTARG"
+      ;;
+    o)
+      OPTIONS="$OPTARG"
+      ;;
   esac
 done
 
@@ -70,7 +80,7 @@ if [ "$PUBLISH" == 0 ]; then
       openstack image delete $id;
     done
 
-    openstack image create --file "$FILE" --property chef-version="$CHEF_VER" --disk-format qcow2 "$IMG_NAME - PR#$PR_NUM"
+    openstack image create --file "$FILE" --property chef-version="$CHEF_VER" --disk-format $DISK "$IMG_NAME - PR#$PR_NUM" $OPTIONS
     exit $?
 else
   OLD_IMAGE_ID=$(openstack image show "$IMG_NAME" -f value -c id)
