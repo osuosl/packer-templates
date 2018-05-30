@@ -17,7 +17,9 @@ node ('master'){
 
       println "This build was triggered by the $event event. Look at https://developer.github.com/v3/activity/events/types for more info."
 
-      if ( event != 'synchronize' || event != 'opened' || event != 'review_requested' || event != 'created' ) {
+      if ( event =~ /synchronize|opened|review_requested|created/ ) {
+         println "Found acceptable event $event"
+      } else {
          currentBuild.result = 'ABORTED'
          error("Stopping because this build was not triggered on a PR's synchronize/opened/review_requested event which would have all the necessary information for making a build successful")
       }
