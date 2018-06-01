@@ -4,6 +4,7 @@
       "boot_command": [
         "<wait>",
         "install-powerpc64",
+        " auto",
         " console-setup/ask_detect=false",
         " console-setup/layoutcode=us",
         " console-setup/modelcode=pc105",
