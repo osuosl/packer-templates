@@ -5,6 +5,7 @@
 
 require 'json'
 require 'optparse'
+require 'English'
 load 'bin/common.rb'
 
 ARGV << '-h' if ARGV.empty?
@@ -24,5 +25,5 @@ run_on_each_cluster(options[:openstack_credentials_file]) do
 
   # execute while handing over STDIN,STDOUT and STDERR to the openstack_taster command
   system(command)
-  exit $?.exitstatus
+  exit $CHILD_STATUS.exitstatus
 end

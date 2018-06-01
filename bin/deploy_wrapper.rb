@@ -5,6 +5,7 @@
 
 require 'json'
 require 'optparse'
+require 'English'
 load 'bin/common.rb'
 
 ARGV << '-h' if ARGV.empty?
@@ -19,9 +20,9 @@ run_on_each_cluster(options[:openstack_credentials_file]) do
 
   image_path = "./#{output_directory}/#{vm_name}"
   image_path += if options[:disk_type] == 'raw'
-                  "-converted.raw"
+                  '-converted.raw'
                 else
-                  "-compressed.qcow2"
+                  '-compressed.qcow2'
                 end
   puts "going to look for image at \n #{image_path}"
 
@@ -45,15 +46,15 @@ run_on_each_cluster(options[:openstack_credentials_file]) do
     if options[:disk_type] == 'raw'
       command += ' -d raw'
       command += ' -o "' + \
-        %w(
-          hw_scsi_model=virtio-scsi
-          hw_disk_bus=scsi
-          hw_qemu_guest_agent=yes
-          os_require_quiesce=yes
-        ).map do |property|
-          " --property #{property}"
-        end.join + \
-        '"'
+                 %w(
+                   hw_scsi_model=virtio-scsi
+                   hw_disk_bus=scsi
+                   hw_qemu_guest_agent=yes
+                   os_require_quiesce=yes
+                 ).map do |property|
+                   " --property #{property}"
+                 end.join + \
+                 '"'
     else
       command += ' -d qcow2'
     end
@@ -61,5 +62,5 @@ run_on_each_cluster(options[:openstack_credentials_file]) do
 
   puts command
   system(command)
-  exit $?.exitstatus
+  exit $CHILD_STATUS.exitstatus
 end
