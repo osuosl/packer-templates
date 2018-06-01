@@ -8,6 +8,7 @@ require 'optparse'
 require 'csv'
 
 OPENSTACK_CREDENTIALS_DEFAULT_LOCATION = '/tmp/packer_pipeline_creds.json'
+DISK_TYPE = 'qcow2'
 
 def option_parser(for_program, argv)
   options = {}
@@ -32,6 +33,14 @@ def option_parser(for_program, argv)
             '--pull_request PR',
             'Specify the PR number for which we are deploying this.') do |r|
       options[:pr_number] = r
+    end
+
+    opts.on(
+      '-d DISK_TYPE',
+      '--disk-type DISK_TYPE',
+      'Specify which type of disk image type to upload (i.e. qcow2 or raw)'
+    ) do |d|
+      options[:disk_type] = d || DISK_TYPE
     end
 
     opts.on('-p',

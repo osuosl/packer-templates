@@ -354,7 +354,7 @@ def deploy_image_for_testing(arch) {
       for ( t in templates ) {
          //check whether this template was successfully built into an image and it was not already deployed!
          if ( check_template_result(arch, t, 'builder') && !check_template_result(arch, t, 'deploy_test' ) ) {
-            result = sh (returnStatus: true, script: "./bin/deploy_wrapper.rb -t $t -s /home/alfred/openstack_credentials.json -r $env.pr")
+            result = sh (returnStatus: true, script: "./bin/deploy_wrapper.rb -d raw -t $t -s /home/alfred/openstack_credentials.json -r $env.pr")
             update_template_result(arch, t, 'deploy_test', result)
          } else {
             println "Skipping $t because it was not successfully built!"
@@ -378,7 +378,7 @@ def deploy_image_on_production(arch) {
       for ( t in templates ) {
          //check whether this template was already tested
          if ( check_template_result(arch, t, 'taster' ) ) {
-            result = sh (returnStatus: true, script: "./bin/deploy_wrapper.rb -t $t -s /home/alfred/openstack_credentials.json -r $env.pr -p")
+            result = sh (returnStatus: true, script: "./bin/deploy_wrapper.rb -d raw -t $t -s /home/alfred/openstack_credentials.json -r $env.pr -p")
             update_template_result(arch, t, 'publish', result)
          } else {
             println "Skipping $t because it hasn't been tested!"
