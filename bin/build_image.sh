@@ -48,12 +48,5 @@ if [ -e chef/${TEMPLATE_NAME}/Berksfile ] ; then
 fi
 packer build -color=false -force $(basename $TEMPLATE)
 
-if [ "$(packer version | grep ^Packer)" == "Packer v0.7.5" ] ; then
-  qemu-img convert -o compat=0.10 -O qcow2 -c ${DIR_NAME}/${IMAGE_NAME}.qcow2 \
-    $FINAL_QCOW_FILE_NAME
-else
-  qemu-img convert -o compat=0.10 -O qcow2 -c ${DIR_NAME}/${IMAGE_NAME} \
-    $FINAL_QCOW_FILE_NAME
-fi
-
-qemu-img convert -o compat=0.10 -O raw $FINAL_QCOW_FILE_NAME $FINAL_RAW_FILE_NAME
+qemu-img convert -O qcow2 -c ${DIR_NAME}/${IMAGE_NAME} $FINAL_QCOW_FILE_NAME
+qemu-img convert -O raw ${DIR_NAME}/${IMAGE_NAME} $FINAL_RAW_FILE_NAME
