@@ -3,11 +3,24 @@
   "run_list": [
     "recipe[openstack_test::hosts]",
     "recipe[openstack_test::cacert]",
-    "recipe[osl-openstack]"
+    "recipe[openstack_test::ceph_setup]",
+    "recipe[osl-openstack]",
+    "recipe[openstack_test::ceph]"
   ],
   "chef_type": "role",
   "override_attributes": {
+    "ceph": {
+      "network": {
+        "public": {
+          "cidr": [ "10.1.100.0/23" ]
+        },
+        "cluster": {
+          "cidr": [ "10.1.100.0/23" ]
+        }
+      }
+    },
     "osl-openstack": {
+      "ceph": true,
       "database_suffix": "x86",
       "databag_prefix": "x86",
       "endpoint_hostname": "controller.example.com",
