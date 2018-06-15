@@ -10,19 +10,8 @@ docker_image 'osuosl/ceph' do
   action :pull
 end
 
-ceph_ip =
-  if node['ipaddress'] == '10.0.2.15'
-    '192.168.60.10'
-  else
-    node['ipaddress']
-  end
-
-ceph_network =
-  if node['ipaddress'] == '10.0.2.15'
-    '192.168.60.0/24'
-  else
-    '10.1.100.0/22'
-  end
+ceph_ip = '127.0.0.1'
+ceph_network = '127.0.0.1'
 
 docker_container 'ceph' do
   repo 'osuosl/ceph'
