@@ -23,18 +23,18 @@ cookbook 'yum-kernel-osuosl', github: 'osuosl-cookbooks/yum-kernel-osuosl'
 cookbook 'yum-qemu-ev', github: 'osuosl-cookbooks/yum-qemu-ev'
 
 # WIP patches
-# %w(
-# ).each do |cb|
-#   cookbook "openstack-#{cb}",
-#            github: "osuosl-cookbooks/cookbook-openstack-#{cb}",
-#            branch: 'stable/newton'
-# end
+%w(
+  compute
+).each do |cb|
+  cookbook "openstack-#{cb}",
+           github: "osuosl-cookbooks/cookbook-openstack-#{cb}",
+           branch: 'stable/newton'
+end
 
 # Openstack deps
 %w(
   block-storage
   common
-  compute
   dashboard
   identity
   image
