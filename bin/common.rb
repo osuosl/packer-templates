@@ -91,6 +91,13 @@ def parse_from_template(template, variable)
       puts "image_name custom variable not pre-set in #{template}!"
       return t['builders'][0]['vm_name'].sub('-', ' ').sub('packer', '').strip
 
+    when 'ssh_username'
+      t_builders = t.dig('builders')
+
+      # process only qemu type of builder -- this accomodates any other builders we add in future.
+      t_builders.select! { |p| p['type'] == 'qemu' }
+      return t['builders'][0]['ssh_username']
+
     when 'output_directory'
       t_builders = t.dig('builders')
 
@@ -105,6 +112,9 @@ def parse_from_template(template, variable)
       t_builders.select! { |p| p['type'] == 'qemu' }
       puts "WARNING: Returning vm_name from builder 0 of #{t_builders.count}" if t_builders.count > 1
       return t['builders'][0]['vm_name']
+
+    when 'flavor'
+      return t['variables']['flavor']
 
     when 'chef_version'
       return t['variables']['chef_version']

@@ -17,10 +17,12 @@ run_on_each_cluster(options[:openstack_credentials_file]) do
   # name which was used for deploying the image
   puts `openstack image list`
 
-  openstack_image_name = parse_from_template(options[:template_file], 'image_name') +
-                         " - PR\##{options[:pr_number]}"
+  image_name = parse_from_template(options[:template_file], 'image_name') + " - PR\##{options[:pr_number]}"
+  ssh_username = parse_from_template(options[:template_file], 'ssh_username')
+  flavor = parse_from_template(options[:template_file], 'flavor')
 
-  command = "openstack_taster \"#{openstack_image_name}\""
+  command = "openstack_taster -i \"#{image_name}\" -u #{ssh_username}"
+  command += " -f #{flavor}" unless flavor.nil?
   puts command
 
   # execute while handing over STDIN,STDOUT and STDERR to the openstack_taster command
