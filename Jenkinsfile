@@ -14,8 +14,15 @@ node ('master'){
    stage('payload_processing') {
       //what event triggered this build ?
       event = new JsonSlurper().parseText("${params.payload}")['action']
+      if ( new JsonSlurper().parseText("${params.payload}")['issue'] == null ) {
+          event_type = 'pull_request'
+          author_association = null
+      } else {
+          event_type = 'issue'
+          author_association = new JsonSlurper().parseText("${params.payload}")['issue']['author_association']
+      }
 
-      println "This build was triggered by the $event event. Look at https://developer.github.com/v3/activity/events/types for more info."
+      println "This build was triggered by the $event event and $event_type event type. Look at https://developer.github.com/v3/activity/events/types for more info."
 
       if ( event =~ /synchronize|opened|review_requested|created/ ) {
          println "Found acceptable event $event"
@@ -24,8 +31,8 @@ node ('master'){
          error("Stopping because this build was not triggered on a PR's synchronize/opened/review_requested event which would have all the necessary information for making a build successful")
       }
 
-      // The event for a comment is 'create', so here we filter out all comments except '!deploy'
-      if ( event == 'created' ){
+      // If !deploy is created via an issue, ensure the author is a member of the org
+      if ( event == 'created' && event_type == 'issue' && author_association == 'MEMBER' ){
         comment = new JsonSlurper().parseText("${params.payload}")['comment']['body']
         if ( comment != '!deploy' ){
           currentBuild.result = 'ABORTED'
@@ -33,15 +40,15 @@ node ('master'){
         }
       }
 
-      //clone the osl-jenkins on master branch to use the latest version of scripts
-      git url: 'https://github.com/osuosl-cookbooks/osl-jenkins', branch: 'master'
-
       //write payload to a file
       writeFile file: "/tmp/packer_pipeline_job_build_$BUILD_NUMBER", text: "$params.payload"
 
-
       //what is the pr number ?
-      pr = new JsonSlurper().parseText("${params.payload}")['number']
+      if ( event_type == 'pull_request') {
+        pr = new JsonSlurper().parseText("${params.payload}")['number']
+      } else if ( event_type == 'issue' ) {
+        pr = new JsonSlurper().parseText("${params.payload}")['issue']['number']
+      }
 
       if ( pr == null ) {
          currentBuild.result = 'ABORTED'
@@ -54,15 +61,21 @@ node ('master'){
             sh "git pr $pr"
       }
 
-      //If this isn't set we can't set a status!
-      println "the GIT_COMMIT says ${env.GIT_COMMIT}"
-      env.GIT_COMMIT = new JsonSlurper().parseText("${params.payload}")['pull_request']['head']['sha']
-      println "the GIT_COMMIT says ${env.GIT_COMMIT}"
+      if ( event_type == 'pull_request') {
+          // If this is a pull_request, grab the sha from the payload and set the GIT_COMMIT env var
+          println "the GIT_COMMIT says ${env.GIT_COMMIT}"
+          env.GIT_COMMIT = new JsonSlurper().parseText("${params.payload}")['pull_request']['head']['sha']
+          println "the GIT_COMMIT says ${env.GIT_COMMIT}"
+      } else if ( event_type == 'issue' ) {
+          // If this is an issue, it doesn't include the sha, so let's pass the PR number as GIT_PR env var instead
+          env.GIT_PR = pr
+          println "The GIT_PR says ${env.GIT_PR}"
+      }
 
       //pass this payload to our script so that it can return info which we can actually use
       env.payload_parsed_JSON = sh(returnStdout: true, script: """
         export PACKER_TEMPLATES_DIR=$WORKSPACE/packer-templates
-        $WORKSPACE/files/default/bin/packer_pipeline.rb -p /tmp/packer_pipeline_job_build_$BUILD_NUMBER
+        $JENKINS_HOME/bin/packer_pipeline.rb -p /tmp/packer_pipeline_job_build_$BUILD_NUMBER
       """).trim()
       writeFile file: "/tmp/${JOB_NAME}-${BUILD_NUMBER}.json", text: env.payload_parsed_JSON
    }
@@ -72,6 +85,7 @@ node ('master'){
 
       //some constants
       env.pr = get_from_payload('pr')
+      env.event_type = get_from_payload('event_type')
 
       //TODO: this should be set from the job
       //set path to the packer binary
@@ -120,8 +134,8 @@ node ('master'){
             echo "Starting execution for $env.arch"
             //do actual things on the node.
             node (env.arch) {
-               //This should only run when a comment is made. The action for comments is 'created'.
-               if(get_from_payload('action') == 'created'){
+               // We've already done a sanity check before this, so if this is an issue type, we know !deploy was used
+               if( env.event_type == 'issue') {
                  deploy_image_on_production(env.arch)
                }
                else{
@@ -145,12 +159,15 @@ node ('master'){
       }
 
       //set status on the commit using the PackerPipeline class
-      withCredentials([usernamePassword(credentialsId: 'packer_pipeline', usernameVariable: '', passwordVariable: 'GITHUB_TOKEN')]) {
+      withCredentials([usernamePassword(
+            credentialsId: 'packer_pipeline',
+            usernameVariable: '',
+            passwordVariable: 'GITHUB_TOKEN')]) {
          //available as an env variable
          sh 'echo "$GITHUB_TOKEN should appear as masked and not null"'
          result = sh(returnStdout: true, script: """
               cat $WORKSPACE/final_results.json;
-               $WORKSPACE/files/default/bin/packer_pipeline.rb -f $WORKSPACE/final_results.json
+               $JENKINS_HOME/bin/packer_pipeline.rb -f $WORKSPACE/final_results.json
          """)
          echo result
       }
