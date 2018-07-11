@@ -134,7 +134,9 @@ node ('master'){
                // We've already done a sanity check before this, so if this is an issue type, we know !deploy was used
                if( env.event_type == 'issue') {
                  if( env.pr_state == 'success') {
+                   clone_repo_and_checkout_pr_branch()
                    deploy_image_on_production(env.arch)
+                   deleteDir()
                  } else {
                    currentBuild.result = 'ABORTED'
                    error("PR in state ${env.pr_state}. Not deploying")
