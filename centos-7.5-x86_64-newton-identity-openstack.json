@@ -83,6 +83,8 @@
   ],
   "variables": {
     "chef_version": "12.18.31",
+    "flavor": "m1.large",
+    "suite": "volumes",
     "local_chef_dir": "chef",
     "chef_dir": "/tmp/packer-chef-client",
     "node_name": "controller.example.com",
