@@ -66,10 +66,6 @@ node ('master'){
           println "the GIT_COMMIT says ${env.GIT_COMMIT}"
           env.GIT_COMMIT = new JsonSlurper().parseText("${params.payload}")['pull_request']['head']['sha']
           println "the GIT_COMMIT says ${env.GIT_COMMIT}"
-      } else if ( event_type == 'issue' ) {
-          // If this is an issue, it doesn't include the sha, so let's pass the PR number as GIT_PR env var instead
-          env.GIT_PR = pr
-          println "The GIT_PR says ${env.GIT_PR}"
       }
 
       //pass this payload to our script so that it can return info which we can actually use
@@ -86,6 +82,7 @@ node ('master'){
       //some constants
       env.pr = get_from_payload('pr')
       env.event_type = get_from_payload('event_type')
+      env.pr_state = get_from_payload('pr_state')
 
       //TODO: this should be set from the job
       //set path to the packer binary
@@ -136,7 +133,13 @@ node ('master'){
             node (env.arch) {
                // We've already done a sanity check before this, so if this is an issue type, we know !deploy was used
                if( env.event_type == 'issue') {
-                 deploy_image_on_production(env.arch)
+                 if( env.pr_state == 'success') {
+                   deploy_image_on_production(env.arch)
+                 } else {
+                   currentBuild.result = 'ABORTED'
+                   error("PR in state ${env.pr_state}. Not deploying")
+                 }
+
                }
                else{
                  clone_repo_and_checkout_pr_branch()
@@ -158,18 +161,33 @@ node ('master'){
          }
       }
 
-      //set status on the commit using the PackerPipeline class
-      withCredentials([usernamePassword(
-            credentialsId: 'packer_pipeline',
-            usernameVariable: '',
-            passwordVariable: 'GITHUB_TOKEN')]) {
-         //available as an env variable
-         sh 'echo "$GITHUB_TOKEN should appear as masked and not null"'
-         result = sh(returnStdout: true, script: """
-              cat $WORKSPACE/final_results.json;
-               $JENKINS_HOME/bin/packer_pipeline.rb -f $WORKSPACE/final_results.json
-         """)
-         echo result
+      if( env.event_type == 'pull_request' ) {
+          // set status on the commit using the PackerPipeline class
+          withCredentials([usernamePassword(
+                credentialsId: 'packer_pipeline',
+                usernameVariable: '',
+                passwordVariable: 'GITHUB_TOKEN')]) {
+             //available as an env variable
+             sh 'echo "$GITHUB_TOKEN should appear as masked and not null"'
+             result = sh(returnStdout: true, script: """
+                  cat $WORKSPACE/final_results.json;
+                   $JENKINS_HOME/bin/packer_pipeline.rb -f $WORKSPACE/final_results.json
+             """)
+             echo result
+          }
+      } else if( env.event_type == 'issue' ) {
+          // Merge and delete branch
+          withCredentials([usernamePassword(
+                credentialsId: 'packer_pipeline',
+                usernameVariable: '',
+                passwordVariable: 'GITHUB_TOKEN')]) {
+             // available as an env variable
+             sh 'echo "$GITHUB_TOKEN should appear as masked and not null"'
+             result = sh(returnStdout: true, script: """
+                   $JENKINS_HOME/bin/packer_pipeline.rb -d ${env.pr}
+             """)
+             echo result
+          }
       }
    }
 }
@@ -393,13 +411,7 @@ def deploy_image_on_production(arch) {
    def templates = get_from_payload(arch)
    stage('deploy_publically') {
       for ( t in templates ) {
-         //check whether this template was already tested
-         if ( check_template_result(arch, t, 'taster' ) ) {
-            result = sh (returnStatus: true, script: "./bin/deploy_wrapper.rb -d raw -t $t -s /home/alfred/openstack_credentials.json -r $env.pr -p")
-            update_template_result(arch, t, 'publish', result)
-         } else {
-            println "Skipping $t because it hasn't been tested!"
-         }
+        result = sh (returnStatus: true, script: "./bin/deploy_wrapper.rb -d raw -t $t -s /home/alfred/openstack_credentials.json -r $env.pr -p")
       }
    }
    templates = null
