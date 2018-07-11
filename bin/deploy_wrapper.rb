@@ -26,7 +26,7 @@ run_on_each_cluster(options[:openstack_credentials_file]) do
                 end
   puts "going to look for image at \n #{image_path}"
 
-  unless (File.exist? image_path) && (!options[:publish])
+  unless (File.exist? image_path) || (options[:publish])
     puts "No file found at #{image_path}! Quitting."
     return 2
   end
