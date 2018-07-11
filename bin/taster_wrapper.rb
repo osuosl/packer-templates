@@ -20,9 +20,11 @@ run_on_each_cluster(options[:openstack_credentials_file]) do
   image_name = parse_from_template(options[:template_file], 'image_name') + " - PR\##{options[:pr_number]}"
   ssh_username = parse_from_template(options[:template_file], 'ssh_username')
   flavor = parse_from_template(options[:template_file], 'flavor')
+  suite = parse_from_template(options[:template_file], 'suite')
 
   command = "openstack_taster -i \"#{image_name}\" -u #{ssh_username}"
   command += " -f #{flavor}" unless flavor.nil?
+  command += " -s #{suite}" unless suite.nil?
   puts command
 
   # execute while handing over STDIN,STDOUT and STDERR to the openstack_taster command

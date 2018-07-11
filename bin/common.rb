@@ -116,6 +116,9 @@ def parse_from_template(template, variable)
     when 'flavor'
       return t['variables']['flavor']
 
+    when 'suite'
+      return t['variables']['suite']
+
     when 'chef_version'
       return t['variables']['chef_version']
 
