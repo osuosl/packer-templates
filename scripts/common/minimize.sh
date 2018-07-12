@@ -1,16 +1,26 @@
 #!/bin/sh -eux
 
-# Whiteout the swap partition to reduce box size 
-# Swap is disabled till reboot 
-readonly swapuuid=$(/sbin/blkid -o value -l -s UUID -t TYPE=swap)
-readonly swappart=$(readlink -f /dev/disk/by-uuid/"$swapuuid")
-/sbin/swapoff "$swappart" || echo "swapoff failed, ignoring"
-dd if=/dev/zero of="$swappart" bs=1M || echo "dd exit code $? is suppressed" 
-/sbin/mkswap -U "$swapuuid" "$swappart" || echo "mkswap failed, ignoring"
-rm -rf /tmp/*
+# Whiteout root
+count=$(df --sync -kP / | tail -n1  | awk -F ' ' '{print $4}')
+count=$(($count-1))
+dd if=/dev/zero of=/tmp/whitespace bs=1M count=$count || echo "dd exit code $? is suppressed";
+rm /tmp/whitespace
 
-dd if=/dev/zero of=/EMPTY bs=1M || echo "dd exit code $? is suppressed" 
-rm -f /EMPTY
-# Block until the empty file has been removed, otherwise, Packer
-# will try to kill the box while the disk is still full and that's bad
-sync
+set +e
+swapuuid="`/sbin/blkid -o value -l -s UUID -t TYPE=swap`";
+case "$?" in
+    2|0) ;;
+    *) exit 1 ;;
+esac
+set -e
+
+if [ "x${swapuuid}" != "x" ]; then
+    # Whiteout the swap partition to reduce box size
+    # Swap is disabled till reboot
+    swappart="`readlink -f /dev/disk/by-uuid/$swapuuid`";
+    /sbin/swapoff "$swappart";
+    dd if=/dev/zero of="$swappart" bs=1M || echo "dd exit code $? is suppressed";
+    /sbin/mkswap -U "$swapuuid" "$swappart";
+fi
+
+sync;
