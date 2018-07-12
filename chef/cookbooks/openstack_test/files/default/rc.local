@@ -1,0 +1,4 @@
+#!/bin/bash
+modprobe dummy numdummies=1
+ip link set name eth1 dev dummy0
+ip addr add 192.168.100.1/24 dev eth1

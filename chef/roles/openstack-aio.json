@@ -4,11 +4,9 @@
     "role[openstack]",
     "recipe[openstack_test]",
     "role[openstack_ops_identity]",
-    "recipe[openstack_test::gluster]",
     "recipe[osl-openstack::controller]",
     "recipe[osl-openstack::compute]",
-    "recipe[osl-openstack::block_storage]",
-    "recipe[openstack-integration-test::setup]"
+    "recipe[osl-openstack::block_storage]"
   ],
   "chef_type": "role",
   "override_attributes": {

@@ -1,0 +1,17 @@
+---
+driver:
+  flavor_ref: 'm1.large'
+provisioner:
+  name: chef_zero
+  roles_path: ../roles
+  data_bags_path: data_bags
+  encrypted_data_bag_secret_key_path: encrypted_data_bag_secret
+  attributes:
+    openstack:
+      secret:
+        key_path: "/tmp/kitchen/encrypted_data_bag_secret"
+
+suites:
+  - name: default
+    run_list:
+      - role[openstack_ops_identity]
