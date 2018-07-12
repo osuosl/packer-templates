@@ -153,8 +153,10 @@ node ('master'){
                  node_results = readJSON file: "${arch}_results.json"
                  deleteDir()
                  //TODO: delete the directory if this build succeeds complteley
-                 update_final_results(arch, node_results)
                }
+             }
+             if( env.event_type == 'pull_request') {
+                 update_final_results(arch, node_results)
              }
          }
          else
