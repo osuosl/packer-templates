@@ -5,6 +5,7 @@
         "<wait>",
         "c<enter>",
         "linux /install/vmlinux",
+        " auto",
         " console-setup/ask_detect=false",
         " console-setup/layoutcode=us",
         " console-setup/modelcode=pc105",
