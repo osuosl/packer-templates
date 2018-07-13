@@ -25,9 +25,9 @@
       "headless": true,
       "vnc_bind_address": "0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "50c938c8070aee2722e100337f44ad45",
-      "iso_checksum_type": "md5",
-      "iso_url": "{{user `mirror`}}/releases/16.04/release/ubuntu-16.04.3-server-powerpc.iso",
+      "iso_checksum": "d9da1e644ecb67b13e6695ad5ca02495e5f72c959f7b5d2f3be62c8f2b2e09e8",
+      "iso_checksum_type": "sha256",
+      "iso_url": "{{user `mirror`}}/releases/16.04/release/ubuntu-16.04.4-server-powerpc.iso",
       "output_directory": "packer-ubuntu-16.04-ppc64-openstack",
       "shutdown_command": "echo 'ubuntu' | sudo -S shutdown -P now",
       "qemuargs": [
@@ -63,7 +63,7 @@
   ],
   "variables": {
     "mirror": "http://cdimage.ubuntu.com",
-    "image_name": "Ubuntu 16.04 BE "
+    "image_name": "Ubuntu 16.04 BE"
   }
 }
 
