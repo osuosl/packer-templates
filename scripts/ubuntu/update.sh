@@ -21,6 +21,11 @@ if [ "$major_version" -ge "16" ]; then
   systemctl daemon-reload;
 fi
 
+# Disable systemd-resolved
+systemctl stop systemd-resolved;
+systemctl disable systemd-resolved;
+systemctl daemon-reload;
+
 # Disable periodic activities of apt to be safe
 cat <<EOF >/etc/apt/apt.conf.d/10periodic;
 APT::Periodic::Enable "0";
