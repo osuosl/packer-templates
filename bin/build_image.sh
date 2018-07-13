@@ -46,7 +46,7 @@ if [ -e chef/${TEMPLATE_NAME}/Berksfile ] ; then
   rm -rf $BERKSHELF_PATH chef/${TEMPLATE_NAME}/cookbooks chef/${TEMPLATE_NAME}/Berksfile.lock
   berks vendor --delete -b chef/${TEMPLATE_NAME}/Berksfile chef/${TEMPLATE_NAME}/cookbooks
 fi
-packer build -color=false -force $(basename $TEMPLATE)
+packer build -on-error=abort -color=false -force $(basename $TEMPLATE)
 
 qemu-img convert -O qcow2 -c ${DIR_NAME}/${IMAGE_NAME} $FINAL_QCOW_FILE_NAME
 qemu-img convert -O raw ${DIR_NAME}/${IMAGE_NAME} $FINAL_RAW_FILE_NAME
