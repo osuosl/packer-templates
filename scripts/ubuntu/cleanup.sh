@@ -15,6 +15,13 @@ dpkg --list \
     | grep -v `uname -r` \
     | xargs apt-get -y purge;
 
+# Remove linux modules
+dpkg --list \
+    | awk '{ print $2 }' \
+    | grep 'linux-modules-.*-generic' \
+    | grep -v `uname -r` \
+    | xargs apt-get -y purge;
+
 # Delete Linux source
 dpkg --list \
     | awk '{ print $2 }' \
@@ -34,7 +41,7 @@ apt-get -y purge libx11-data xauth libxmuu1 libxcb1 libx11-6 libxext6;
 apt-get -y purge ppp pppconfig pppoeconf;
 
 # Delete oddities
-apt-get -y purge popularity-contest installation-report command-not-found command-not-found-data friendly-recovery bash-completion fonts-ubuntu-font-family-console laptop-detect;
+apt-get -y purge popularity-contest installation-report command-not-found command-not-found-data friendly-recovery bash-completion fonts-ubuntu-font-family-console laptop-detect landscape-common;
 
 # Delete services we don't need installed by default
 apt-get -y purge exim4-base rpcbind
