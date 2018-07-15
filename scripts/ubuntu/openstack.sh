@@ -3,7 +3,8 @@ apt-get -y install pump cloud-utils cloud-init cloud-initramfs-growroot \
 
 # Speed up cloud-init by only using OpenStack and a specific metadata url
 cat >> /etc/cloud/cloud.cfg.d/91_openstack_override.cfg << EOF
-
+# Set the hostname in /etc/hosts so sudo doesn't complain
+manage_etc_hosts: true
 # Force only OpenStack being enabled
 datasource_list: ['OpenStack']
 datasource:
