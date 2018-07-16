@@ -75,7 +75,6 @@
       "type": "shell",
       "execute_command": "echo 'centos' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
       "scripts": [
-        "scripts/centos/chef-zero-openstack-cleanup.sh",
         "scripts/centos/cleanup.sh",
         "scripts/common/minimize.sh"
       ]
