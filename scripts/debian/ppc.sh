@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -eux
 
 mkdir -p /etc/apt/sources.list.d
 echo 'deb "http://packages.osuosl.org/repositories/apt/" jessie main' > /etc/apt/sources.list.d/osuosl.list

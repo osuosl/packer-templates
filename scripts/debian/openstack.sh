@@ -1,2 +1,2 @@
-apt-get -y install pump cloud-utils cloud-init cloud-initramfs-growroot \
-    bash-completion
+#!/bin/bash -eux
+apt-get -y install pump cloud-utils cloud-init cloud-initramfs-growroot bash-completion
