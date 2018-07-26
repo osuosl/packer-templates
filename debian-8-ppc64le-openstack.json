@@ -18,7 +18,7 @@
         " locale=en_US.UTF-8",
         " netcfg/get_hostname=unassigned-hostname",
         " netcfg/get_domain=unassigned-domain",
-        " url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-8.10/preseed-ppc64.cfg<wait>",
+        " url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-8/preseed-ppc64.cfg<wait>",
         " ---",
         "<enter><wait>",
         "initrd /install/initrd.gz",
@@ -28,13 +28,14 @@
       "accelerator": "kvm",
       "boot_wait": "10s",
       "disk_size": "3072",
+      "disk_interface": "virtio-scsi",
       "headless": true,
       "vnc_bind_address":"0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "3db8eb9d7bffec1fe0c7f38890ec15ed",
-      "iso_checksum_type": "md5",
-      "iso_url": "{{user `mirror`}}/archive/8.10.0/ppc64el/iso-cd/debian-8.10.0-ppc64el-CD-1.iso",
-      "output_directory": "packer-debian-8.10-ppc64le-openstack",
+      "iso_checksum": "cb36257fd563b6407f9ee7f9699efa1b4a636f314cd760be6f51c21251123085",
+      "iso_checksum_type": "sha256",
+      "iso_url": "{{user `mirror`}}/8.11.0/ppc64el/iso-cd/debian-8.11.0-ppc64el-CD-1.iso",
+      "output_directory": "packer-debian-8.11-ppc64le-openstack",
       "shutdown_command": "echo 'debian' | sudo -S /sbin/shutdown -hP now",
       "ssh_password": "debian",
       "ssh_port": 22,
@@ -47,7 +48,7 @@
       "qemu_binary": "/usr/libexec/qemu-kvm",
       "machine_type": "pseries",
       "type": "qemu",
-      "vm_name": "packer-debian-8.10-ppc64le-openstack"
+      "vm_name": "packer-debian-8.11-ppc64le-openstack"
     }
   ],
   "provisioners": [
@@ -69,8 +70,8 @@
     }
   ],
   "variables": {
-    "mirror": "http://cdimage.debian.org/cdimage",
-    "image_name": "Debian 8.10 LE"
+    "mirror": "http://cdimage.debian.org/cdimage/archive",
+    "image_name": "Debian 8.11 LE"
   }
 }
 
