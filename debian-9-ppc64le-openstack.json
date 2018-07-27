@@ -48,7 +48,7 @@
       "qemu_binary": "/usr/libexec/qemu-kvm",
       "machine_type": "pseries",
       "type": "qemu",
-      "vm_name": "packer-debian-9.5-ppc64le-openstack"
+      "vm_name": "packer-debian-9-ppc64le-openstack"
     }
   ],
   "provisioners": [
