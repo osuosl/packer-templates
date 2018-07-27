@@ -18,7 +18,7 @@
         " locale=en_US.UTF-8",
         " netcfg/get_hostname=unassigned-hostname",
         " netcfg/get_domain=unassigned-domain",
-        " url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-8/preseed-ppc64.cfg<wait>",
+        " url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-8/preseed-ppc64le.cfg<wait>",
         " ---",
         "<enter><wait>",
         "initrd /install/initrd.gz",

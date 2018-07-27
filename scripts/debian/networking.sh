@@ -4,7 +4,6 @@ major_version="`echo $debian_version | awk -F. '{print $1}'`";
 
 if [ -e /etc/yaboot.conf ] ; then
   sed -i 's/append\=\"/append\=\"net\.ifnames\=0 biosdevname\=0\ /' /etc/yaboot.conf
-  sed -i 's/^\(device=.*\)/\#\1/' /etc/yaboot.conf
 fi
 
 if [ "$major_version" -le "8" ]; then
