@@ -35,7 +35,7 @@
       "iso_checksum": "cb36257fd563b6407f9ee7f9699efa1b4a636f314cd760be6f51c21251123085",
       "iso_checksum_type": "sha256",
       "iso_url": "{{user `mirror`}}/8.11.0/ppc64el/iso-cd/debian-8.11.0-ppc64el-CD-1.iso",
-      "output_directory": "packer-debian-8.11-ppc64le-openstack",
+      "output_directory": "packer-debian-8-ppc64le-openstack",
       "shutdown_command": "echo 'debian' | sudo -S /sbin/shutdown -hP now",
       "ssh_password": "debian",
       "ssh_port": 22,

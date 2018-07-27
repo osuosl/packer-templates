@@ -30,7 +30,7 @@
       "iso_checksum": "ec142ed86a8b6f5afb237a2f819156fefdd437294ed2c5d8ef00ef61e4e5893d",
       "iso_checksum_type": "sha256",
       "iso_url": "{{user `mirror`}}/8.11.0/powerpc/iso-cd/debian-8.11.0-powerpc-CD-1.iso",
-      "output_directory": "packer-debian-8.11-ppc64-openstack",
+      "output_directory": "packer-debian-8-ppc64-openstack",
       "shutdown_command": "echo 'debian' | sudo -S /sbin/shutdown -hP now",
       "ssh_password": "debian",
       "ssh_port": 22,

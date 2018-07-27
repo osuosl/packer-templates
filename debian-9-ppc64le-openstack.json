@@ -35,7 +35,7 @@
       "iso_checksum": "9a105d77c71974adc2a1a678f90075818735ca0bbbdceea432da3b77ce053182",
       "iso_checksum_type": "sha256",
       "iso_url": "{{user `mirror`}}/release/9.5.0/ppc64el/iso-cd/debian-9.5.0-ppc64el-netinst.iso",
-      "output_directory": "packer-debian-9.5-ppc64le-openstack",
+      "output_directory": "packer-debian-9-ppc64le-openstack",
       "shutdown_command": "echo 'debian' | sudo -S /sbin/shutdown -hP now",
       "ssh_password": "debian",
       "ssh_port": 22,
