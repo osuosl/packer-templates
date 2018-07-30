@@ -1,15 +1,22 @@
 #!/bin/bash -eux
-if [ -x /usr/bin/dnf ] ; then
-  echo "using dnf"
-  dnf -y remove gcc cpp kernel-devel kernel-headers rpcbind postfix
-  dnf -y clean all
-else
-  echo "using yum"
-  yum -y remove gcc cpp kernel-devel kernel-headers rpcbind postfix
-  yum -y clean all
-fi
+echo "Removing development packages and cleaning up DNF data"
+dnf -y remove gcc cpp gc kernel-devel kernel-headers glibc-devel \
+  elfutils-libelf-devel glibc-headers kernel-devel kernel-headers
+dnf -y autoremove
+dnf -y clean all --enablerepo=\*
 
-echo "port 0" >> /etc/chrony.conf
-echo "cmdport 0" >> /etc/chrony.conf
+# Avoid 150 meg firmware package we don't need
+echo "Removing extra packages"
+dnf -y remove linux-firmware
 
 rm -f /tmp/chef*rpm
+
+# delete any logs that have built up during the install
+find /var/log/ -name *.log -exec rm -f {} \;
+
+# Remove any non-loopback network configs
+find /etc/sysconfig/network-scripts -name "ifcfg-*" -not -name "ifcfg-lo" -exec rm -f {} \;
+
+# Don't have chorying listening on a port
+echo "port 0" >> /etc/chrony.conf
+echo "cmdport 0" >> /etc/chrony.conf
