@@ -3,8 +3,7 @@
     {
       "boot_command": [
         "<wait>",
-        "c<enter>",
-        "linux /install/vmlinux",
+        "install",
         " console-setup/ask_detect=false",
         " console-setup/layoutcode=us",
         " console-setup/modelcode=pc105",
@@ -18,23 +17,20 @@
         " locale=en_US.UTF-8",
         " netcfg/get_hostname=unassigned-hostname",
         " netcfg/get_domain=unassigned-domain",
-        " url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-9.3/preseed-ppc64.cfg<wait>",
-        " ---",
-        "<enter><wait>",
-        "initrd /install/initrd.gz",
-        "<enter><wait>",
-        "boot<enter><wait>"
+        " url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-8/preseed-ppc64.cfg<wait>",
+        "<enter><wait>"
       ],
       "accelerator": "kvm",
       "boot_wait": "10s",
       "disk_size": "3072",
+      "disk_interface": "virtio-scsi",
       "headless": true,
       "vnc_bind_address":"0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "5b829e86bf099c0f7b57cb3a135d080a",
-      "iso_checksum_type": "md5",
-      "iso_url": "{{user `mirror`}}/release/9.3.0/ppc64el/iso-cd/debian-9.3.0-ppc64el-netinst.iso",
-      "output_directory": "packer-debian-9.3-ppc64le-openstack",
+      "iso_checksum": "ec142ed86a8b6f5afb237a2f819156fefdd437294ed2c5d8ef00ef61e4e5893d",
+      "iso_checksum_type": "sha256",
+      "iso_url": "{{user `mirror`}}/8.11.0/powerpc/iso-cd/debian-8.11.0-powerpc-CD-1.iso",
+      "output_directory": "packer-debian-8-ppc64-openstack",
       "shutdown_command": "echo 'debian' | sudo -S /sbin/shutdown -hP now",
       "ssh_password": "debian",
       "ssh_port": 22,
@@ -47,7 +43,7 @@
       "qemu_binary": "/usr/libexec/qemu-kvm",
       "machine_type": "pseries",
       "type": "qemu",
-      "vm_name": "packer-debian-9.3-ppc64le-openstack"
+      "vm_name": "packer-debian-8-ppc64-openstack"
     }
   ],
   "provisioners": [
@@ -61,7 +57,7 @@
         "scripts/debian/sudoers.sh",
         "scripts/common/vmtools.sh",
         "scripts/debian/systemd.sh",
-        "scripts/debian/ppc-stretch.sh",
+        "scripts/debian/ppc.sh",
         "scripts/debian/cleanup.sh",
         "scripts/common/minimize.sh"
       ],
@@ -69,8 +65,8 @@
     }
   ],
   "variables": {
-    "mirror": "http://cdimage.debian.org/cdimage",
-    "image_name": "Debian 9.3 LE"
+    "mirror": "http://cdimage.debian.org/cdimage/archive",
+    "image_name": "Debian 8.11 BE"
   }
 }
 
