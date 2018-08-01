@@ -64,7 +64,14 @@ package-cleanup --oldkernels --count=1 -y
 yum -y remove epel-release
 
 # We don't need nfs or postfix installed by default
-yum -y remove rpcbind postfix
+if grep -q -i "release 6" /etc/redhat-release ; then
+  # Manually remove this without deps so that it doesn't uninstall other needed
+  # apps
+  rpm -e --nodeps postfix
+  yum -y remove rpcbind
+else
+  yum -y remove rpcbind postfix
+fi
 
 echo "port 0" >> /etc/chrony.conf
 echo "cmdport 0" >> /etc/chrony.conf
