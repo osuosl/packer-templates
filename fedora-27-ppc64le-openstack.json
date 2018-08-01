@@ -12,6 +12,7 @@
       "accelerator": "kvm",
       "boot_wait": "6s",
       "disk_size": 3584,
+      "disk_interface": "virtio-scsi",
       "headless": true,
       "http_directory": "http",
       "iso_checksum": "723997fcc3bc65cdf3c5cc5c161c8e8313402b194010cb4fe8d91cf7e110ea9c",
@@ -40,7 +41,6 @@
       "execute_command": "echo 'fedora' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "scripts": [
         "scripts/common/sshd.sh",
-        "scripts/common/chef.sh",
         "scripts/fedora/openstack.sh",
         "scripts/fedora/cleanup.sh",
         "scripts/common/minimize.sh"

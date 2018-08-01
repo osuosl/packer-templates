@@ -2,22 +2,23 @@
   "builders": [
     {
       "boot_command": [
-        "c<wait5>",
+        "c<wait10>",
         "linux /ppc/ppc64/vmlinuz ro ",
-        "biosdevname=0 net.ifnames=0 ",
-        "ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-26/ks-ppc64le-openstack.cfg<enter>",
+        "biosdevname=0 net.ifnames=0 plymouth.enable=0 ",
+        "ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-28/ks-ppc64-openstack.cfg<enter>",
         "initrd /ppc/ppc64/initrd.img<enter>",
         "boot<enter>"
       ],
       "accelerator": "kvm",
       "boot_wait": "6s",
       "disk_size": 3584,
+      "disk_interface": "virtio-scsi",
       "headless": true,
       "http_directory": "http",
-      "iso_checksum": "125d31c889188d0d7def8b2b03ba0a2d84aff53297cd645521fc455ad17508a3",
+      "iso_checksum": "2f8c17aa5563fa5289c91892c6834c661d8f277d709148b8bae1c4e0728374ab",
       "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}/releases/26/Server/ppc64le/iso/Fedora-Server-netinst-ppc64le-26-1.5.iso",
-      "output_directory": "packer-fedora-26-ppc64le-openstack",
+      "iso_url": "{{user `mirror`}}/releases/28/Server/ppc64/iso/Fedora-Server-netinst-ppc64-28-1.1.iso",
+      "output_directory": "packer-fedora-28-ppc64-openstack",
       "shutdown_command": "echo 'fedora'|sudo -S shutdown -P now",
       "qemuargs": [
         [ "-m", "2048M" ],
@@ -31,7 +32,7 @@
       "ssh_wait_timeout": "10000s",
       "vnc_bind_address": "0.0.0.0",
       "type": "qemu",
-      "vm_name": "packer-fedora-26-ppc64le-openstack"
+      "vm_name": "packer-fedora-28-ppc64-openstack"
     }
   ],
   "provisioners": [
@@ -40,7 +41,6 @@
       "execute_command": "echo 'fedora' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "scripts": [
         "scripts/common/sshd.sh",
-        "scripts/common/chef.sh",
         "scripts/fedora/openstack.sh",
         "scripts/fedora/cleanup.sh",
         "scripts/common/minimize.sh"
@@ -50,6 +50,6 @@
   ],
   "variables": {
     "mirror": "http://fedora-secondary.osuosl.org",
-    "image_name": "Fedora 26 LE"
+    "image_name": "Fedora 28 BE"
   }
 }
