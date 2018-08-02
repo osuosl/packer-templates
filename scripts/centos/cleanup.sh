@@ -68,6 +68,8 @@ if grep -q -i "release 6" /etc/redhat-release ; then
   # apps
   rpm -e --nodeps postfix
   yum -y remove rpcbind
+elif [ -e /etc/keystone ] ; then
+  echo "VM has OpenStack installed, skipping removing postfix/rpcbind..."
 else
   yum -y remove rpcbind postfix
 fi
