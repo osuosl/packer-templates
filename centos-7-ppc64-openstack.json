@@ -5,20 +5,21 @@
         "c<wait5><wait10>",
         "linux /ppc/ppc64/vmlinuz ro ",
         "biosdevname=0 net.ifnames=0 ",
-        "ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-7.5/ks-ppc64.cfg<enter>",
+        "ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-7/ks-ppc64.cfg<enter>",
         "initrd /ppc/ppc64/initrd.img<enter>",
         "boot<enter><wait>"
       ],
       "accelerator": "kvm",
       "boot_wait": "6s",
       "disk_size": 3072,
+      "disk_interface": "virtio-scsi",
       "headless": true,
       "vnc_bind_address":"0.0.0.0",
       "http_directory": "http",
       "iso_checksum": "2328edda16b1996d3898f408781b7e3948cb5c00fa4ef90aec79174ffd38ff56",
       "iso_checksum_type": "sha256",
       "iso_url": "{{user `mirror`}}/7.5.1804/isos/ppc64/CentOS-7-ppc64-NetInstall-1804.iso",
-      "output_directory": "packer-centos-7.5-ppc64-openstack",
+      "output_directory": "packer-centos-7-ppc64-openstack",
       "shutdown_command": "echo 'centos'|sudo -S shutdown -P now",
       "qemuargs": [
         [ "-m", "2048M" ],
@@ -31,7 +32,7 @@
       "ssh_username": "centos",
       "ssh_wait_timeout": "10000s",
       "type": "qemu",
-      "vm_name": "packer-centos-7.5-ppc64-openstack"
+      "vm_name": "packer-centos-7-ppc64-openstack"
     }
   ],
   "provisioners": [
