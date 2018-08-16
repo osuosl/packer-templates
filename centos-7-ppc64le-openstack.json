@@ -44,7 +44,7 @@
         "scripts/common/vmtools.sh",
         "scripts/centos/chef-ppc64.sh",
         "scripts/centos/osuosl-altarch.sh",
-        "scripts/centos/epel-7.sh",
+        "scripts/centos/epel.sh",
         "scripts/centos/openstack.sh",
         "scripts/centos/cleanup.sh",
         "scripts/common/minimize.sh"
