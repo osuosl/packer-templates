@@ -49,7 +49,7 @@
     }
   ],
   "variables": {
-    "chef_version": "12.18.31",
+    "chef_version": "13.8.5",
     "mirror": "http://centos.osuosl.org",
     "image_name": "CentOS 6.10"
   }
