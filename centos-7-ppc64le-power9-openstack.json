@@ -1,0 +1,58 @@
+{
+  "builders": [
+    {
+      "boot_command": [
+        "c<wait5><wait10>",
+        "linux /ppc/ppc64/vmlinuz ro ",
+        "biosdevname=0 net.ifnames=0 ",
+        "ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-7/ks-ppc64le-power9.cfg<enter>",
+        "initrd /ppc/ppc64/initrd.img<enter>",
+        "boot<enter><wait>"
+      ],
+      "accelerator": "kvm",
+      "boot_wait": "6s",
+      "disk_size": 3072,
+      "disk_interface": "virtio-scsi",
+      "headless": true,
+      "vnc_bind_address":"0.0.0.0",
+      "http_directory": "http",
+      "iso_checksum": "58d9af172656db71947b5db2d0d1f577217bbc1a86eada7ca3ce7bfcf7d7d9b4",
+      "iso_checksum_type": "sha256",
+      "iso_url": "{{user `mirror`}}/7.5.1804/isos/power9/CentOS-7-Power9-NetInstall-1804.iso",
+      "output_directory": "packer-centos-7-ppc64le-power9-openstack",
+      "shutdown_command": "echo 'centos'|sudo -S shutdown -P now",
+      "qemuargs": [
+        [ "-m", "2048M" ],
+        [ "-boot", "strict=on" ]
+      ],
+      "qemu_binary": "/usr/libexec/qemu-kvm",
+      "machine_type": "pseries",
+      "ssh_password": "centos",
+      "ssh_port": 22,
+      "ssh_username": "centos",
+      "ssh_wait_timeout": "10000s",
+      "type": "qemu",
+      "vm_name": "packer-centos-7-ppc64le-power9-openstack"
+    }
+  ],
+  "provisioners": [
+    {
+      "execute_command": "echo 'centos' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+      "scripts": [
+        "scripts/centos/fix-slow-dns.sh",
+        "scripts/common/sshd.sh",
+        "scripts/common/vmtools.sh",
+        "scripts/centos/osuosl-altarch-power9.sh",
+        "scripts/centos/epel.sh",
+        "scripts/centos/openstack.sh",
+        "scripts/centos/cleanup.sh",
+        "scripts/common/minimize.sh"
+      ],
+      "type": "shell"
+    }
+  ],
+  "variables": {
+    "mirror": "http://centos-altarch.osuosl.org",
+    "image_name": "CentOS 7.5 LE (POWER9)"
+  }
+}
