@@ -64,7 +64,7 @@
         "scripts/debian/systemd.sh",
         "scripts/debian/ppc-stretch.sh",
         "scripts/debian/power9.sh",
-        "scripts/debian/cleanup.sh",
+        "scripts/debian/cleanup-power9.sh",
         "scripts/common/minimize.sh"
       ],
       "type": "shell"
