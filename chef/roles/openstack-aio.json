@@ -1,6 +1,11 @@
 {
   "env_run_lists": {},
   "run_list": [
+    "role[ceph]",
+    "role[ceph_mon]",
+    "role[ceph_mgr]",
+    "role[ceph_osd]",
+    "role[ceph_setup]",
     "role[openstack]",
     "recipe[openstack_test]",
     "role[openstack_ops_identity]",

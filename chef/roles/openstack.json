@@ -3,9 +3,7 @@
   "run_list": [
     "recipe[openstack_test::hosts]",
     "recipe[openstack_test::cacert]",
-    "recipe[openstack_test::ceph_setup]",
-    "recipe[osl-openstack]",
-    "recipe[openstack_test::ceph]"
+    "recipe[osl-openstack]"
   ],
   "chef_type": "role",
   "override_attributes": {

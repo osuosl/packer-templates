@@ -5,8 +5,8 @@
   vms
 ).each do |p|
   ceph_chef_pool p do
-    pg_num 2
-    pgp_num 2
+    pg_num 32
+    pgp_num 32
   end
   execute "rbd pool init #{p}"
 end
