@@ -7,6 +7,11 @@
     "name": "openstack_ops_identity",
     "override_attributes": {},
     "run_list": [
+      "role[ceph]",
+      "role[ceph_mon]",
+      "role[ceph_mgr]",
+      "role[ceph_osd]",
+      "role[ceph_setup]",
       "role[openstack]",
       "recipe[osl-openstack::ops_database]",
       "recipe[certificate::wildcard]",

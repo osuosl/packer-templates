@@ -1,0 +1,52 @@
+{
+  "env_run_lists": {},
+  "run_list": [
+    "recipe[osl-ceph]"
+  ],
+  "chef_type": "role",
+  "default_attributes": {},
+  "override_attributes": {
+    "ceph": {
+      "fsid-secret": "ae3f1d03-bacd-4a90-b869-1a4fabb107f2",
+      "keyring": {
+        "mon": "/etc/ceph/$cluster.mon.keyring"
+      },
+      "mon": {
+        "role": "ceph_mon"
+      },
+      "osd": {
+        "role": "ceph_osd",
+        "crush": {
+          "chooseleaf_type": 0,
+          "update": true
+        }
+      },
+      "network": {
+        "public": {
+          "cidr": [
+            "10.1.100.0/23",
+            "10.0.2.0/24"
+          ]
+        },
+        "cluster": {
+          "cidr": [
+            "10.1.100.0/23",
+            "10.0.2.0/24"
+          ]
+        }
+      }
+    },
+    "osl-ceph": {
+      "create-filesystem-osd": true
+    },
+    "yum": {
+      "epel": {
+        "baseurl": "http://epel.osuosl.org/7/$basearch",
+        "gpgkey": "http://epel.osuosl.org/RPM-GPG-KEY-EPEL-7"
+      }
+    }
+  },
+  "json_class": "Chef::Role",
+  "description": "Ceph Role",
+  "name": "ceph"
+}

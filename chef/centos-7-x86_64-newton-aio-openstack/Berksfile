@@ -8,8 +8,10 @@ cookbook 'ceph-chef', github: 'osuosl-cookbooks/ceph-chef'
 cookbook 'firewall', github: 'osuosl-cookbooks/firewall'
 cookbook 'ibm-power', github: 'osuosl-cookbooks/ibm-power'
 cookbook 'openstack_test', path: '../cookbooks/openstack_test'
-cookbook 'openstackclient', github: 'cloudbau/cookbook-openstackclient'
-cookbook 'osl-apache', github: 'osuosl-cookbooks/osl-apache'
+cookbook 'openstackclient',
+	github: 'osuosl-cookbooks/cookbook-openstackclient',
+	branch: 'lock-fog-openstack'
+cookbook 'osl-apache', github: 'osuosl-cookbooks/osl-apache', branch: 'stable/2.x'
 cookbook 'osl-ceph', github: 'osuosl-cookbooks/osl-ceph'
 cookbook 'osl-docker', github: 'osuosl-cookbooks/osl-docker'
 cookbook 'osl-munin', github: 'osuosl-cookbooks/osl-munin'
@@ -17,6 +19,7 @@ cookbook 'osl-nrpe', github: 'osuosl-cookbooks/osl-nrpe'
 cookbook 'osl-openstack', github: 'osuosl-cookbooks/osl-openstack', branch: 'stable/newton'
 cookbook 'osl-php', github: 'osuosl-cookbooks/osl-php'
 cookbook 'osl-rsync', github: 'osuosl-cookbooks/osl-rsync'
+cookbook 'osl-selinux', github: 'osuosl-cookbooks/osl-selinux'
 cookbook 'resource_from_hash', github: 'osuosl-cookbooks/resource_from_hash'
 cookbook 'statsd', github: 'att-cloud/cookbook-statsd'
 cookbook 'yum-kernel-osuosl', github: 'osuosl-cookbooks/yum-kernel-osuosl'
@@ -24,26 +27,26 @@ cookbook 'yum-qemu-ev', github: 'osuosl-cookbooks/yum-qemu-ev'
 
 # WIP patches
 %w(
-  compute
-).each do |cb|
-  cookbook "openstack-#{cb}",
-           github: "osuosl-cookbooks/cookbook-openstack-#{cb}",
-           branch: 'stable/newton'
-end
-
-# Openstack deps
-%w(
   block-storage
   common
+  compute
   dashboard
   identity
   image
-  integration-test
   network
   ops-database
   ops-messaging
   orchestration
   telemetry
+).each do |cb|
+  cookbook "openstack-#{cb}",
+           github: "osuosl-cookbooks/cookbook-openstack-#{cb}",
+           branch: 'stable/newton-chef13'
+end
+
+# Openstack deps
+%w(
+  integration-test
 ).each do |cb|
   cookbook "openstack-#{cb}",
            github: "openstack/cookbook-openstack-#{cb}",

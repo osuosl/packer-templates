@@ -28,6 +28,10 @@
   ],
   "provisioners": [
     {
+      "type": "shell",
+      "inline": [ "sudo hostnamectl set-hostname controller.example.com" ]
+    },
+    {
       "environment_vars": [
         "CHEF_VERSION={{user `chef_version`}}"
       ],
@@ -70,19 +74,27 @@
       "skip_clean_node": true,
       "skip_clean_client": true,
       "skip_install": true,
-      "run_list": [ "role[openstack-aio]" ]
+      "run_list": [
+        "role[ceph]",
+        "role[ceph_mon]",
+        "role[ceph_mgr]",
+        "role[ceph_osd]",
+        "role[ceph_setup]",
+        "role[openstack-aio]"
+      ]
     },
     {
       "type": "shell",
       "execute_command": "echo 'centos' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
       "scripts": [
+        "scripts/centos/chef-zero-openstack-cleanup.sh",
         "scripts/centos/cleanup.sh",
         "scripts/common/minimize.sh"
       ]
     }
   ],
   "variables": {
-    "chef_version": "12.18.31",
+    "chef_version": "13.8.5",
     "flavor": "m1.large",
     "suite": "volumes",
     "local_chef_dir": "chef",
