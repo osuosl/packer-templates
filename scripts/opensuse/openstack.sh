@@ -1,7 +1,9 @@
 #!/bin/bash -eux
 
 zypper -n up
-zypper -n in cloud-init
+zypper -n in vim less cloud-init
+sed -i -e 's/^After=systemd-networkd-wait-online.service/After=systemd-networkd-wait-online.service\nAfter=wicked.service\nRequires=wicked.service/g' /usr/lib/systemd/system/cloud-init.service
+systemctl enable cloud-config cloud-final cloud-init-local cloud-init
 
 # do some cleanup
 zypper -n rm rpcbind postfix Mesa* libX11-data libxcb1
@@ -11,12 +13,11 @@ if [ $(uname -m)=="ppc64" -o $(uname -m)=="ppc64le" ] ; then
   systemctl enable rtas_errd
 fi
 
-systemctl enable cloud-init
-
 # Create opensuse user
 sed -i -e ':a;N;$!ba;s/users:\n - root/users:\n - default/g' /etc/cloud/cloud.cfg
 # Disable root and password logins
 sed -i -e ':a;N;$!ba;s/disable_root: false\n/disable_root: 1\nssh_pwauth: 0\n/g' /etc/cloud/cloud.cfg
+sed -i -e 's/distro: ubuntu/distro: opensuse/' /etc/cloud/cloud.cfg
 
 sed -i -e \
   's/GRUB_CMDLINE_LINUX=\"\(.*\)/GRUB_CMDLINE_LINUX=\"console=ttyS0,115200n8 console=tty0 \1/g' \
