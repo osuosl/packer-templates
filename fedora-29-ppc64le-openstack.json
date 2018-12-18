@@ -2,10 +2,10 @@
   "builders": [
     {
       "boot_command": [
-        "c<wait10>",
+        "c<wait5>",
         "linux /ppc/ppc64/vmlinuz ro ",
-        "biosdevname=0 net.ifnames=0 ",
-        "ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-27/ks-ppc64-openstack.cfg<enter>",
+        "biosdevname=0 net.ifnames=0 plymouth.enable=0 ",
+        "ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-29/ks-ppc64le-openstack.cfg<enter>",
         "initrd /ppc/ppc64/initrd.img<enter>",
         "boot<enter>"
       ],
@@ -15,10 +15,10 @@
       "disk_interface": "virtio-scsi",
       "headless": true,
       "http_directory": "http",
-      "iso_checksum": "0c68e9cd813860e573c935ed9fe63998fef659b245d6f0e7073e0c49b02a39c5",
+      "iso_checksum": "97ec9c29509da967bd2ac8f59fd5bfaf1aac3f1c472191a409c263b46abc51df",
       "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}/releases/27/Server/ppc64/iso/Fedora-Server-netinst-ppc64-27-1.6.iso",
-      "output_directory": "packer-fedora-27-ppc64-openstack",
+      "iso_url": "{{user `mirror`}}/releases/29/Server/ppc64le/iso/Fedora-Server-netinst-ppc64le-29-1.2.iso",
+      "output_directory": "packer-fedora-29-ppc64le-openstack",
       "shutdown_command": "echo 'fedora'|sudo -S shutdown -P now",
       "qemuargs": [
         [ "-m", "2048M" ],
@@ -32,7 +32,7 @@
       "ssh_wait_timeout": "10000s",
       "vnc_bind_address": "0.0.0.0",
       "type": "qemu",
-      "vm_name": "packer-fedora-27-ppc64-openstack"
+      "vm_name": "packer-fedora-29-ppc64le-openstack"
     }
   ],
   "provisioners": [
@@ -50,6 +50,6 @@
   ],
   "variables": {
     "mirror": "http://fedora-secondary.osuosl.org",
-    "image_name": "Fedora 27 BE"
+    "image_name": "Fedora 29 LE"
   }
 }
