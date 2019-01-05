@@ -1,0 +1,10 @@
+{
+  "guest": {
+    "encrypted_data": "2EvwqNky7D9lZOGQzUwcPKhVWZbmvTjUt9VsRZ5HeXQ=\n",
+    "hmac": "8lopjQPLKg+pulGF+8kSL19eqgwRU6tp0vLu2BLFa2A=\n",
+    "iv": "Bw+wWmwmhxYEUVIGTO1vbA==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  },
+  "id": "openstack"
+}

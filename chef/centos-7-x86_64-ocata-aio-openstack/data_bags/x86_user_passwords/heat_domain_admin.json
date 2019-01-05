@@ -1,0 +1,10 @@
+{
+  "heat_domain_admin": {
+    "encrypted_data": "EeSUEM/XXIdCHOuNXlEtH4Abh/txlk8aLWC6Zx6DvDmp5buKawZHnn6rh6uN\nrRQo\n",
+    "hmac": "+C5DbgqGjIarR9UdH5c0iFRt0/oz53x4IunBVcqesZ4=\n",
+    "iv": "hgIORRhbkRrRF/RHc6KIlg==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  },
+  "id": "heat_domain_admin"
+}
