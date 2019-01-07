@@ -1,0 +1,1 @@
+../centos-7-x86_64-ocata-aio-openstack/metadata.rb

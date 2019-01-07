@@ -1,0 +1,10 @@
+{
+  "fernet_key1": {
+    "encrypted_data": "VMDmsIzP1us47/Rma+5xYEm3kS9gYb+gvkBQ6Ar33yRDcEYFM6E5LbrmUNw/\nCKl4hxsKpxDz76oaMpiU6gmrEw==\n",
+    "hmac": "w0ZYxuqJyssV6fMTx68XxcbCCAnyAFNRxwuJ86fXC/s=\n",
+    "iv": "P9OaX9JunwVSq4XMnRCv2A==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  },
+  "id": "fernet_key1"
+}

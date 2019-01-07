@@ -1,1 +1,0 @@
-../centos-7-x86_64-newton-aio-openstack/metadata.rb
