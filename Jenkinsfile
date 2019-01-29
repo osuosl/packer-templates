@@ -101,7 +101,7 @@ node ('master'){
       for ( arch in archs ) {
          env.arch = arch
          templates = get_from_payload(env.arch)
-         if ( ! templates.empty && templates != null ) {
+         if (templates) {
             echo "Checking whether the node for $env.arch is actually available..."
             //check whether the node is actually up.
 
