@@ -33,7 +33,7 @@
       "http_directory": "http",
       "iso_checksum": "dc8aa1b7f9c7d7dd66bbde516e739166126faa55789da0cb63328a507ed5fc00",
       "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}/releases/18.04/release/ubuntu-18.04-server-ppc64el.iso",
+      "iso_url": "{{user `mirror`}}/releases/18.04/release/ubuntu-18.04.1-server-ppc64el.iso",
       "output_directory": "packer-ubuntu-18.04-ppc64le-power9-openstack",
       "shutdown_command": "echo 'ubuntu' | sudo -S shutdown -P now",
       "qemuargs": [
