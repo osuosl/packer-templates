@@ -16,9 +16,9 @@
       "headless": true,
       "vnc_bind_address":"0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "2328edda16b1996d3898f408781b7e3948cb5c00fa4ef90aec79174ffd38ff56",
+      "iso_checksum": "af935f75c7f49379403e8b1a670a240a90a5752ccb4a2e19d9f0109138b1c2e8",
       "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}/7.5.1804/isos/ppc64/CentOS-7-ppc64-NetInstall-1804.iso",
+      "iso_url": "{{user `mirror`}}/7.6.1810/isos/ppc64/CentOS-7-ppc64-NetInstall-1810.iso",
       "output_directory": "packer-centos-7-ppc64-openstack",
       "shutdown_command": "echo 'centos'|sudo -S shutdown -P now",
       "qemuargs": [
@@ -54,6 +54,6 @@
   ],
   "variables": {
     "mirror": "http://centos-altarch.osuosl.org",
-    "image_name": "CentOS 7.5 BE"
+    "image_name": "CentOS 7.6 BE"
   }
 }
