@@ -1,6 +1,6 @@
 #!/bin/bash -eux
 
-/usr/bin/rsync -rv util.osuosl.org::sshkey-unmanaged /tmp/
+/usr/bin/rsync -rv util2.osuosl.org::sshkey-unmanaged /tmp/
 mkdir -p /root/.ssh /home/osuadmin/.ssh/
 cp /tmp/authorized_keys.unmanaged /root/.ssh/authorized_keys
 cp /tmp/authorized_keys.unmanaged /home/osuadmin/.ssh/authorized_keys
