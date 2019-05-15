@@ -3,6 +3,7 @@
   images
   backups
   vms
+  metrics
 ).each do |p|
   ceph_chef_pool p do
     pg_num 32
@@ -44,4 +45,15 @@ ceph_chef_client 'cinder-backup' do
   key secrets['ceph']['block_backup_token']
   keyname 'client.cinder-backup'
   filename '/etc/ceph/ceph.client.cinder-backup.keyring'
+end
+
+ceph_chef_client 'gnocchi' do
+  caps(
+    mon: 'allow r',
+    osd: 'allow rwx pool=metrics'
+  )
+  group 'ceph'
+  key secrets['ceph']['metrics_token']
+  keyname 'client.gnocchi'
+  filename '/etc/ceph/ceph.client.gnocchi.keyring'
 end
