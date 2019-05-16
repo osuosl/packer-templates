@@ -1,0 +1,10 @@
+{
+  "ceph": {
+    "encrypted_data": "zUiJM8aMERWfaawmlrDMRM78lmMSyCoKJZCFL7iqEaKStsEUpurRAAijL/ce\nHXzhBSkFVwWJl+4fdLefb9KhBEiv0oN2tqQN+3zo8YbLXrYyKFx9hGGC95qA\nPkc8IautbBuNlgdR8xW27IjWKor3h867SMfzhLRCrNmx2yG149MHr7u16vlc\nuqW95O9p1HwNRzW+Ut879X8OirIg2hWcyp9BjKipxf7WK9bttadYWr7+GrQ7\nd6HjBEfjGPqOyaTZH7YDDyfueVGenjiSrTI9poplZhxzq5CnK4ADvAMnhZqH\nXOz6W/qMR8hL5Yc5/k5R+tN0jzN1DZksUI7xPoZegA==\n",
+    "hmac": "bgh826ziKNfUvvQsHkj6CT0qCxhuSlBWEUl49PwKG2E=\n",
+    "iv": "SD3/3PdX0C4wXVrazWxcpA==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  },
+  "id": "openstack"
+}
