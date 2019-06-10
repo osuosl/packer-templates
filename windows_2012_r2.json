@@ -23,6 +23,7 @@
         [ "-m", "2048M" ],
         [ "-fdb", "floppy/virtio.vfd" ]
       ],
+      "qemu_binary": "/usr/libexec/qemu-kvm",
       "disk_interface": "virtio-scsi",
       "accelerator": "kvm",
       "vnc_bind_address": "0.0.0.0",
