@@ -94,7 +94,7 @@
     }
   ],
   "variables": {
-    "chef_version": "13.8.5",
+    "chef_version": "13.12.14",
     "flavor": "m1.large",
     "suite": "volumes",
     "local_chef_dir": "chef",
