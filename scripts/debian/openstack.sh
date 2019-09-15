@@ -1,5 +1,5 @@
 #!/bin/bash -eux
-apt-get -y install pump cloud-utils cloud-init cloud-initramfs-growroot \
+apt-get -y install cloud-utils cloud-init cloud-initramfs-growroot \
   bash-completion parted
 
 cat >> /etc/cloud/cloud.cfg.d/91_openstack_override.cfg << EOF
