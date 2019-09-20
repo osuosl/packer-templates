@@ -1,0 +1,72 @@
+{
+  "builders": [
+    {
+      "boot_command": [
+        "<wait>",
+        "install",
+        " console-setup/ask_detect=false",
+        " console-setup/layoutcode=us",
+        " console-setup/modelcode=pc105",
+        " debconf/frontend=noninteractive",
+        " debian-installer=en_US.UTF-8",
+        " fb=false",
+        " kbd-chooser/method=us",
+        " keyboard-configuration/xkb-keymap=us",
+        " keyboard-configuration/layout=USA",
+        " keyboard-configuration/variant=USA",
+        " locale=en_US.UTF-8",
+        " netcfg/get_hostname=unassigned-hostname",
+        " netcfg/get_domain=unassigned-domain",
+        " url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-10/preseed-ports.cfg<wait>",
+        "<enter><wait>"
+      ],
+      "accelerator": "kvm",
+      "boot_wait": "10s",
+      "disk_size": "3072",
+      "disk_interface": "virtio-scsi",
+      "headless": true,
+      "vnc_bind_address":"0.0.0.0",
+      "http_directory": "http",
+      "iso_checksum": "33e45af8c4011bcb204b9486381a7c90d0382d10b98783a1f672af134b82c789",
+      "iso_checksum_type": "sha256",
+      "iso_url": "{{user `mirror`}}/10.0/ppc64/iso-cd/debian-10.0-ppc64-NETINST-1.iso",
+      "output_directory": "packer-debian-10-ppc64-openstack",
+      "shutdown_command": "echo 'debian' | sudo -S /sbin/shutdown -hP now",
+      "ssh_password": "debian",
+      "ssh_port": 22,
+      "ssh_username": "debian",
+      "ssh_wait_timeout": "10000s",
+      "qemuargs": [
+        [ "-m", "2048M" ],
+        [ "-boot", "strict=on" ]
+      ],
+      "qemu_binary": "/usr/libexec/qemu-kvm",
+      "machine_type": "pseries",
+      "type": "qemu",
+      "vm_name": "packer-debian-10-ppc64-openstack"
+    }
+  ],
+  "provisioners": [
+    {
+      "execute_command": "echo 'debian' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
+      "scripts": [
+        "scripts/debian/update.sh",
+        "scripts/debian/openstack.sh",
+        "scripts/common/sshd.sh",
+        "scripts/debian/networking.sh",
+        "scripts/debian/sudoers.sh",
+        "scripts/common/vmtools.sh",
+        "scripts/debian/systemd.sh",
+        "scripts/debian/ppc-stretch.sh",
+        "scripts/debian/cleanup.sh",
+        "scripts/common/minimize.sh"
+      ],
+      "type": "shell"
+    }
+  ],
+  "variables": {
+    "mirror": "https://cdimage.debian.org/cdimage/ports",
+    "image_name": "Debian 10.0 BE"
+  }
+}
+
