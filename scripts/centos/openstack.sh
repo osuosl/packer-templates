@@ -5,7 +5,7 @@ if [ $(uname -m)=="ppc64" -o $(uname -m)=="ppc64le" ]
     yum -y install ppc64-diag
 fi
 
-yum -y install cloud-init cloud-utils dracut-modules-growroot cloud-utils-growpart
+yum -y install --skip-broken cloud-init cloud-utils dracut-modules-growroot cloud-utils-growpart
 dracut -f
 
 if [ -e /boot/grub/grub.conf ] ; then
@@ -28,11 +28,13 @@ fi
 
 # Ensure that the cloud-init user is correct
 sed -i -e 's/name: fedora/name: centos/' /etc/cloud/cloud.cfg
+sed -i -e 's/name: cloud-user/name: centos/' /etc/cloud/cloud.cfg
 sed -i -e 's/Fedora Cloud User/CentOS Cloud User/' /etc/cloud/cloud.cfg
+sed -i -e 's/Cloud User/CentOS Cloud User/' /etc/cloud/cloud.cfg
 sed -i -e 's/distro: fedora/distro: rhel/' /etc/cloud/cloud.cfg
 
 # Ensure that cloud-init starts before sshd
-if [ -e /usr/lib/systemd/system/cloud-init.service ] ; then
+if [[ -e /usr/lib/systemd/system/cloud-init.service && ! -e /etc/yum.repos.d/CentOS-AppStream.repo ]] ; then
   FILE=/usr/lib/systemd/system/cloud-init.service
   sed -i '/^Wants/s/$/ sshd.service/' $FILE
   grep -q Before $FILE && sed -i '/Before/s/$/ sshd.service/' $FILE ||  sed -i '/\[Unit\]/aBefore=sshd.service' $FILE
