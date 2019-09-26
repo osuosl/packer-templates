@@ -19,7 +19,7 @@
       "iso_checksum": "9062ae0d892126f57429c3194143e6e6e5485e5f32834e03d849bf5cf075ca7a",
       "iso_checksum_type": "sha256",
       "iso_url": "{{user `mirror`}}//8.0.1905/isos/ppc64le/CentOS-8-ppc64le-1905-boot.iso",
-      "output_directory": "packer-centos-7-ppc64le-openstack",
+      "output_directory": "packer-centos-8-ppc64le-openstack",
       "shutdown_command": "echo 'centos'|sudo -S shutdown -P now",
       "qemuargs": [
         [ "-m", "2048M" ],
