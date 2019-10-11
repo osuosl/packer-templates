@@ -2,7 +2,6 @@ source 'https://supermarket.chef.io'
 solver :ruby, :required
 
 # OSL Base deps
-cookbook 'aliases', github: 'osuosl-cookbooks/aliases'
 cookbook 'base', github: 'osuosl-cookbooks/base'
 cookbook 'ceph-chef', github: 'osuosl-cookbooks/ceph-chef'
 cookbook 'firewall', github: 'osuosl-cookbooks/firewall'
@@ -13,28 +12,27 @@ cookbook 'osl-ceph', github: 'osuosl-cookbooks/osl-ceph'
 cookbook 'osl-docker', github: 'osuosl-cookbooks/osl-docker'
 cookbook 'osl-munin', github: 'osuosl-cookbooks/osl-munin'
 cookbook 'osl-nrpe', github: 'osuosl-cookbooks/osl-nrpe'
-cookbook 'osl-openstack', github: 'osuosl-cookbooks/osl-openstack', branch: 'stable/pike'
+cookbook 'osl-openstack', github: 'osuosl-cookbooks/osl-openstack', branch: 'stable/queens'
 cookbook 'osl-php', github: 'osuosl-cookbooks/osl-php'
 cookbook 'osl-rsync', github: 'osuosl-cookbooks/osl-rsync'
 cookbook 'osl-selinux', github: 'osuosl-cookbooks/osl-selinux'
 cookbook 'resource_from_hash', github: 'osuosl-cookbooks/resource_from_hash'
-cookbook 'statsd', github: 'att-cloud/cookbook-statsd'
 cookbook 'yum-kernel-osuosl', github: 'osuosl-cookbooks/yum-kernel-osuosl'
 cookbook 'yum-qemu-ev', github: 'osuosl-cookbooks/yum-qemu-ev'
 
 # WIP patches
-%w(
-  compute
-).each do |cb|
-  cookbook "openstack-#{cb}",
-           github: "osuosl-cookbooks/cookbook-openstack-#{cb}",
-           branch: 'stable/pike'
-end
+# %w(
+# ).each do |cb|
+#   cookbook "openstack-#{cb}",
+#            github: "osuosl-cookbooks/cookbook-openstack-#{cb}",
+#            branch: 'stable/pike'
+# end
 
 # Openstack deps
 %w(
   block-storage
   common
+  compute
   dashboard
   identity
   image
@@ -47,5 +45,5 @@ end
 ).each do |cb|
   cookbook "openstack-#{cb}",
            github: "openstack/cookbook-openstack-#{cb}",
-           tag: 'stable/pike'
+           tag: 'stable/queens'
 end

@@ -1,5 +1,6 @@
 %w(
   volumes
+  volumes_ssd
   images
   backups
   vms
@@ -28,7 +29,7 @@ end
 ceph_chef_client 'cinder' do
   caps(
     mon: 'profile rbd',
-    osd: 'profile rbd pool=volumes, profile rbd pool=vms, profile rbd pool=images'
+    osd: 'profile rbd pool=volumes, profile rbd pool=vms, profile rbd pool=images, profile rbd pool=volumes_ssd'
   )
   group 'ceph'
   key secrets['ceph']['block_token']
