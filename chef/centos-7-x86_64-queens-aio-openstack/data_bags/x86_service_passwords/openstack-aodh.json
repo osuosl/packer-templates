@@ -1,0 +1,10 @@
+{
+  "id": "openstack-aodh",
+  "openstack-aodh": {
+    "encrypted_data": "FCFuMzSW/aqZUz0th0YIOJP48hgdRcIMslHs5DFdkiVvK1iOSnnAr/x5wg4T\n02Eo\n",
+    "hmac": "ToB9Q/ufpH20L+5WceX/RLbskIN9pfhYk1FqOLmC6LY=\n",
+    "iv": "khwXNKp/3hbd9Ru59atyUw==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  }
+}
