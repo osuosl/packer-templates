@@ -29,16 +29,12 @@
   ],
   "provisioners": [
     {
-      "environment_vars": [
-        "CHEF_VERSION={{user `chef_version`}}"
-      ],
       "execute_command": "echo 'centos' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
       "scripts": [
         "scripts/centos/osuosl.sh",
         "scripts/centos/fix-slow-dns.sh",
         "scripts/common/sshd.sh",
         "scripts/common/vmtools.sh",
-        "scripts/common/chef.sh",
         "scripts/centos/epel.sh",
         "scripts/centos/fix-selinux.sh",
         "scripts/centos/openstack.sh",
@@ -49,7 +45,6 @@
     }
   ],
   "variables": {
-    "chef_version": "13.12.14",
     "mirror": "http://centos.osuosl.org",
     "image_name": "CentOS 6.10"
   }
