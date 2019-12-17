@@ -1,0 +1,61 @@
+{
+  "builders": [
+    {
+      "boot_command": [
+        "c<wait>",
+        "linux /images/pxeboot/vmlinuz inst.stage2=hd:LABEL=CentOS-8-BaseOS-aarch64 ",
+        "text biosdevname=0 net.ifnames=0 ",
+        "ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-8/ks-aarch64.cfg<enter>",
+        "initrd /images/pxeboot/initrd.img<enter>",
+        "boot<enter><wait>"
+      ],
+      "accelerator": "kvm",
+      "boot_wait": "10s",
+      "disk_size": 4096,
+      "disk_interface": "virtio-scsi",
+      "headless": true,
+      "http_directory": "http",
+      "iso_checksum": "18a211a826bd3dd4d034ddc529303bc2b5dc6e1b63ea311644d7698e7b67fb3e",
+      "iso_checksum_type": "sha256",
+      "iso_url": "{{user `mirror`}}/8.0.1905/isos/aarch64/CentOS-8-aarch64-1905-boot.iso",
+      "output_directory": "packer-centos-8-aarch64-openstack",
+      "qemuargs": [
+        [ "-m", "2048M" ],
+        ["-machine", "gic-version=3,accel=kvm"],
+        ["-cpu", "host"],
+        [ "-boot", "strict=on" ],
+        [ "-bios", "/usr/share/AAVMF/AAVMF_CODE.fd" ],
+        [ "-monitor", "none" ]
+      ],
+      "qemu_binary": "qemu-kvm",
+      "shutdown_command": "echo 'centos'|sudo -S /sbin/halt -h -p",
+      "ssh_password": "centos",
+      "ssh_port": 22,
+      "ssh_username": "centos",
+      "ssh_wait_timeout": "10000s",
+      "type": "qemu",
+      "vm_name": "packer-centos-8-aarch64-openstack",
+      "vnc_bind_address": "0.0.0.0"
+    }
+  ],
+  "provisioners": [
+    {
+      "execute_command": "echo 'centos' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "scripts": [
+        "scripts/centos/osuosl.sh",
+        "scripts/centos/fix-slow-dns.sh",
+        "scripts/common/sshd.sh",
+        "scripts/common/vmtools.sh",
+        "scripts/centos/network-manager-dhcp-fix.sh",
+        "scripts/centos/openstack.sh",
+        "scripts/centos/cleanup.sh",
+        "scripts/common/minimize.sh"
+      ],
+      "type": "shell"
+    }
+  ],
+  "variables": {
+    "mirror": "http://centos.osuosl.org",
+    "image_name": "CentOS 8.0"
+  }
+}
