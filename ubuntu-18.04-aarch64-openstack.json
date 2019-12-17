@@ -2,11 +2,9 @@
   "builders": [
     {
       "boot_command": [
-        "<enter><wait><f6><esc><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
-        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
-        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
-        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
-        "/install/vmlinuz",
+        "<wait>",
+        "c<enter>",
+        "linux /linux",
         " auto",
         " console-setup/ask_detect=false",
         " console-setup/layoutcode=us",
@@ -14,17 +12,18 @@
         " debconf/frontend=noninteractive",
         " debian-installer=en_US.UTF-8",
         " fb=false",
-        " initrd=/install/initrd.gz",
         " kbd-chooser/method=us",
         " keyboard-configuration/layout=USA",
         " keyboard-configuration/variant=USA",
         " locale=en_US.UTF-8",
         " netcfg/get_hostname=unassigned-hostname",
         " netcfg/get_domain=unassigned-domain",
-        " grub-installer/bootdev=/dev/sda",
-        " url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu-18.04/preseed.cfg<wait>",
+        " url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu-18.04/preseed-aarch64.cfg<wait>",
         " ---",
-        "<enter><wait>"
+        "<enter><wait>",
+        "initrd /initrd.gz",
+        "<enter><wait>",
+        "boot<enter><wait>"
       ],
       "accelerator": "kvm",
       "boot_wait": "6s",
@@ -33,22 +32,28 @@
       "headless": true,
       "vnc_bind_address": "0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "7d8e0055d663bffa27c1718685085626cb59346e7626ba3d3f476322271f573e",
+      "iso_checksum": "8102c71de80a2a67c263956bf01b63852287998cda3b874012085e83a79f3d3d",
       "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}/releases/18.04/release/ubuntu-18.04.3-server-amd64.iso",
-      "output_directory": "packer-ubuntu-18.04-x86_64-openstack",
+      "iso_url": "{{user `mirror`}}/bionic-updates/main/installer-arm64/current/images/netboot/mini.iso",
+      "output_directory": "packer-ubuntu-18.04-aarch64-openstack",
       "shutdown_command": "echo 'ubuntu' | sudo -S shutdown -P now",
       "qemuargs": [
         [ "-m", "2048M" ],
-        [ "-boot", "strict=on" ]
+        [ "-boot", "strict=on" ],
+        [ "-machine", "virt,gic-version=3,accel=kvm" ],
+        [ "-cpu", "host" ],
+        [ "-boot", "strict=on" ],
+        [ "-bios", "/usr/share/AAVMF/AAVMF_CODE.fd" ],
+        [ "-monitor", "none" ]
       ],
       "qemu_binary": "/usr/libexec/qemu-kvm",
+      "machine_type": "pseries",
       "ssh_password": "ubuntu",
       "ssh_port": 22,
       "ssh_username": "ubuntu",
       "ssh_wait_timeout": "10000s",
       "type": "qemu",
-      "vm_name": "packer-ubuntu-18.04-x86_64-openstack"
+      "vm_name": "packer-ubuntu-18.04-aarch64-openstack"
     }
   ],
   "provisioners": [
@@ -68,7 +73,7 @@
     }
   ],
   "variables": {
-    "mirror": "http://cdimage.ubuntu.com",
+    "mirror": "http://ports.ubuntu.com/ubuntu-ports/dists",
     "image_name": "Ubuntu 18.04"
   }
 }

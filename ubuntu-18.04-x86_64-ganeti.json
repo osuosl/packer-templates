@@ -53,7 +53,7 @@
   ],
   "provisioners": [
     {
-      "execute_command": "echo 'osuadmin' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
+      "execute_command": "echo 'osuadmin' | {{.Vars}} sudo -S -E bash -eux '{{.Path}}'",
       "scripts": [
         "scripts/ubuntu/update.sh",
         "scripts/ubuntu/networking.sh",

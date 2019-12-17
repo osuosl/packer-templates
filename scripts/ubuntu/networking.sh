@@ -20,14 +20,7 @@ else
   echo "pre-up sleep 2" >> /etc/network/interfaces;
 fi
 
-if [ -e /etc/yaboot.conf ] ; then
-  sed -i 's/append\=\"/append\=\"net\.ifnames\=0 biosdevname\=0\ /' /etc/yaboot.conf
-fi
-
 if [ "$major_version" -ge "16" ] && [ -e /etc/default/grub ] ; then
   # Disable Predictable Network Interface names and use eth0
   sed -i 's/en[[:alnum:]]*/eth0/g' /etc/network/interfaces;
-  sed -ie 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/g' /etc/default/grub;
-  sed -ie 's/GRUB_CMDLINE_LINUX="\(.*\)"/GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0 \1"/g' /etc/default/grub;
-  update-grub;
 fi
