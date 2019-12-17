@@ -5,7 +5,8 @@ if [ $(uname -m)=="ppc64" -o $(uname -m)=="ppc64le" ]
     yum -y install ppc64-diag
 fi
 
-yum -y install --skip-broken cloud-init cloud-utils dracut-modules-growroot cloud-utils-growpart
+yum -y install --skip-broken cloud-init cloud-utils dracut-modules-growroot \
+  cloud-utils-growpart gdisk
 dracut -f
 
 if [ -e /boot/grub/grub.conf ] ; then
@@ -23,7 +24,11 @@ elif [ -e /etc/default/grub ] ; then
   # No fancy boot screen
   grep -q rhgb /etc/default/grub && sed -e 's/rhgb //' /etc/default/grub
   # Write out the config
-  grub2-mkconfig -o /boot/grub2/grub.cfg
+  if [ $(uname -m) == "aarch64" ] ; then
+    grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
+  else
+    grub2-mkconfig -o /boot/grub2/grub.cfg
+  fi
 fi
 
 # Ensure that the cloud-init user is correct
