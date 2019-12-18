@@ -47,7 +47,7 @@
   ],
   "provisioners": [
     {
-      "execute_command": "echo 'debian' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
+      "execute_command": "echo 'debian' | {{.Vars}} sudo -S -E bash -eux '{{.Path}}'",
       "scripts": [
         "scripts/debian/update.sh",
         "scripts/debian/openstack.sh",
