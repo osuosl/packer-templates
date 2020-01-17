@@ -91,7 +91,7 @@ node ('master'){
 
       //TODO: this should be set from the job as an env variable
       //this should *ALWAYS* match what lib/packer_pipeline.rb return
-      archs = ['x86_64', 'ppc64']
+      archs = ['x86_64', 'ppc64', 'aarch64']
 
       //we will store the results here in a LinkedHashMap implementation
       def pipeline_results = readJSON text: "{}"
