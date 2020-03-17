@@ -148,7 +148,7 @@ node ('master'){
                  run_linter(env.arch)
                  build_image(env.arch)
                  deploy_image_for_testing(env.arch)
-                 run_tests(env.arch)
+                 //run_tests(env.arch)
                  //archive '*' //store all the files
                  node_results = readJSON file: "${arch}_results.json"
                  deleteDir()
