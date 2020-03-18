@@ -11,9 +11,9 @@
       "disk_interface": "virtio-scsi",
       "headless": true,
       "http_directory": "http",
-      "iso_checksum": "a7993a0d4b7fef2433e0d4f53530b63c715d3aadbe91f152ee5c3621139a2cbc",
+      "iso_checksum": "7fea13202bf2f26989df4175aace8fdc16e1137f7961c33512cbfad844008948",
       "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}/8.0.1905/isos/x86_64/CentOS-8-x86_64-1905-boot.iso",
+      "iso_url": "{{user `mirror`}}/8.1.1911/isos/x86_64/CentOS-8.1.1911-x86_64-boot.iso",
       "output_directory": "packer-centos-8-x86_64-openstack",
       "qemuargs": [ [ "-m", "2048M" ] ],
       "qemu_binary": "qemu-kvm",
@@ -45,6 +45,6 @@
   ],
   "variables": {
     "mirror": "http://centos.osuosl.org",
-    "image_name": "CentOS 8.0"
+    "image_name": "CentOS 8.1"
   }
 }

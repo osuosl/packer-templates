@@ -16,9 +16,9 @@
       "headless": true,
       "vnc_bind_address":"0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "9062ae0d892126f57429c3194143e6e6e5485e5f32834e03d849bf5cf075ca7a",
+      "iso_checksum": "4de170f8f3673dc5cacbf250827f4c408f0e731cbc665eb98db31fec10ea01e7",
       "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}//8.0.1905/isos/ppc64le/CentOS-8-ppc64le-1905-boot.iso",
+      "iso_url": "{{user `mirror`}}//8.1.1911/isos/ppc64le/CentOS-8.1.1911-ppc64le-boot.iso",
       "output_directory": "packer-centos-8-ppc64le-openstack",
       "shutdown_command": "echo 'centos'|sudo -S shutdown -P now",
       "qemuargs": [
@@ -54,6 +54,6 @@
   ],
   "variables": {
     "mirror": "http://centos.osuosl.org",
-    "image_name": "CentOS 8.0 LE"
+    "image_name": "CentOS 8.1 LE"
   }
 }
