@@ -1,6 +1,10 @@
 #!/bin/bash -eux
+if [ -e /usr/bin/dnf ] ; then
+  dnf -y install cloud-init cloud-utils-growpart
+else
+  yum -y install cloud-init cloud-utils dracut-modules-growroot cloud-utils-growpart
+fi
 
-yum -y install cloud-init cloud-utils dracut-modules-growroot cloud-utils-growpart
 dracut -f
 
 if [ -e /boot/grub/grub.conf ] ; then
