@@ -1,0 +1,10 @@
+{
+  "id": "openstack-telemetry_metric",
+  "openstack-telemetry_metric": {
+    "encrypted_data": "SeYKZg1+2uKzXq+bZHYYMXrbWXQjEGYOQLej+C8yiLpW2/2+OyLmFk0m5itD\nmIyF\n",
+    "hmac": "NOlfZh8ZBMsd6/CW7IJFZcHhsxPW7e076+mZxGQVmj8=\n",
+    "iv": "AyKpwkUJS6dL+HNmFsPhNQ==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  }
+}

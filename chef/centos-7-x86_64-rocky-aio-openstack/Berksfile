@@ -12,7 +12,7 @@ cookbook 'osl-ceph', github: 'osuosl-cookbooks/osl-ceph'
 cookbook 'osl-docker', github: 'osuosl-cookbooks/osl-docker'
 cookbook 'osl-munin', github: 'osuosl-cookbooks/osl-munin'
 cookbook 'osl-nrpe', github: 'osuosl-cookbooks/osl-nrpe'
-cookbook 'osl-openstack', github: 'osuosl-cookbooks/osl-openstack', branch: 'stable/queens'
+cookbook 'osl-openstack', github: 'osuosl-cookbooks/osl-openstack', branch: 'stable/rocky'
 cookbook 'osl-php', github: 'osuosl-cookbooks/osl-php'
 cookbook 'osl-rsync', github: 'osuosl-cookbooks/osl-rsync'
 cookbook 'osl-selinux', github: 'osuosl-cookbooks/osl-selinux'
@@ -45,5 +45,7 @@ cookbook 'yum-qemu-ev', github: 'osuosl-cookbooks/yum-qemu-ev'
 ).each do |cb|
   cookbook "openstack-#{cb}",
            github: "openstack/cookbook-openstack-#{cb}",
-           tag: 'stable/queens'
+           tag: 'stable/rocky'
 end
+
+cookbook 'openstackclient', github: 'openstack/cookbook-openstackclient', branch: 'stable/rocky'

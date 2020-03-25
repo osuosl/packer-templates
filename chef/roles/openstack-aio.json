@@ -11,6 +11,7 @@
     "role[openstack_ops_identity]",
     "recipe[osl-openstack::controller]",
     "recipe[osl-openstack::compute]",
+    "recipe[openstack_test::compute]",
     "recipe[osl-openstack::block_storage]"
   ],
   "chef_type": "role",
