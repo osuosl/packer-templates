@@ -2,6 +2,7 @@
   "builders": [
     {
       "boot_command": [
+        "c<wait5><wait10>",
         "linux /linux",
         " console-setup/ask_detect=false",
         " console-setup/layoutcode=us",
@@ -30,9 +31,9 @@
       "headless": true,
       "vnc_bind_address":"0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "a9c54f7af807fcd5a8c293da9a2f887bf0a0a972f09b787755d328a2eaa12bd6",
+      "iso_checksum": "698a53faed5ceb51c705e46567dba7a0865bb7928ec8a301c083b5af74861328",
       "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}/buster/main/installer-arm64/current/images/netboot/mini.iso",
+      "iso_url": "{{user `mirror`}}/buster/main/installer-arm64/20190702+deb10u3/images/netboot/mini.iso",
       "output_directory": "packer-debian-10-aarch64-openstack",
       "shutdown_command": "echo 'debian' | sudo -S /sbin/shutdown -hP now",
       "ssh_password": "debian",
@@ -72,7 +73,7 @@
   ],
   "variables": {
     "mirror": "http://debian.osuosl.org/debian/dists",
-    "image_name": "Debian 10.2"
+    "image_name": "Debian 10.3"
   }
 }
 
