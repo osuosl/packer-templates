@@ -16,9 +16,9 @@
       "headless": true,
       "vnc_bind_address":"0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "6072ecf3a43dd49c678b393ebb2903c755d23942a429f148a7a5dae7a74c2a0d",
+      "iso_checksum": "777b83d236e36f5e8773b8bb0fe69095c7b50180e4c8c5035f9d68730c63db60",
       "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}/7.7.1908/isos/power9/CentOS-7-power9-NetInstall-1908.iso",
+      "iso_url": "{{user `mirror`}}/7.8.2003/isos/power9/CentOS-7-power9-NetInstall-2003.iso",
       "output_directory": "packer-centos-7-ppc64le-power9-openstack",
       "shutdown_command": "echo 'centos'|sudo -S shutdown -P now",
       "qemuargs": [
@@ -53,6 +53,6 @@
   ],
   "variables": {
     "mirror": "http://centos-altarch.osuosl.org",
-    "image_name": "CentOS 7.7 LE (POWER9)"
+    "image_name": "CentOS 7.8 LE (POWER9)"
   }
 }
