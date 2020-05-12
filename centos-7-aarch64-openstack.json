@@ -15,9 +15,9 @@
       "disk_interface": "virtio-scsi",
       "headless": true,
       "http_directory": "http",
-      "iso_checksum": "9374c22959c490782d641db04220517347d29337b71119e50b39b74e7269c69b",
+      "iso_checksum": "f8fc89855d3f4910a8b7ee45788a463110a1ba4b314d7ff75a30ba732849c305",
       "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}/7.7.1908/isos/aarch64/CentOS-7-aarch64-NetInstall-1908.iso",
+      "iso_url": "{{user `mirror`}}/7.8.2003/isos/aarch64/CentOS-7-aarch64-NetInstall-2003.iso",
       "output_directory": "packer-centos-7-aarch64-openstack",
       "qemuargs": [
         [ "-m", "1024M" ],
@@ -56,6 +56,6 @@
   "variables": {
     "mirror": "http://centos-altarch.osuosl.org",
     "build": "20191215",
-    "image_name": "CentOS 7.7"
+    "image_name": "CentOS 7.8"
   }
 }
