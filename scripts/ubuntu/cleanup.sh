@@ -1,4 +1,6 @@
 #!/bin/bash
+ubuntu_version="`lsb_release -r | awk '{print $2}'`";
+major_version="`echo $ubuntu_version | awk -F. '{print $1}'`";
 
 # Delete all Linux headers
 dpkg --list \
@@ -41,7 +43,11 @@ apt-get -y purge libx11-data xauth libxmuu1 libxcb1 libx11-6 libxext6;
 apt-get -y purge ppp pppconfig pppoeconf;
 
 # Delete oddities
-apt-get -y purge popularity-contest installation-report command-not-found command-not-found-data friendly-recovery bash-completion fonts-ubuntu-font-family-console laptop-detect landscape-common;
+if [ "$major_version" -ge "20" ] ; then
+  apt-get -y purge popularity-contest installation-report command-not-found friendly-recovery bash-completion fonts-ubuntu-font-family-console laptop-detect landscape-common;
+else
+  apt-get -y purge popularity-contest installation-report command-not-found command-not-found-data friendly-recovery bash-completion fonts-ubuntu-font-family-console laptop-detect landscape-common;
+fi
 
 # Delete services we don't need installed by default
 apt-get -y purge exim4-base rpcbind

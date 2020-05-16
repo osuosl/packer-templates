@@ -1,5 +1,11 @@
-apt-get -y install pump cloud-utils cloud-init cloud-initramfs-growroot \
-    bash-completion
+ubuntu_version="`lsb_release -r | awk '{print $2}'`";
+major_version="`echo $ubuntu_version | awk -F. '{print $1}'`";
+
+if [ "$major_version" -ge "20" ] ; then
+  apt-get -y install cloud-utils cloud-init cloud-initramfs-growroot bash-completion
+else
+  apt-get -y install pump cloud-utils cloud-init cloud-initramfs-growroot bash-completion
+fi
 
 if [ -e /etc/yaboot.conf ] ; then
   sed -i 's/append\=\"/append\=\"net\.ifnames\=0 biosdevname\=0\ /' /etc/yaboot.conf
