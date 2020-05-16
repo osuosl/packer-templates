@@ -3,7 +3,7 @@
     {
       "boot_command": [
         "<tab> biosdevname=0 net.ifnames=0 ",
-        "ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-29/ks-x86_64-openstack.cfg<enter>"
+        "ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-32/ks-x86_64-openstack.cfg<enter>"
       ],
       "accelerator": "kvm",
       "boot_wait": "6s",
@@ -11,10 +11,10 @@
       "disk_interface": "virtio-scsi",
       "headless": true,
       "http_directory": "http",
-      "iso_checksum": "aa7fb0e6e5b71774ebdaab0dae76bdd9246a5bc7aedc28b7f1103aaaf9750654",
+      "iso_checksum": "7f4afd2a26c718f9f15e4bbfd9c2e8849f81036d2a82a4e81fa4a313a833da9c",
       "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}/linux/releases/29/Server/x86_64/iso/Fedora-Server-netinst-x86_64-29-1.2.iso",
-      "output_directory": "packer-fedora-29-x86_64-openstack",
+      "iso_url": "{{user `mirror`}}/linux/releases/32/Server/x86_64/iso/Fedora-Server-netinst-x86_64-32-1.6.iso",
+      "output_directory": "packer-fedora-32-x86_64-openstack",
       "shutdown_command": "echo 'fedora'|sudo -S shutdown -P now",
       "qemuargs": [
         [ "-m", "2048M" ],
@@ -27,7 +27,7 @@
       "ssh_wait_timeout": "10000s",
       "vnc_bind_address": "0.0.0.0",
       "type": "qemu",
-      "vm_name": "packer-fedora-29-x86_64-openstack"
+      "vm_name": "packer-fedora-32-x86_64-openstack"
     }
   ],
   "provisioners": [
@@ -45,6 +45,6 @@
   ],
   "variables": {
     "mirror": "http://fedora.osuosl.org",
-    "image_name": "Fedora 29"
+    "image_name": "Fedora 32"
   }
 }
