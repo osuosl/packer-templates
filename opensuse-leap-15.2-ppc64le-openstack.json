@@ -4,8 +4,8 @@
       "boot_command": [
         "c<wait5>",
         "linux /boot/ppc64le/linux netsetup=dhcp install=cd:/ ",
-        "lang=en_US autoyast=http://{{ .HTTPIP }}:{{ .HTTPPort }}/opensuse-leap-15.0/autoinst.xml ",
-        "install=http://download.opensuse.org/ports/ppc/distribution/leap/15.0/repo/oss/ ",
+        "lang=en_US autoyast=http://{{ .HTTPIP }}:{{ .HTTPPort }}/opensuse-leap-15.2/autoinst.xml ",
+        "install=http://download.opensuse.org/ports/ppc/distribution/leap/15.2/repo/oss/ ",
         "textmode=1<enter> ",
         "initrd /boot/ppc64le/initrd<enter> ",
         "boot<enter> "
@@ -16,10 +16,10 @@
       "headless": true,
       "vnc_bind_address":"0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "e5af64c33b8d2ba4e7a266653459a74e12bd0f0f7a87c10e71a885d9446e8e9e",
+      "iso_checksum": "03eee4f761ba9e8f1e31abcb8181bd333a2253c81905a4f4e7382b50bdc425df",
       "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}/ports/ppc/distribution/leap/15.0/iso/openSUSE-Leap-15.0-DVD-ppc64le-Build69.2-Media.iso",
-      "output_directory": "packer-opensuse-leap-15.0-ppc64le-openstack",
+      "iso_url": "{{user `mirror`}}/ports/ppc/distribution/leap/15.2/iso/openSUSE-Leap-15.2-DVD-ppc64le-Build247.2-Media.iso",
+      "output_directory": "packer-opensuse-leap-15.2-ppc64le-openstack",
       "shutdown_command": "echo 'opensuse'|sudo -S /sbin/halt -h -p",
       "ssh_password": "opensuse",
       "ssh_port": 22,
@@ -32,7 +32,7 @@
       "qemu_binary": "/usr/libexec/qemu-kvm",
       "machine_type": "pseries",
       "type": "qemu",
-      "vm_name": "packer-opensuse-leap-15.0-ppc64le-openstack"
+      "vm_name": "packer-opensuse-leap-15.2-ppc64le-openstack"
     }
   ],
   "provisioners": [
@@ -52,6 +52,6 @@
   ],
   "variables": {
     "mirror": "http://download.opensuse.org",
-    "image_name": "OpenSUSE Leap 15.0 LE"
+    "image_name": "OpenSUSE Leap 15.2 LE"
   }
 }
