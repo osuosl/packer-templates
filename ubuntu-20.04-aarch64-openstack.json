@@ -1,0 +1,79 @@
+{
+  "builders": [
+    {
+      "boot_command": [
+        "<wait>",
+        "c<enter>",
+        "linux /linux",
+        " auto",
+        " console-setup/ask_detect=false",
+        " console-setup/layoutcode=us",
+        " console-setup/modelcode=pc105",
+        " debconf/frontend=noninteractive",
+        " debian-installer=en_US.UTF-8",
+        " fb=false",
+        " kbd-chooser/method=us",
+        " keyboard-configuration/layout=USA",
+        " keyboard-configuration/variant=USA",
+        " locale=en_US.UTF-8",
+        " netcfg/get_hostname=unassigned-hostname",
+        " netcfg/get_domain=unassigned-domain",
+        " url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu-20.04/preseed-aarch64.cfg<wait>",
+        " ---",
+        "<enter><wait>",
+        "initrd /initrd.gz",
+        "<enter><wait>",
+        "boot<enter><wait>"
+      ],
+      "accelerator": "kvm",
+      "boot_wait": "6s",
+      "disk_size": 4096,
+      "disk_interface": "virtio-scsi",
+      "headless": true,
+      "vnc_bind_address": "0.0.0.0",
+      "http_directory": "http",
+      "iso_checksum": "36c2fe79cd76c8fcf1c03bb1aeadf6d0bd014f594ba30336a5e6ee19220efeab",
+      "iso_checksum_type": "sha256",
+      "iso_url": "{{user `mirror`}}/focal/main/installer-arm64/current/legacy-images/netboot/mini.iso",
+      "output_directory": "packer-ubuntu-20.04-aarch64-openstack",
+      "shutdown_command": "echo 'ubuntu' | sudo -S shutdown -P now",
+      "qemuargs": [
+        [ "-m", "2048M" ],
+        [ "-boot", "strict=on" ],
+        [ "-machine", "virt,gic-version=3,accel=kvm" ],
+        [ "-cpu", "host" ],
+        [ "-boot", "strict=on" ],
+        [ "-bios", "/usr/share/AAVMF/AAVMF_CODE.fd" ],
+        [ "-monitor", "none" ]
+      ],
+      "qemu_binary": "/usr/libexec/qemu-kvm",
+      "machine_type": "pseries",
+      "ssh_password": "ubuntu",
+      "ssh_port": 22,
+      "ssh_username": "ubuntu",
+      "ssh_wait_timeout": "10000s",
+      "type": "qemu",
+      "vm_name": "packer-ubuntu-20.04-aarch64-openstack"
+    }
+  ],
+  "provisioners": [
+    {
+      "execute_command": "echo 'ubuntu' | {{.Vars}} sudo -S -E bash -eux '{{.Path}}'",
+      "scripts": [
+        "scripts/ubuntu/update.sh",
+        "scripts/ubuntu/networking.sh",
+        "scripts/common/sshd.sh",
+        "scripts/common/vmtools.sh",
+        "scripts/ubuntu/openstack.sh",
+        "scripts/ubuntu/sudoers.sh",
+        "scripts/ubuntu/cleanup.sh",
+        "scripts/common/minimize.sh"
+      ],
+      "type": "shell"
+    }
+  ],
+  "variables": {
+    "mirror": "http://ports.ubuntu.com/ubuntu-ports/dists",
+    "image_name": "Ubuntu 20.04"
+  }
+}
