@@ -4,7 +4,7 @@ if [ $(uname -m)=="ppc64" -o $(uname -m)=="ppc64le" ] ; then
   dnf -y install ppc64-diag
 fi
 
-dnf -y install cloud-init cloud-utils yum
+dnf -y install cloud-init cloud-utils yum vim
 dracut -f
 
 if [ -e /boot/grub/grub.conf ] ; then
