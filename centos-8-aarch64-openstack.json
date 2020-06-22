@@ -3,7 +3,7 @@
     {
       "boot_command": [
         "c<wait>",
-        "linux /images/pxeboot/vmlinuz inst.stage2=hd:LABEL=CentOS-8-1-1911-aarch64-dvd ",
+        "linux /images/pxeboot/vmlinuz inst.stage2=hd:LABEL=CentOS-8-2-2004-aarch64-dvd ",
         "text biosdevname=0 net.ifnames=0 ",
         "ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-8/ks-aarch64.cfg<enter>",
         "initrd /images/pxeboot/initrd.img<enter>",
@@ -15,9 +15,9 @@
       "disk_interface": "virtio-scsi",
       "headless": true,
       "http_directory": "http",
-      "iso_checksum": "e693b670b841d0270a393ed27b97c7efc054dc791e9e0fd77fb813c9cf4b760b",
+      "iso_checksum": "76a9a5f84ac9581fee079d7154bf68f72661c9d941e9ab3143bccc760c23eecc",
       "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}/8.1.1911/isos/aarch64/CentOS-8.1.1911-aarch64-boot.iso",
+      "iso_url": "{{user `mirror`}}/8.2.2004/isos/aarch64/CentOS-8.2.2004-aarch64-boot.iso",
       "output_directory": "packer-centos-8-aarch64-openstack",
       "qemuargs": [
         [ "-m", "2048M" ],
@@ -56,6 +56,6 @@
   ],
   "variables": {
     "mirror": "http://centos.osuosl.org",
-    "image_name": "CentOS 8.1"
+    "image_name": "CentOS 8.2"
   }
 }
