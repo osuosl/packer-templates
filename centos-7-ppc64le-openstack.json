@@ -16,9 +16,9 @@
       "headless": true,
       "vnc_bind_address":"0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "38250738077f0950f978fa55bf98c90b6d2a29b02130f6d3d76386b8c9172c55",
+      "iso_checksum": "76423e534281666d00c0989ab7e4cb48e0b412207a9e8fd6269bfef23a7e71c7",
       "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}/7.8.2003/isos/ppc64le/CentOS-7-ppc64le-NetInstall-2003.iso",
+      "iso_url": "{{user `mirror`}}/7.9.2009/isos/ppc64le/CentOS-7-ppc64le-NetInstall-2009.iso",
       "output_directory": "packer-centos-7-ppc64le-openstack",
       "shutdown_command": "echo 'centos'|sudo -S shutdown -P now",
       "qemuargs": [
@@ -53,6 +53,6 @@
   ],
   "variables": {
     "mirror": "http://centos-altarch.osuosl.org",
-    "image_name": "CentOS 7.8 LE"
+    "image_name": "CentOS 7.9 LE"
   }
 }
