@@ -1,4 +1,4 @@
-#!/opt/chef/embedded/bin/ruby
+#!/opt/cinc/embedded/bin/ruby
 # frozen_string_literal: true
 
 # wrapper around the deploy.sh for deploying things properly.

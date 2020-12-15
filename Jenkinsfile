@@ -87,7 +87,7 @@ node ('master'){
       //TODO: this should be set from the job
       //set path to the packer binary
       env.packer = '/usr/local/bin/packer'
-      env.PATH = "/usr/libexec:/usr/local/bin:/opt/chef/embedded/bin:${env.PATH}"
+      env.PATH = "/usr/libexec:/usr/local/bin:/opt/cinc/embedded/bin:${env.PATH}"
 
       //TODO: this should be set from the job as an env variable
       //this should *ALWAYS* match what lib/packer_pipeline.rb return

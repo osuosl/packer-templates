@@ -1,4 +1,4 @@
-#!/opt/chef/embedded/bin/ruby
+#!/opt/cinc/embedded/bin/ruby
 # frozen_string_literal: true
 
 # wrapper around the openstack_taster for tasting things properly.
