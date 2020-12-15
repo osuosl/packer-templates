@@ -16,9 +16,9 @@
       "headless": true,
       "vnc_bind_address":"0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "13ebdc5ecdfc316fa4528f3bc4d896ca32745af65766bd84ece37e10d87f8e9e",
+      "iso_checksum": "a56fc1039534155253ca412fcd8e0293e6f67fd92c526a8b754309578140dff6",
       "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}//8.3.2011/isos/ppc64le/CentOS-8.3.2011-ppc64le-boot.iso",
+      "iso_url": "{{user `mirror`}}//8.3.2011/isos/ppc64le/CentOS-8.3.2011-ppc64le-dvd1.iso",
       "output_directory": "packer-centos-8-ppc64le-openstack",
       "shutdown_command": "echo 'centos'|sudo -S shutdown -P now",
       "qemuargs": [
