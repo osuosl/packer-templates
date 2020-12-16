@@ -11,7 +11,7 @@
       ],
       "accelerator": "kvm",
       "boot_wait": "10s",
-      "disk_size": 2048,
+      "disk_size": 3072,
       "disk_interface": "virtio-scsi",
       "headless": true,
       "http_directory": "http",
