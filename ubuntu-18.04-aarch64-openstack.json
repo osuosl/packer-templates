@@ -32,9 +32,9 @@
       "headless": true,
       "vnc_bind_address": "0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "8102c71de80a2a67c263956bf01b63852287998cda3b874012085e83a79f3d3d",
+      "iso_checksum": "015c2e34cc950b78682b772e9197164a144a565e112660d1183825ead80005cc",
       "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}/bionic-updates/main/installer-arm64/current/images/netboot/mini.iso",
+      "iso_url": "{{user `mirror`}}/bionic-updates/main/installer-arm64/20101020ubuntu543.17/images/netboot/mini.iso",
       "output_directory": "packer-ubuntu-18.04-aarch64-openstack",
       "shutdown_command": "echo 'ubuntu' | sudo -S shutdown -P now",
       "qemuargs": [

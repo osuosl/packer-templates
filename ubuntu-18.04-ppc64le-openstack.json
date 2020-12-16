@@ -31,9 +31,9 @@
       "headless": true,
       "vnc_bind_address": "0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "8de9bbc30ab843d23c064d72fa24c003b8e90d0b01c35be7d4f49c2bf8d92ba3",
+      "iso_checksum": "1c9eceaaca2b9372ab9f466c33fa88ac781fa43818de1b1a7dc64db70f3b12d8",
       "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}/releases/18.04/release/ubuntu-18.04.4-server-ppc64el.iso",
+      "iso_url": "{{user `mirror`}}/releases/18.04/release/ubuntu-18.04.5-server-ppc64el.iso",
       "output_directory": "packer-ubuntu-18.04-ppc64le-openstack",
       "shutdown_command": "echo 'ubuntu' | sudo -S shutdown -P now",
       "qemuargs": [
