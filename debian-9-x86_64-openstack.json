@@ -27,9 +27,9 @@
       "headless": true,
       "vnc_bind_address":"0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "3c47f64693435b0b42b6ef59624edbffa7c4004317d9f9a3f04ecb6a4e30f191",
+      "iso_checksum": "71c7e9eb292acc880f84605b1ca2b997f25737fe0a43fc9586f61d35cd2eb43b",
       "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}/9.12.0/amd64/iso-cd/debian-9.12.0-amd64-netinst.iso",
+      "iso_url": "{{user `mirror`}}/9.13.0/amd64/iso-cd/debian-9.13.0-amd64-netinst.iso",
       "output_directory": "packer-debian-9-x86_64-openstack",
       "shutdown_command": "echo 'debian' | sudo -S /sbin/shutdown -hP now",
       "ssh_password": "debian",
@@ -64,7 +64,7 @@
   ],
   "variables": {
     "mirror": "http://cdimage.debian.org/cdimage/archive",
-    "image_name": "Debian 9.12"
+    "image_name": "Debian 9.13"
   }
 }
 
