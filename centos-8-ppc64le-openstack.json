@@ -5,7 +5,8 @@
         "c<wait5><wait10>",
         "linux /ppc/ppc64/vmlinuz ro ",
         "biosdevname=0 net.ifnames=0 ",
-        "ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-8/ks-ppc64le.cfg<enter>",
+        "inst.stage2=hd:LABEL=CentOS-8-4-2105-ppc64le-dvd ",
+        "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-8/ks-ppc64le.cfg<enter>",
         "initrd /ppc/ppc64/initrd.img<enter>",
         "boot<enter><wait>"
       ],
@@ -16,9 +17,9 @@
       "headless": true,
       "vnc_bind_address":"0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "a56fc1039534155253ca412fcd8e0293e6f67fd92c526a8b754309578140dff6",
+      "iso_checksum": "9cfca292a59a45bdb1737019a6ac0383e0a674a415e7c0634262d66884a47d01",
       "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}//8.3.2011/isos/ppc64le/CentOS-8.3.2011-ppc64le-dvd1.iso",
+      "iso_url": "{{user `mirror`}}//8.4.2105/isos/ppc64le/CentOS-8.4.2105-ppc64le-dvd1.iso",
       "output_directory": "packer-centos-8-ppc64le-openstack",
       "shutdown_command": "echo 'centos'|sudo -S shutdown -P now",
       "qemuargs": [
@@ -54,6 +55,6 @@
   ],
   "variables": {
     "mirror": "http://centos.osuosl.org",
-    "image_name": "CentOS 8.3 LE"
+    "image_name": "CentOS 8.4 LE"
   }
 }
