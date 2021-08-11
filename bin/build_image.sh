@@ -29,7 +29,7 @@ done
 
 DIR_NAME="packer-$(basename -s .json "$TEMPLATE")"
 TEMPLATE_NAME="$(basename -s .json "$TEMPLATE")"
-IMAGE_NAME=$(grep vm_name "$TEMPLATE " | awk '{print $2}' | sed -e 's/\"//g' | sed -e 's/,//g')
+IMAGE_NAME=$(grep vm_name "$TEMPLATE" | awk '{print $2}' | sed -e 's/\"//g' | sed -e 's/,//g')
 FINAL_QCOW_FILE_NAME="${DIR_NAME}/${IMAGE_NAME}-compressed.qcow2"
 FINAL_RAW_FILE_NAME="${DIR_NAME}/${IMAGE_NAME}-converted.raw"
 
