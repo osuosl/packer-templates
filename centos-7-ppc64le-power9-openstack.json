@@ -53,6 +53,7 @@
   ],
   "variables": {
     "mirror": "http://centos-altarch.osuosl.org",
+    "build": "20210811",
     "image_name": "CentOS 7.9 LE (POWER9)"
   }
 }
