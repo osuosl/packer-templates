@@ -44,7 +44,7 @@
   ],
   "variables": {
     "mirror": "http://centos.osuosl.org",
-    "build": "20201214",
+    "build": "20210810",
     "image_name": "CentOS 7.9"
   }
 }
