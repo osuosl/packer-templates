@@ -31,9 +31,9 @@
       "headless": true,
       "vnc_bind_address":"0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "bfa3e3f7941d1d8b9a629551b12b4579e68fdf8f52c307ca9034704afd957c80",
+      "iso_checksum": "1a2a6f988a887905cd005335e1f2eb80f38ca0caa036a87d27bcd327436cc459",
       "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}/buster/main/installer-arm64/20190702+deb10u7/images/netboot/mini.iso",
+      "iso_url": "{{user `mirror`}}/buster/main/installer-arm64/20190702+deb10u10/images/netboot/mini.iso",
       "output_directory": "packer-debian-10-aarch64-openstack",
       "shutdown_command": "echo 'debian' | sudo -S /sbin/shutdown -hP now",
       "ssh_password": "debian",
@@ -73,7 +73,7 @@
   ],
   "variables": {
     "mirror": "http://debian.osuosl.org/debian/dists",
-    "image_name": "Debian 10.7"
+    "image_name": "Debian 10.10"
   }
 }
 
