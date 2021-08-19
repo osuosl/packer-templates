@@ -3,7 +3,7 @@
     {
       "boot_command": [
         "c<wait5><wait10>",
-        "linux /linux",
+        "linux /install.a64/vmlinuz",
         " console-setup/ask_detect=false",
         " console-setup/layoutcode=us",
         " console-setup/modelcode=pc105",
@@ -20,7 +20,7 @@
         " url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-11/preseed-aarch64.cfg<wait>",
         " ---",
         "<enter><wait>",
-        "initrd /initrd.gz",
+        "initrd /install.a64/initrd.gz",
         "<enter><wait>",
         "boot<enter><wait>"
       ],
@@ -31,9 +31,9 @@
       "headless": true,
       "vnc_bind_address":"0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "0b16a62b464ec2898feda0464da56ccfa3cdb311742758eaa15a00def0685c0a",
+      "iso_checksum": "",
       "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}/bullseye/main/installer-arm64/20210731/images/netboot/mini.iso",
+      "iso_url": "{{user `mirror`}}/11.0.0/arm64/iso-cd/debian-11.0.0-arm64-netinst.iso",
       "output_directory": "packer-debian-11-aarch64-openstack",
       "shutdown_command": "echo 'debian' | sudo -S /sbin/shutdown -hP now",
       "ssh_password": "debian",
@@ -72,7 +72,7 @@
     }
   ],
   "variables": {
-    "mirror": "http://debian.osuosl.org/debian/dists",
+    "mirror": "http://debian.osuosl.org/debian-cdimage",
     "image_name": "Debian 11.0"
   }
 }
