@@ -1,6 +1,7 @@
 {
   "builders": [
     {
+      "accelerator": "kvm",
       "boot_command": [
         "c<wait5><wait10>",
         "linux /install.a64/vmlinuz",
@@ -24,34 +25,48 @@
         "<enter><wait>",
         "boot<enter><wait>"
       ],
-      "accelerator": "kvm",
+      "boot_key_interval": "20m",
       "boot_wait": "10s",
-      "disk_size": "3072",
+      "cdrom_interface": "virtio-scsi",
       "disk_interface": "virtio-scsi",
+      "disk_size": "3072",
+      "firmware": "/usr/share/AAVMF/AAVMF_CODE.fd",
       "headless": true,
-      "vnc_bind_address":"0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "9c8c4a3d1f812e7dc3509193e45bf33df363352d0e5d614d443600b7849ce04e",
-      "iso_checksum_type": "sha256",
+      "iso_checksum": "sha256:9c8c4a3d1f812e7dc3509193e45bf33df363352d0e5d614d443600b7849ce04e",
       "iso_url": "{{user `mirror`}}/11.0.0/arm64/iso-cd/debian-11.0.0-arm64-netinst.iso",
       "output_directory": "packer-debian-11-aarch64-openstack",
+      "qemu_binary": "/usr/libexec/qemu-kvm",
+      "qemuargs": [
+        [
+          "-m",
+          "2048M"
+        ],
+        [
+          "-boot",
+          "strict=on"
+        ],
+        [
+          "-machine",
+          "virt,gic-version=3,accel=kvm"
+        ],
+        [
+          "-cpu",
+          "host"
+        ],
+        [
+          "-monitor",
+          "none"
+        ]
+      ],
       "shutdown_command": "echo 'debian' | sudo -S /sbin/shutdown -hP now",
       "ssh_password": "debian",
       "ssh_port": 22,
+      "ssh_timeout": "10000s",
       "ssh_username": "debian",
-      "ssh_wait_timeout": "10000s",
-      "qemuargs": [
-        [ "-m", "2048M" ],
-        [ "-boot", "strict=on" ],
-        [ "-machine", "virt,gic-version=3,accel=kvm" ],
-        [ "-cpu", "host" ],
-        [ "-bios", "/usr/share/AAVMF/AAVMF_CODE.fd" ],
-        [ "-monitor", "none" ]
-      ],
-      "qemu_binary": "/usr/libexec/qemu-kvm",
-      "machine_type": "pseries",
       "type": "qemu",
-      "vm_name": "packer-debian-11-aarch64-openstack"
+      "vm_name": "packer-debian-11-aarch64-openstack",
+      "vnc_bind_address": "0.0.0.0"
     }
   ],
   "provisioners": [
@@ -72,8 +87,8 @@
     }
   ],
   "variables": {
-    "mirror": "http://debian.osuosl.org/debian-cdimage",
-    "image_name": "Debian 11.0"
+    "image_name": "Debian 11.0",
+    "mirror": "http://debian.osuosl.org/debian-cdimage"
   }
 }
 
