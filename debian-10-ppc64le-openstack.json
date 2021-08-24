@@ -1,9 +1,10 @@
 {
   "builders": [
     {
+      "accelerator": "kvm",
       "boot_command": [
         "<wait>",
-        "c<enter>",
+        "c<wait>",
         "linux /install/vmlinux",
         " console-setup/ask_detect=false",
         " console-setup/layoutcode=us",
@@ -25,30 +26,32 @@
         "<enter><wait>",
         "boot<enter><wait>"
       ],
-      "accelerator": "kvm",
-      "boot_wait": "10s",
-      "disk_size": "3072",
+      "boot_key_interval": "20ms",
+      "boot_wait": "7s",
       "disk_interface": "virtio-scsi",
+      "disk_size": "3072",
       "headless": true,
-      "vnc_bind_address":"0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "e6228dcff620aface02ebbab43dd95febc8a2cf1f6139db4bac5c29f13a439da",
-      "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}/10.10.0/ppc64el/iso-cd/debian-10.10.0-ppc64el-netinst.iso",
+      "iso_checksum": "file:{{user `mirror`}}/{{user `mirror_folder`}}/SHA256SUMS",
+      "iso_url": "{{user `mirror`}}/{{user `mirror_folder`}}/debian-10.10.0-ppc64el-netinst.iso",
+      "memory": 2048,
+      "machine_type": "pseries",
       "output_directory": "packer-debian-10-ppc64le-openstack",
+      "qemu_binary": "/usr/libexec/qemu-kvm",
+      "qemuargs": [
+        [
+          "-boot",
+          "strict=on"
+        ]
+      ],
       "shutdown_command": "echo 'debian' | sudo -S /sbin/shutdown -hP now",
       "ssh_password": "debian",
       "ssh_port": 22,
+      "ssh_timeout": "10000s",
       "ssh_username": "debian",
-      "ssh_wait_timeout": "10000s",
-      "qemuargs": [
-        [ "-m", "2048M" ],
-        [ "-boot", "strict=on" ]
-      ],
-      "qemu_binary": "/usr/libexec/qemu-kvm",
-      "machine_type": "pseries",
       "type": "qemu",
-      "vm_name": "packer-debian-10-ppc64le-openstack"
+      "vm_name": "packer-debian-10-ppc64le-openstack",
+      "vnc_bind_address": "0.0.0.0"
     }
   ],
   "provisioners": [
@@ -70,8 +73,9 @@
     }
   ],
   "variables": {
-    "mirror": "http://debian.osuosl.org/debian-cdimage",
-    "image_name": "Debian 10.10 LE"
+    "image_name": "Debian 10.10 LE",
+    "mirror": "http://cdimage.debian.org/cdimage/archive",
+    "mirror_folder": "10.10.0/ppc64el/iso-cd"
   }
 }
 

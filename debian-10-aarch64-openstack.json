@@ -1,9 +1,10 @@
 {
   "builders": [
     {
+      "accelerator": "kvm",
       "boot_command": [
-        "c<wait5><wait10>",
-        "linux /linux",
+        "c",
+        "linux /install.a64/vmlinuz",
         " console-setup/ask_detect=false",
         " console-setup/layoutcode=us",
         " console-setup/modelcode=pc105",
@@ -20,38 +21,49 @@
         " url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-10/preseed-aarch64.cfg<wait>",
         " ---",
         "<enter><wait>",
-        "initrd /initrd.gz",
+        "initrd /install.a64/initrd.gz",
         "<enter><wait>",
         "boot<enter><wait>"
       ],
-      "accelerator": "kvm",
-      "boot_wait": "10s",
+      "boot_key_interval": "20ms",
+      "boot_wait": "5s",
+      "cdrom_interface": "virtio-scsi",
+      "disk_interface": "virtio",
       "disk_size": "3072",
-      "disk_interface": "virtio-scsi",
+      "firmware": "/usr/share/AAVMF/AAVMF_CODE.fd",
       "headless": true,
-      "vnc_bind_address":"0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "1a2a6f988a887905cd005335e1f2eb80f38ca0caa036a87d27bcd327436cc459",
-      "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}/buster/main/installer-arm64/20190702+deb10u10/images/netboot/mini.iso",
+      "iso_checksum": "file:{{user `mirror`}}/{{user `mirror_folder`}}/SHA256SUMS",
+      "iso_url": "{{user `mirror`}}/{{user `mirror_folder`}}/debian-10.9.0-arm64-netinst.iso",
+      "memory": 2048,
       "output_directory": "packer-debian-10-aarch64-openstack",
+      "qemu_binary": "/usr/libexec/qemu-kvm",
+      "qemuargs": [
+        [
+          "-boot",
+          "strict=on"
+        ],
+        [
+          "-machine",
+          "virt,gic-version=3,accel=kvm"
+        ],
+        [
+          "-cpu",
+          "host"
+        ],
+        [
+          "-monitor",
+          "none"
+        ]
+      ],
       "shutdown_command": "echo 'debian' | sudo -S /sbin/shutdown -hP now",
       "ssh_password": "debian",
       "ssh_port": 22,
+      "ssh_timeout": "10000s",
       "ssh_username": "debian",
-      "ssh_wait_timeout": "10000s",
-      "qemuargs": [
-        [ "-m", "2048M" ],
-        [ "-boot", "strict=on" ],
-        [ "-machine", "virt,gic-version=3,accel=kvm" ],
-        [ "-cpu", "host" ],
-        [ "-bios", "/usr/share/AAVMF/AAVMF_CODE.fd" ],
-        [ "-monitor", "none" ]
-      ],
-      "qemu_binary": "/usr/libexec/qemu-kvm",
-      "machine_type": "pseries",
       "type": "qemu",
-      "vm_name": "packer-debian-10-aarch64-openstack"
+      "vm_name": "packer-debian-10-aarch64-openstack",
+      "vnc_bind_address": "0.0.0.0"
     }
   ],
   "provisioners": [
@@ -72,8 +84,8 @@
     }
   ],
   "variables": {
-    "mirror": "http://debian.osuosl.org/debian/dists",
-    "image_name": "Debian 10.10"
+    "image_name": "Debian 10.10",
+    "mirror": "http://cdimage.debian.org/cdimage/archive",
+    "mirror_folder": "10.9.0/arm64/iso-cd"
   }
 }
-
