@@ -3,7 +3,7 @@
     {
       "accelerator": "kvm",
       "boot_command": [
-        "c<wait5><wait10>",
+        "c",
         "linux /install.a64/vmlinuz",
         " console-setup/ask_detect=false",
         " console-setup/layoutcode=us",
@@ -25,9 +25,10 @@
         "<enter><wait>",
         "boot<enter><wait>"
       ],
-      "boot_key_interval": "20m",
-      "boot_wait": "10s",
+      "boot_key_interval": "20ms",
+      "boot_wait": "5s",
       "cdrom_interface": "virtio-scsi",
+      "disk_interface": "virtio",
       "disk_size": "3072",
       "firmware": "/usr/share/AAVMF/AAVMF_CODE.fd",
       "headless": true,

@@ -21,20 +21,18 @@
         "grub-installer/bootdev=/dev/sda <wait>",
         "<enter><wait>"
       ],
-      "boot_wait": "10s",
+      "boot_key_interval": "20ms",
+      "boot_wait": "5s",
       "disk_interface": "virtio-scsi",
       "disk_size": "3072",
       "headless": true,
       "http_directory": "http",
-      "iso_checksum": "sha256:c433254a7c5b5b9e6a05f9e1379a0bd6ab3323f89b56537b684b6d1bd1f8b6ad",
-      "iso_url": "{{user `mirror`}}/10.10.0/amd64/iso-cd/debian-10.10.0-amd64-netinst.iso",
+      "iso_checksum": "file:{{user `mirror`}}/{{user `mirror_folder`}}/SHA256SUMS",
+      "iso_url": "{{user `mirror`}}/{{user `mirror_folder`}}/debian-10.10.0-amd64-netinst.iso",
+      "memory": 2048,
       "output_directory": "packer-debian-10-x86_64-openstack",
       "qemu_binary": "/usr/libexec/qemu-kvm",
       "qemuargs": [
-        [
-          "-m",
-          "2048M"
-        ],
         [
           "-boot",
           "strict=on"
@@ -69,7 +67,8 @@
   ],
   "variables": {
     "image_name": "Debian 10.10",
-    "mirror": "http://cdimage.debian.org/cdimage/archive"
+    "mirror": "http://cdimage.debian.org/cdimage/archive",
+    "mirror_folder": "10.10.0/amd64/iso-cd"
   }
 }
 
