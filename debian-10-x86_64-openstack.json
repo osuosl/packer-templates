@@ -1,48 +1,51 @@
 {
   "builders": [
     {
+      "accelerator": "kvm",
       "boot_command": [
         "<esc><wait>",
-        "install <wait>",
-        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `preseed_path`}} <wait>",
-        "debian-installer=en_US.UTF-8 <wait>",
-        "auto <wait>",
-        "locale=en_US.UTF-8 <wait>",
-        "kbd-chooser/method=us <wait>",
-        "keyboard-configuration/xkb-keymap=us <wait>",
+        "install ",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `preseed_path`}} ",
+        "debian-installer=en_US.UTF-8 ",
+        "auto ",
+        "locale=en_US.UTF-8 ",
+        "kbd-chooser/method=us ",
+        "keyboard-configuration/xkb-keymap=us ",
         "netcfg/get_hostname=unassigned-hostname ",
         "netcfg/get_domain=unassigned-domain ",
-        "url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-10/preseed.cfg<wait> ",
-        "fb=false <wait>",
-        "debconf/frontend=noninteractive <wait>",
-        "console-setup/ask_detect=false <wait>",
-        "console-keymaps-at/keymap=us <wait>",
-        "grub-installer/bootdev=/dev/sda <wait>",
-        "<enter><wait>"
+        "url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-10/preseed.cfg ",
+        "fb=false ",
+        "debconf/frontend=noninteractive ",
+        "console-setup/ask_detect=false ",
+        "console-keymaps-at/keymap=us ",
+        "grub-installer/bootdev=/dev/sda ",
+        "<enter>"
       ],
-      "accelerator": "kvm",
-      "boot_wait": "10s",
-      "disk_size": "3072",
+      "boot_key_interval": "20ms",
+      "boot_wait": "5s",
       "disk_interface": "virtio-scsi",
+      "disk_size": "3072",
       "headless": true,
-      "vnc_bind_address":"0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "b317d87b0a3d5b568f48a92dcabfc4bc51fe58d9f67ca13b013f1b8329d1306d",
-      "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}/10.7.0/amd64/iso-cd/debian-10.7.0-amd64-netinst.iso",
+      "iso_checksum": "file:{{user `mirror`}}/{{user `mirror_folder`}}/SHA256SUMS",
+      "iso_url": "{{user `mirror`}}/{{user `mirror_folder`}}/debian-10.10.0-amd64-netinst.iso",
+      "memory": 2048,
       "output_directory": "packer-debian-10-x86_64-openstack",
+      "qemu_binary": "/usr/libexec/qemu-kvm",
+      "qemuargs": [
+        [
+          "-boot",
+          "strict=on"
+        ]
+      ],
       "shutdown_command": "echo 'debian' | sudo -S /sbin/shutdown -hP now",
       "ssh_password": "debian",
       "ssh_port": 22,
+      "ssh_timeout": "10000s",
       "ssh_username": "debian",
-      "ssh_wait_timeout": "10000s",
-      "qemuargs": [
-        [ "-m", "2048M" ],
-        [ "-boot", "strict=on" ]
-      ],
-      "qemu_binary": "/usr/libexec/qemu-kvm",
       "type": "qemu",
-      "vm_name": "packer-debian-10-x86_64-openstack"
+      "vm_name": "packer-debian-10-x86_64-openstack",
+      "vnc_bind_address": "0.0.0.0"
     }
   ],
   "provisioners": [
@@ -63,8 +66,9 @@
     }
   ],
   "variables": {
-    "mirror": "http://debian.osuosl.org/debian-cdimage",
-    "image_name": "Debian 10.7"
+    "image_name": "Debian 10.10",
+    "mirror": "http://cdimage.debian.org/cdimage/archive",
+    "mirror_folder": "10.10.0/amd64/iso-cd"
   }
 }
 
