@@ -1,6 +1,7 @@
 {
   "builders": [
     {
+      "accelerator": "kvm",
       "boot_command": [
         "<esc><wait>",
         "install <wait>",
@@ -20,29 +21,33 @@
         "grub-installer/bootdev=/dev/sda <wait>",
         "<enter><wait>"
       ],
-      "accelerator": "kvm",
       "boot_wait": "10s",
-      "disk_size": "3072",
       "disk_interface": "virtio-scsi",
+      "disk_size": "3072",
       "headless": true,
-      "vnc_bind_address":"0.0.0.0",
       "http_directory": "http",
-      "iso_checksum": "c433254a7c5b5b9e6a05f9e1379a0bd6ab3323f89b56537b684b6d1bd1f8b6ad",
-      "iso_checksum_type": "sha256",
+      "iso_checksum": "sha256:c433254a7c5b5b9e6a05f9e1379a0bd6ab3323f89b56537b684b6d1bd1f8b6ad",
       "iso_url": "{{user `mirror`}}/10.10.0/amd64/iso-cd/debian-10.10.0-amd64-netinst.iso",
       "output_directory": "packer-debian-10-x86_64-openstack",
+      "qemu_binary": "/usr/libexec/qemu-kvm",
+      "qemuargs": [
+        [
+          "-m",
+          "2048M"
+        ],
+        [
+          "-boot",
+          "strict=on"
+        ]
+      ],
       "shutdown_command": "echo 'debian' | sudo -S /sbin/shutdown -hP now",
       "ssh_password": "debian",
       "ssh_port": 22,
+      "ssh_timeout": "10000s",
       "ssh_username": "debian",
-      "ssh_wait_timeout": "10000s",
-      "qemuargs": [
-        [ "-m", "2048M" ],
-        [ "-boot", "strict=on" ]
-      ],
-      "qemu_binary": "/usr/libexec/qemu-kvm",
       "type": "qemu",
-      "vm_name": "packer-debian-10-x86_64-openstack"
+      "vm_name": "packer-debian-10-x86_64-openstack",
+      "vnc_bind_address": "0.0.0.0"
     }
   ],
   "provisioners": [
@@ -63,8 +68,8 @@
     }
   ],
   "variables": {
-    "mirror": "http://cdimage.debian.org/cdimage/archive",
-    "image_name": "Debian 10.10"
+    "image_name": "Debian 10.10",
+    "mirror": "http://cdimage.debian.org/cdimage/archive"
   }
 }
 
