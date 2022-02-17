@@ -1,0 +1,20 @@
+{
+  "audit": {
+    "compliance_phase": true,
+    "profiles": {
+      "packer_templates": {
+        "path": "/tmp/cinc/inspec"
+      }
+    },
+    "reporter": [
+      "json-file",
+      "cli"
+    ],
+    "json_file": {
+      "location": "/tmp/cinc/results.json"
+    }
+  },
+  "run_list": [
+    "recipe[packer_templates::powervs]"
+  ]
+}

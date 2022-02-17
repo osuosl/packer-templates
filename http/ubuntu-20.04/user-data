@@ -2,17 +2,26 @@
 autoinstall:
   version: 1
   identity:
-    hostname: vagrant
-    username: vagrant
-    # Generated via: printf vagrant | mkpasswd -m sha-512 -S vagrant. -s
-    password: "$6$vagrant.$sd6r0/OKL.FIGZbhanVkrLassSxoPRv1h5lkISsmBONqaLUGVXkEcD22Ddak5W8JSxeU0VFkU/We1Y7o4hVO/1"
+    hostname: packer
+    username: osuadmin
+    # Generated via: printf osuadmin | mkpasswd -m sha-512 -S osuadmin. -s
+    password: "$6$osuadmin.$QXNHxHGhDBX1KStyKri0uqdkSObBtjUUzj31IPU1TkMl.uUu0HwB365HSm5za6bVhDoSpTvVLqjKOzKjQMCxL/"
   early-commands:
     # otherwise packer tries to connect and exceed max attempts:
     - systemctl stop ssh
+  late-commands:
+    - echo "PermitRootLogin yes" >> /target/etc/ssh/sshd_config
+    - curtin in-target --target=/target -- passwd -q -u root
+    - curtin in-target --target=/target -- passwd -q -x -1 root
+    - sed -i 's|^root:.:|root:$6$osuadmin.$QXNHxHGhDBX1KStyKri0uqdkSObBtjUUzj31IPU1TkMl.uUu0HwB365HSm5za6bVhDoSpTvVLqjKOzKjQMCxL/:|' /target/etc/shadow
+    - curtin in-target --target=/target -- apt-get -y dist-upgrade
   ssh:
     install-server: true
   refresh-installer:
-    update: true
+    update: yes
+  storage:
+    layout:
+      name: direct
   apt:
     preserve_sources_list: false
     primary:

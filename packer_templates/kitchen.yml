@@ -1,0 +1,94 @@
+---
+driver:
+  name: vagrant
+
+verifier:
+  name: inspec
+  inspec_tests:
+    - path: ../inspec
+
+provisioner:
+  name: chef_infra
+  product_name: cinc
+  enforce_idempotency: true
+  multiple_converge: 2
+  deprecations_as_errors: true
+
+platforms:
+  - name: centos-stream-8
+    driver:
+      box: osuosl/centos-stream-8
+      box_url: https://ftp.osuosl.org/pub/osl/vagrant/centos-stream-8.box
+  - name: ubuntu-20.04
+    driver:
+      box: osuosl/ubuntu-20.04
+      box_url: https://ftp.osuosl.org/pub/osl/vagrant/ubuntu-20.04.box
+
+suites:
+  - name: default
+    run_list:
+      - recipe[packer_templates::default]
+    verifier:
+      controls:
+        - chrony
+        - default
+        - network
+        - osuadmin
+        - repos
+        - ssh
+        - sudo
+  - name: chrony
+    run_list:
+      - recipe[packer_templates::chrony]
+    verifier:
+      controls:
+        - chrony
+  - name: cleanup
+    run_list:
+      - recipe[packer_templates::cleanup]
+    verifier:
+      controls:
+        - cleanup
+  - name: network
+    run_list:
+      - recipe[packer_templates::network]
+    verifier:
+      controls:
+        - network
+  - name: osuadmin
+    run_list:
+      - recipe[packer_templates::osuadmin]
+    verifier:
+      controls:
+        - osuadmin
+  - name: powervs
+    run_list:
+      - recipe[packer_templates::powervs]
+    verifier:
+      controls:
+        - cleanup
+        - default
+        - network
+        - osuadmin
+        - powervs
+        - repos
+        - ssh
+        - sudo
+  - name: ssh
+    run_list:
+      - recipe[packer_templates::ssh]
+    verifier:
+      controls:
+        - ssh
+  - name: sudo
+    run_list:
+      - recipe[packer_templates::sudo]
+    verifier:
+      controls:
+        - sudo
+  - name: repos
+    run_list:
+      - recipe[packer_templates::repos]
+    verifier:
+      controls:
+        - repos

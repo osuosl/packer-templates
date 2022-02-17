@@ -1,0 +1,13 @@
+node_name "localhost"
+checksum_path "/tmp/cinc/checksums"
+file_cache_path "/tmp/cinc/cache"
+file_backup_path "/tmp/cinc/backup"
+cookbook_path ["/tmp/cinc/cookbooks"]
+data_bag_path "/tmp/cinc/data_bags"
+environment_path "/tmp/cinc/environments"
+node_path "/tmp/cinc/nodes"
+role_path "/tmp/cinc/roles"
+client_path "/tmp/cinc/clients"
+user_path "/tmp/cinc/users"
+chef_server_url "http://127.0.0.1:8889"
+named_run_list {}
