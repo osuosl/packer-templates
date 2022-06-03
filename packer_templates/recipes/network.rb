@@ -1,5 +1,6 @@
 case node['platform_family']
 when 'debian'
+  apt_update 'network'
   package %w(network-manager isc-dhcp-client)
 
   filter_lines '/etc/NetworkManager/NetworkManager.conf' do

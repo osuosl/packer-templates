@@ -43,13 +43,8 @@ control 'network' do
     end
 
     describe command 'netplan get' do
-      its('stdout') do
-        should cmp <<~EOF
-          network:
-            renderer: NetworkManager
-            version: 2
-        EOF
-      end
+      its('stdout') { should match /renderer: NetworkManager/ }
+      its('stdout') { should match /version: 2/ }
     end
 
     describe ini '/etc/systemd/resolved.conf' do

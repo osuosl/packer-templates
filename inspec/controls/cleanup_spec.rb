@@ -119,7 +119,7 @@ control 'cleanup' do
     end
 
     describe command 'du -s /var/cache/apt/archives' do
-      its('stdout') { should match /^8/ }
+      its('stdout') { should match /^(8|16)/ }
     end
   end
 end

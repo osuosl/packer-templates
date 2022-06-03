@@ -55,6 +55,19 @@ suites:
     verifier:
       controls:
         - network
+  - name: openstack
+    run_list:
+      - recipe[packer_templates::openstack]
+    verifier:
+      controls:
+        - openstack
+        - network
+        - osuadmin
+        - repos
+        - ssh
+        - sudo
+      inputs:
+        openstack: true
   - name: osuadmin
     run_list:
       - recipe[packer_templates::osuadmin]
@@ -74,6 +87,8 @@ suites:
         - repos
         - ssh
         - sudo
+      inputs:
+        powervs: true
   - name: ssh
     run_list:
       - recipe[packer_templates::ssh]

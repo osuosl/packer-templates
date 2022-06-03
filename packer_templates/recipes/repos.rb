@@ -124,9 +124,9 @@ if platform_family?('rhel')
     filter_lines '/etc/yum.repos.d/epel-next.repo' do
       filters(
         [
-          { comment: [/^metalink.*repo=epel-next-\$releasever.*/, '#', ''] },
+          { comment: [/^metalink.*repo=epel-next-8.*/, '#', ''] },
           { replace: [
-              %r{#baseurl=.*basearch/$},
+              %r{^#baseurl=.*basearch/$},
               'baseurl=https://epel.osuosl.org/next/$releasever/Everything/$basearch/',
             ],
           },

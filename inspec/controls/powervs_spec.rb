@@ -8,8 +8,10 @@ grub_path =
   when 'debian'
     '/boot/grub'
   end
+powervs = input('powervs', value: false)
 
 control 'powervs' do
+  only_if { powervs }
   case os_family
   when 'redhat'
     %w(
