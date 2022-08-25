@@ -1,10 +1,17 @@
 include_recipe 'packer_templates::sudo'
 
+osuadmin_passwd =
+  if ENV['OSUADMIN_PASSWD'].nil?
+    node['package_template']['osuadmin']['password']
+  else
+    ENV['OSUADMIN_PASSWD']
+  end
+
 # OSU Admin user for support
 user 'osuadmin' do
   home '/var/lib/osuadmin'
   shell '/bin/bash'
-  password node['package_template']['osuadmin']['password']
+  password osuadmin_passwd
   manage_home true
   sensitive true
 end

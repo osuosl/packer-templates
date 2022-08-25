@@ -18,6 +18,26 @@ module PackerTemplates
         Dir['/etc/sysconfig/network-scripts/ifcfg-*'].reject { |f| File.basename(f).match('ifcfg-lo') }
       end
 
+      def openstack_pkgs
+        pkgs = []
+        if platform_family?('rhel')
+          pkgs = %w(
+            cloud-init
+            cloud-utils-growpart
+            gdisk
+          )
+          pkgs << 'ppc64-diag' if node['kernel']['machine'] == 'ppc64le'
+        else
+          pkgs = %w(
+            cloud-utils
+            cloud-init
+            cloud-initramfs-growroot
+          )
+          pkgs << 'powerpc-utils' if node['kernel']['machine'] == 'ppc64le'
+        end
+        pkgs.sort
+      end
+
       def powervs_pkgs
         if platform_family?('rhel')
           %w(
@@ -67,6 +87,32 @@ module PackerTemplates
           else
             []
           end
+        end
+      end
+
+      def openstack_grub_cmdline
+        if platform_family?('rhel')
+          case node['kernel']['machine']
+          when 'ppc64le'
+            'GRUB_CMDLINE_LINUX="console=hvc0,115200n8 console=tty0 crashkernel=auto rhgb quiet"'
+          else
+            'GRUB_CMDLINE_LINUX="console=ttyS0,115200n8 console=tty0 crashkernel=auto rhgb quiet"'
+          end
+        else
+          case node['kernel']['machine']
+          when 'ppc64le'
+            'GRUB_CMDLINE_LINUX="console=hvc0,115200n8 console=tty0"'
+          else
+            'GRUB_CMDLINE_LINUX="console=ttyS0,115200n8 console=tty0"'
+          end
+        end
+      end
+
+      def openstack_grub_mkconfig
+        if node['kernel']['machine'] == 'aarch64'
+          'grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg'
+        else
+          'grub2-mkconfig -o /boot/grub2/grub.cfg'
         end
       end
 
