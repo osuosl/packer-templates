@@ -23,6 +23,10 @@ platforms:
     driver:
       box: osuosl/ubuntu-20.04
       box_url: https://ftp.osuosl.org/pub/osl/vagrant/ubuntu-20.04.box
+  - name: ubuntu-22.04
+    driver:
+      box: osuosl/ubuntu-22.04
+      box_url: https://ftp.osuosl.org/pub/osl/vagrant/ubuntu-22.04.box
 
 suites:
   - name: default
