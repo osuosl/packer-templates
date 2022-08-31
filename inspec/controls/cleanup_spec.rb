@@ -65,6 +65,7 @@ control 'cleanup' do
       build-essential
       command-not-found
       dkms
+      fonts-ubuntu-console
       fonts-ubuntu-font-family-console
       friendly-recovery
       gcc

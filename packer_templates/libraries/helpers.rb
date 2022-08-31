@@ -154,30 +154,59 @@ module PackerTemplates
         if platform_family?('rhel')
           %w(gcc cpp kernel-devel kernel-headers)
         elsif platform_family?('debian')
-          %w(
-            build-essential
-            command-not-found
-            dkms
-            fonts-ubuntu-font-family-console
-            friendly-recovery
-            gcc
-            g++
-            installation-report
-            landscape-common
-            laptop-detect
-            libc6-dev
-            libx11-6
-            libx11-data
-            libxcb1
-            libxext6
-            libxmuu1
-            make
-            popularity-contest
-            ppp
-            pppconfig
-            pppoeconf
-            xauth
-          )
+          if platform?('ubuntu')
+            case node['platform_version']
+            when '20.04'
+              %w(
+                build-essential
+                command-not-found
+                dkms
+                fonts-ubuntu-font-family-console
+                friendly-recovery
+                gcc
+                g++
+                installation-report
+                landscape-common
+                laptop-detect
+                libc6-dev
+                libx11-6
+                libx11-data
+                libxcb1
+                libxext6
+                libxmuu1
+                make
+                popularity-contest
+                ppp
+                pppconfig
+                pppoeconf
+                xauth
+              )
+            when '22.04'
+              %w(
+                build-essential
+                command-not-found
+                dkms
+                fonts-ubuntu-console
+                friendly-recovery
+                gcc
+                g++
+                landscape-common
+                laptop-detect
+                libc6-dev
+                libx11-6
+                libx11-data
+                libxcb1
+                libxext6
+                libxmuu1
+                make
+                popularity-contest
+                ppp
+                pppconfig
+                pppoeconf
+                xauth
+              )
+            end
+          end
         end
       end
 

@@ -13,7 +13,10 @@ autoinstall:
   ssh:
     install-server: true
   refresh-installer:
-    update: true
+    update: yes
+  storage:
+    layout:
+      name: direct
   apt:
     preserve_sources_list: false
     primary:
