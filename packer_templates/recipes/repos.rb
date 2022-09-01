@@ -82,7 +82,7 @@ if platform_family?('rhel')
       action :nothing
     end
 
-    package 'epel-release' do
+    package %w(epel-release epel-next-release) do
       notifies :run, 'execute[import epel key]', :immediately
     end
 

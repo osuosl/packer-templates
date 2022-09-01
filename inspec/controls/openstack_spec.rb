@@ -1,10 +1,15 @@
 ppc64le = os.arch == 'ppc64le'
+aarch64 = os.arch == 'aarch64'
 os_family = os.family
 os_name = os.name
 grub_path =
   case os_family
   when 'redhat'
-    '/boot/grub2'
+    if aarch64
+      '/boot/efi/EFI/centos'
+    else
+      '/boot/grub2'
+    end
   when 'debian'
     '/boot/grub'
   end
@@ -29,7 +34,11 @@ control 'openstack' do
     end if ppc64le
 
     describe file '/boot/grub2/grubenv' do
-      its('content') { should match /^kernelopts=.* console=ttyS0,115200n8 console=tty0 crashkernel=auto rhgb quiet $/ }
+      if ppc64le
+        its('content') { should match /^kernelopts=.* console=hvc0,115200n8 console=tty0 crashkernel=auto rhgb quiet $/ }
+      else
+        its('content') { should match /^kernelopts=.* console=ttyS0,115200n8 console=tty0 crashkernel=auto rhgb quiet $/ }
+      end
     end
 
   when 'debian'
@@ -53,7 +62,7 @@ control 'openstack' do
     case os_family
     when 'redhat'
       if ppc64le
-        its('content') { should match /^GRUB_CMDLINE_LINUX="console=tty0 console=hvc0,115200n8 crashkernel=auto rd.shell rd.driver.pre=dm_multipath log_buf_len=1M"$/ }
+        its('content') { should match /^GRUB_CMDLINE_LINUX="console=hvc0,115200n8 console=tty0 crashkernel=auto rhgb quiet"$/ }
       else
         its('content') { should match /GRUB_CMDLINE_LINUX="console=ttyS0,115200n8 console=tty0 crashkernel=auto rhgb quiet"$/ }
       end
