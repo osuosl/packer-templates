@@ -6,7 +6,7 @@ when 'debian'
   filter_lines '/etc/NetworkManager/NetworkManager.conf' do
     filters(
       [
-        { after: [/\[main\]$/, 'dhcp=dhclient'] },
+        { after: [/\[main\]$/, 'dhcp=internal'] },
         { after: [/\[main\]$/, 'dns=default'] },
         { after: [/\[main\]$/, 'rc-manager=netconfig'] },
         { after: [/\[main\]$/, 'systemd-resolved=false'] },
@@ -106,6 +106,6 @@ when 'rhel'
   package 'dhcp-client'
 
   file '/etc/NetworkManager/conf.d/dhcp.conf' do
-    content "[main]\ndhcp=dhclient\n"
+    content "[main]\ndhcp=internal\n"
   end
 end

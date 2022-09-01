@@ -11,7 +11,7 @@ control 'network' do
 
     describe ini '/etc/NetworkManager/NetworkManager.conf' do
       its('main.dns') { should cmp 'default' }
-      its('main.dhcp') { should cmp 'dhclient' }
+      its('main.dhcp') { should cmp 'internal' }
       its('main.systemd-resolved') { should cmp 'false' }
       its('main.rc-manager') { should cmp 'netconfig' }
       its('keyfile.unmanaged-devices') { should cmp 'interface-name:ibmveth3' }
@@ -89,7 +89,7 @@ control 'network' do
     end
 
     describe file '/etc/NetworkManager/conf.d/dhcp.conf' do
-      its('content') { should cmp "[main]\ndhcp=dhclient\n" }
+      its('content') { should cmp "[main]\ndhcp=internal\n" }
     end
   end
 end
