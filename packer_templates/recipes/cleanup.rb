@@ -84,3 +84,7 @@ end
 service 'rpcbind.socket' do
   action [:stop, :disable]
 end
+
+file '/etc/resolv.conf' do
+  content ''
+end

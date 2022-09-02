@@ -21,6 +21,10 @@ control 'cleanup' do
     it { should_not match /packer/ }
   end
 
+  describe file '/etc/resolv.conf' do
+    its('content') { should cmp '' }
+  end
+
   case platform
   when 'centos'
     %w(gcc cpp kernel-devel kernel-headers).each do |pkg|
@@ -64,7 +68,6 @@ control 'cleanup' do
     %w(
       build-essential
       command-not-found
-      dkms
       fonts-ubuntu-console
       fonts-ubuntu-font-family-console
       friendly-recovery
