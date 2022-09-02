@@ -1,7 +1,10 @@
 include_recipe 'packer_templates::chrony'
 
+clean_packages = node['package_template']['clean']['packages']
+
 package cleanup_pkgs do
   action :remove
+  only_if { clean_packages }
 end
 
 if platform_family?('rhel')
@@ -9,6 +12,7 @@ if platform_family?('rhel')
 
   package iwl_firmware_pkgs do
     action :remove
+    only_if { clean_packages }
   end
 
   directory '/etc/udev/rules.d/70-persistent-net.rules' do
@@ -48,14 +52,17 @@ elsif platform_family?('debian')
       path-exclude=/usr/share/doc/linux-firmware/*
     EOF
     notifies :run, 'execute[apt-get reinstall]', :immediately
+    only_if { clean_packages }
   end
 
   package "linux-headers-#{node['kernel']['release']}" do
     action :purge
+    only_if { clean_packages }
   end
 
   package "linux-headers-#{node['kernel']['release'].gsub('-generic', '')}" do
     action :purge
+    only_if { clean_packages }
   end
 
   service 'ufw.service' do

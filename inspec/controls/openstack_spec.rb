@@ -35,9 +35,9 @@ control 'openstack' do
 
     describe file '/boot/grub2/grubenv' do
       if ppc64le
-        its('content') { should match /^kernelopts=.* console=hvc0,115200n8 console=tty0 crashkernel=auto rhgb quiet $/ }
+        its('content') { should match /^kernelopts=.* console=hvc0,115200n8 console=tty0 crashkernel=auto/ }
       else
-        its('content') { should match /^kernelopts=.* console=ttyS0,115200n8 console=tty0 crashkernel=auto rhgb quiet $/ }
+        its('content') { should match /^kernelopts=.* console=ttyS0,115200n8 console=tty0 crashkernel=auto/ }
       end
     end
 
@@ -62,9 +62,9 @@ control 'openstack' do
     case os_family
     when 'redhat'
       if ppc64le
-        its('content') { should match /^GRUB_CMDLINE_LINUX="console=hvc0,115200n8 console=tty0 crashkernel=auto rhgb quiet"$/ }
+        its('content') { should match /^GRUB_CMDLINE_LINUX="console=hvc0,115200n8 console=tty0 crashkernel=auto/ }
       else
-        its('content') { should match /GRUB_CMDLINE_LINUX="console=ttyS0,115200n8 console=tty0 crashkernel=auto rhgb quiet"$/ }
+        its('content') { should match /GRUB_CMDLINE_LINUX="console=ttyS0,115200n8 console=tty0 crashkernel=auto/ }
       end
     when 'debian'
       if ppc64le

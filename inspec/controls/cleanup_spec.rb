@@ -1,5 +1,6 @@
 platform = os.name
 kernel_rel = inspec.command('uname -r').stdout
+clean_packages = input('clean_packages')
 
 control 'cleanup' do
   # ssh should be the only thing listening
@@ -31,10 +32,14 @@ control 'cleanup' do
       describe package pkg do
         it { should_not be_installed }
       end
-    end
+    end if clean_packages
 
     describe command 'rpm -qa' do
-      its('stdout') { should_not match /iwl.*firmware/ }
+      if clean_packages
+        its('stdout') { should_not match /iwl.*firmware/ }
+      else
+        its('stdout') { should match /iwl.*firmware/ }
+      end
     end
 
     describe directory '/etc/udev/rules.d/70-persistent-net.rules' do
@@ -92,7 +97,7 @@ control 'cleanup' do
       describe package pkg do
         it { should_not be_installed }
       end
-    end
+    end if clean_packages
 
     [
       "linux-headers-#{kernel_rel.gsub('-generic', '')}",
@@ -101,7 +106,7 @@ control 'cleanup' do
       describe package pkg do
         it { should_not be_installed }
       end
-    end
+    end if clean_packages
 
     describe service 'ufw.service' do
       it { should_not be_running }
@@ -120,7 +125,7 @@ control 'cleanup' do
         its('exit_status') { should eq 0 }
         its('stdout') { should eq '' }
       end
-    end
+    end if clean_packages
 
     describe command 'du -s /var/cache/apt/archives' do
       its('stdout') { should match /^(8|16)/ }

@@ -6,7 +6,7 @@ run_help() {
   echo "    $0 - Upload target image to OpenStack"
   echo
   echo " USAGE:"
-  echo "    $0 [-v | -f [FILE] -n [IMG_NAME]"
+  echo "    $0 [-v | -f [FILE] -n [IMG_NAME] -o [OPTIONS] -t [TYPE]"
   echo
   echo " OPTIONS:"
   echo "    -v          - Show verbose output."
@@ -19,10 +19,12 @@ run_help() {
   echo "                  [-p] is specified."
 	echo
   echo "    OPTIONS     - Raw options for the image. i.e. '--property <key1=value> --property <key2=value>'"
+  echo
+  echo "    TYPE        - Disk format type (defaults to raw)"
   exit 0
 }
 
-while getopts "hpvf:c:n:r:d:o:" opt ; do
+while getopts "hvf:n:o:t:" opt ; do
   case ${opt} in
     h)
       run_help
@@ -39,15 +41,22 @@ while getopts "hpvf:c:n:r:d:o:" opt ; do
     o)
       OPTIONS="$OPTARG"
       ;;
+    t)
+      TYPE="$OPTARG"
+      ;;
+    *)
+      ;;
   esac
 done
 
 [ -z "$1" ] && run_help
 [ -z "$IMG_NAME" ] && echo "Error: IMG_NAME not set. Try '$0 -h'" && exit 1
+[ -z "$TYPE" ] && TYPE="raw"
+
 
 openstack image create \
   --file "$FILE" \
-  --disk-format raw \
+  --disk-format "$TYPE" \
   --property hw_scsi_model=virtio-scsi \
   --property hw_disk_bus=scsi \
   --property hw_qemu_guest_agent=yes \
