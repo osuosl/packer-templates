@@ -8,7 +8,7 @@ if platform_family?('rhel')
         ]
       )
       sensitive false
-      notifies :run, 'execute[dnf makecache]'
+      notifies :run, 'execute[dnf makecache]', :immediately
     end
 
     filter_lines '/etc/yum.repos.d/CentOS-Stream-BaseOS.repo' do
@@ -19,7 +19,7 @@ if platform_family?('rhel')
         ]
       )
       sensitive false
-      notifies :run, 'execute[dnf makecache]'
+      notifies :run, 'execute[dnf makecache]', :immediately
     end
 
     filter_lines '/etc/yum.repos.d/CentOS-Stream-Extras.repo' do
@@ -30,7 +30,7 @@ if platform_family?('rhel')
         ]
       )
       sensitive false
-      notifies :run, 'execute[dnf makecache]'
+      notifies :run, 'execute[dnf makecache]', :immediately
     end
 
     filter_lines '/etc/yum.repos.d/CentOS-Stream-HighAvailability.repo' do
@@ -40,8 +40,7 @@ if platform_family?('rhel')
           { replace: [/^#baseurl.*/, 'baseurl=https://centos.osuosl.org/$stream/HighAvailability/$basearch/os/'] },
         ]
       )
-      sensitive false
-      notifies :run, 'execute[dnf makecache]'
+      notifies :run, 'execute[dnf makecache]', :immediately
     end
 
     filter_lines '/etc/yum.repos.d/CentOS-Stream-PowerTools.repo' do
@@ -53,7 +52,7 @@ if platform_family?('rhel')
         ]
       )
       sensitive false
-      notifies :run, 'execute[dnf makecache]'
+      notifies :run, 'execute[dnf makecache]', :immediately
     end
 
     filter_lines '/etc/yum.repos.d/CentOS-Stream-RealTime.repo' do
@@ -64,7 +63,7 @@ if platform_family?('rhel')
         ]
       )
       sensitive false
-      notifies :run, 'execute[dnf makecache]'
+      notifies :run, 'execute[dnf makecache]', :immediately
     end
 
     filter_lines '/etc/yum.repos.d/CentOS-Stream-ResilientStorage.repo' do
