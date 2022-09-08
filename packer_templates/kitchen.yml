@@ -5,7 +5,7 @@ driver:
 verifier:
   name: inspec
   inspec_tests:
-    - path: ../inspec
+    - path: inspec
 
 provisioner:
   name: chef_infra

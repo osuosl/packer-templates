@@ -160,7 +160,7 @@ module PackerTemplates
               %w(
                 build-essential
                 command-not-found
-                dkms
+                fonts-ubuntu-console
                 fonts-ubuntu-font-family-console
                 friendly-recovery
                 gcc
@@ -185,7 +185,6 @@ module PackerTemplates
               %w(
                 build-essential
                 command-not-found
-                dkms
                 fonts-ubuntu-console
                 friendly-recovery
                 gcc

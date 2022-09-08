@@ -11,3 +11,4 @@ chef/berkshelf
 chef/*/Berksfile.lock
 chef/*/cookbooks
 packer-*-openstack/
+cookbooks/*
