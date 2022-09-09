@@ -26,7 +26,7 @@ source "qemu" "ubuntu-2204" {
     ]
   boot_wait        = "8s"
   disk_interface   = "virtio-scsi"
-  disk_size        = 4096
+  disk_size        = 5120
   format           = "raw"
   headless         = true
   http_directory   = "http"
