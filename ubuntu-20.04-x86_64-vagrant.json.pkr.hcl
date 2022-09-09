@@ -26,7 +26,7 @@ source "virtualbox-iso" "ubuntu-2004" {
   virtualbox_version_file = ".vbox_version"
   http_directory        = "http"
   iso_checksum          = "file:https://ubuntu.osuosl.org/releases/20.04/SHA256SUMS"
-  iso_url               = "${var.mirror}/20.04/ubuntu-20.04.4-live-server-amd64.iso"
+  iso_url               = "${var.mirror}/20.04/ubuntu-20.04.5-live-server-amd64.iso"
   output_directory      = "packer-ubuntu-20.04-x86_64-vagrant"
   shutdown_command      = "echo 'vagrant'|sudo -S /sbin/halt -h -p"
   ssh_password          = "vagrant"

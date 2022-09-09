@@ -29,7 +29,7 @@ source "qemu" "ubuntu-2004" {
   headless         = true
   http_directory   = "http"
   iso_checksum     = "file:https://ubuntu.osuosl.org/releases/20.04/SHA256SUMS"
-  iso_url          = "${var.mirror}/ubuntu-20.04.4-live-server-amd64.iso"
+  iso_url          = "${var.mirror}/ubuntu-20.04.5-live-server-amd64.iso"
   qemu_binary      = "qemu-kvm"
   qemuargs         = [
     [
