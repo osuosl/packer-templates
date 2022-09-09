@@ -41,6 +41,22 @@ suites:
         - repos
         - ssh
         - sudo
+  - name: default-cleanup
+    run_list:
+      - recipe[packer_templates::default]
+      - recipe[packer_templates::cleanup]
+    verifier:
+      controls:
+        - chrony
+        - default
+        - network
+        - osuadmin
+        - repos
+        - ssh
+        - sudo
+        - cleanup
+      inputs:
+        cleanup: true
   - name: chrony
     run_list:
       - recipe[packer_templates::chrony]

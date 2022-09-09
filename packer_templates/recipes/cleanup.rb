@@ -86,5 +86,11 @@ service 'rpcbind.socket' do
 end
 
 file '/etc/resolv.conf' do
-  content ''
+  content "\n"
+  notifies :run, 'execute[truncate /etc/resolv.conf]', :delayed
+end
+
+execute 'truncate /etc/resolv.conf' do
+  command 'echo > /etc/resolv.conf'
+  action :nothing
 end

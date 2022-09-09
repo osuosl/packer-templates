@@ -1,7 +1,8 @@
 {
   "audit": {
     "attributes": {
-      "openstack": true
+      "openstack": true,
+      "cleanup": true
     },
     "compliance_phase": true,
     "profiles": {

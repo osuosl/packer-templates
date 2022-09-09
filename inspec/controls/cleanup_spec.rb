@@ -22,7 +22,7 @@ control 'cleanup' do
   end
 
   describe file '/etc/resolv.conf' do
-    its('content') { should cmp '' }
+    its('content') { should cmp "\n" }
   end
 
   case platform
