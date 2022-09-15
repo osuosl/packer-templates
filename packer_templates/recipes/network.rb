@@ -1,7 +1,7 @@
 case node['platform_family']
 when 'debian'
   apt_update 'network'
-  package %w(network-manager isc-dhcp-client)
+  package ['network-manager', network_dhcp_pkg]
 
   filter_lines '/etc/NetworkManager/NetworkManager.conf' do
     filters(
@@ -103,7 +103,7 @@ when 'debian'
     action :nothing
   end
 when 'rhel'
-  package 'dhcp-client'
+  package network_dhcp_pkg
 
   file '/etc/NetworkManager/conf.d/dhcp.conf' do
     content "[main]\ndhcp=internal\n"

@@ -18,6 +18,18 @@ module PackerTemplates
         Dir['/etc/sysconfig/network-scripts/ifcfg-*'].reject { |f| File.basename(f).match('ifcfg-lo') }
       end
 
+      def network_dhcp_pkg
+        if platform_family?('rhel')
+          if node['platform_version'].to_i >= 8
+            'dhcp-client'
+          else
+            'dhclient'
+          end
+        else
+          'isc-dhcp-client'
+        end
+      end
+
       def openstack_pkgs
         pkgs = []
         if platform_family?('rhel')

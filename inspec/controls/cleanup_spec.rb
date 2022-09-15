@@ -1,4 +1,6 @@
 platform = os.name
+release = os.release
+arch = os.arch
 kernel_rel = inspec.command('uname -r').stdout
 
 control 'cleanup' do
@@ -62,6 +64,10 @@ control 'cleanup' do
     end
 
     describe file '/var/cache/dnf/base.solv' do
+      it { should_not exist }
+    end
+
+    describe file "/var/cache/yum/#{arch}/#{release.to_i}/timedhosts.txt" do
       it { should_not exist }
     end
   when 'ubuntu'

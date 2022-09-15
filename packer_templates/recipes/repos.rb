@@ -1,4 +1,17 @@
 if platform_family?('rhel')
+  execute 'dnf makecache' do
+    action :nothing
+  end
+
+  execute 'yum makecache' do
+    action :nothing
+  end
+
+  execute 'import epel key' do
+    command "rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-#{node['platform_version'].to_i}"
+    action :nothing
+  end
+
   if centos_stream_platform?
     filter_lines '/etc/yum.repos.d/CentOS-Stream-AppStream.repo' do
       filters(
@@ -77,17 +90,8 @@ if platform_family?('rhel')
       notifies :run, 'execute[dnf makecache]', :immediately
     end
 
-    execute 'dnf makecache' do
-      action :nothing
-    end
-
     package %w(epel-release epel-next-release) do
       notifies :run, 'execute[import epel key]', :immediately
-    end
-
-    execute 'import epel key' do
-      command 'rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-8'
-      action :nothing
     end
 
     filter_lines '/etc/yum.repos.d/epel.repo' do
@@ -133,6 +137,40 @@ if platform_family?('rhel')
       )
       sensitive false
       notifies :run, 'execute[dnf makecache]', :immediately
+    end
+  else
+    filter_lines '/etc/yum.repos.d/CentOS-Base.repo' do
+      filters(
+        [
+          { comment: [/^mirrorlist.*repo=os.*/, '#', ''] },
+          { replace: [%r{^#baseurl=http://mirror.centos.org/centos/\$releasever/os/\$basearch/}, 'baseurl=https://centos.osuosl.org/$releasever/os/$basearch/'] },
+          { comment: [/^mirrorlist.*repo=updates.*/, '#', ''] },
+          { replace: [%r{#baseurl=http://mirror.centos.org/centos/\$releasever/updates/\$basearch/}, 'baseurl=https://centos.osuosl.org/$releasever/updates/$basearch/'] },
+          { comment: [/^mirrorlist.*repo=extras.*/, '#', ''] },
+          { replace: [%r{#baseurl=http://mirror.centos.org/centos/\$releasever/extras/\$basearch/}, 'baseurl=https://centos.osuosl.org/$releasever/extras/$basearch/'] },
+        ]
+      )
+      sensitive false
+      notifies :run, 'execute[yum makecache]', :immediately
+    end
+
+    package 'epel-release' do
+      notifies :run, 'execute[import epel key]', :immediately
+    end
+
+    filter_lines '/etc/yum.repos.d/epel.repo' do
+      filters(
+        [
+          { comment: [/^metalink.*repo=epel-7.*/, '#', ''] },
+          { replace: [
+              /^#baseurl=.*basearch$/,
+              'baseurl=https://epel.osuosl.org/$releasever/$basearch/',
+            ],
+          },
+        ]
+      )
+      sensitive false
+      notifies :run, 'execute[yum makecache]', :immediately
     end
   end
 elsif platform?('ubuntu')

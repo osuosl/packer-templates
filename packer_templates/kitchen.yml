@@ -15,6 +15,10 @@ provisioner:
   deprecations_as_errors: true
 
 platforms:
+  - name: centos-7
+    driver:
+      box: osuosl/centos-7
+      box_url: https://ftp.osuosl.org/pub/osl/vagrant/centos-7.box
   - name: centos-stream-8
     driver:
       box: osuosl/centos-stream-8

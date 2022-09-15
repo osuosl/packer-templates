@@ -1,4 +1,5 @@
 platform = os.name
+release = os.release
 cleanup = input('cleanup')
 
 control 'network' do
@@ -89,7 +90,9 @@ control 'network' do
       it { should_not be_listening }
     end
   when 'centos'
-    describe package 'dhcp-client' do
+    dhcp_pkg = release.to_i >= 8 ? 'dhcp-client' : 'dhclient'
+
+    describe package dhcp_pkg do
       it { should be_installed }
     end
 

@@ -10,3 +10,4 @@ version           '1.0.0'
 
 depends 'dnf-automatic'
 depends 'line'
+depends 'yum-cron'

@@ -41,6 +41,10 @@ if platform_family?('rhel')
     only_if { ::File.exist?('/var/cache/dnf/base.solv') }
   end
 
+  execute 'yum clean all' do
+    only_if { ::File.exist?("/var/cache/yum/#{node['kernel']['machine']}/#{node['platform_version'].to_i}/timedhosts.txt") }
+  end
+
 elsif platform_family?('debian')
   file '/etc/dpkg/dpkg.cfg.d/excludes' do
     content <<~EOF

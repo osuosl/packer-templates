@@ -57,7 +57,11 @@ end
 if platform_family?('rhel')
   node.default['dnf-automatic']['conf']['emitters']['emit_via'] = 'motd'
 
-  include_recipe 'dnf-automatic'
+  if node['platform_version'].to_i >= 8
+    include_recipe 'dnf-automatic'
+  else
+    include_recipe 'yum-cron'
+  end
 elsif platform_family?('debian')
   filter_lines '/etc/apt/apt.conf.d/50unattended-upgrades' do
     filters(

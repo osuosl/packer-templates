@@ -1,4 +1,5 @@
 platform = os.name
+release = os.release
 
 control 'default' do
   describe service 'postfix' do
@@ -21,13 +22,21 @@ control 'default' do
 
   case platform
   when 'centos'
-    describe service 'dnf-automatic.timer' do
-      it { should be_enabled }
-      it { should be_running }
-    end
+    case release.to_i
+    when 8
+      describe service 'dnf-automatic.timer' do
+        it { should be_enabled }
+        it { should be_running }
+      end
 
-    describe ini '/etc/dnf/automatic.conf' do
-      its('emitters.emit_via') { should cmp 'motd' }
+      describe ini '/etc/dnf/automatic.conf' do
+        its('emitters.emit_via') { should cmp 'motd' }
+      end
+    when 7
+      describe service 'yum-cron' do
+        it { should be_enabled }
+        it { should be_running }
+      end
     end
   end
 end
