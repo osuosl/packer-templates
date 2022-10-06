@@ -56,6 +56,11 @@ end
 
 if platform_family?('rhel')
   node.default['dnf-automatic']['conf']['emitters']['emit_via'] = 'motd'
+  # Wait for 15 minutes after node is online to perform upgrade. This is to work around any issues with running dnf
+  # commands directly after boot (i.e. test-kitchen)
+  node.default['dnf-automatic']['conf']['commands']['network_online_timeout'] = '900'
+  # Let's remove the Chef header to not confuse users
+  node.default['dnf-automatic']['header'] = false
 
   include_recipe 'dnf-automatic'
 elsif platform_family?('debian')
