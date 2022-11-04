@@ -1,3 +1,6 @@
 source 'https://supermarket.chef.io'
 
+cookbook 'osl-gpu', github: 'osuosl-cookbooks/osl-gpu', branch: 'main'
+cookbook 'osl-repos', github: 'osuosl-cookbooks/osl-repos'
+
 metadata

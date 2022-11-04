@@ -3,3 +3,9 @@ name: packer_templates
 inputs:
   - name: cleanup
     value: false
+  - name: driver_version
+    value: 515
+  - name: cuda_version
+    value: 11.7
+  - name: clean_packages
+    value: true

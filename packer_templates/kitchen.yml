@@ -69,6 +69,30 @@ suites:
     verifier:
       controls:
         - cleanup
+  - name: cleanup-packages
+    run_list:
+      - recipe[packer_templates::cleanup]
+    attributes:
+      package_template:
+        clean:
+          packages: false
+    verifier:
+      controls:
+        - cleanup
+      inputs:
+        clean_packages: false
+  - name: gpu
+    run_list:
+      - recipe[packer_templates::gpu]
+    attributes:
+      package_template:
+        clean:
+          packages: false
+    verifier:
+      controls:
+        - gpu
+      inputs:
+        clean_packages: false
   - name: network
     run_list:
       - recipe[packer_templates::network]

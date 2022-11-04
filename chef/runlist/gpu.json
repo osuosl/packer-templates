@@ -1,0 +1,34 @@
+{
+  "audit": {
+    "attributes": {
+      "clean_packages": false,
+      "cleanup": true,
+      "gpu": true,
+      "openstack": true
+    },
+    "compliance_phase": true,
+    "profiles": {
+      "packer_templates": {
+        "path": "/tmp/cinc/inspec"
+      }
+    },
+    "reporter": [
+      "json-file",
+      "cli"
+    ],
+    "json_file": {
+      "location": "/tmp/cinc/results.json"
+    }
+  },
+  "package_template": {
+    "clean": {
+      "packages": false
+    }
+  },
+  "run_list": [
+    "recipe[packer_templates::default]",
+    "recipe[packer_templates::openstack]",
+    "recipe[packer_templates::gpu]",
+    "recipe[packer_templates::cleanup]"
+  ]
+}
