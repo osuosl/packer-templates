@@ -94,7 +94,7 @@ build {
   }
 
   provisioner "file" {
-    source = "inspec"
+    source = "cookbooks/osl-unmanaged/test/integration/inspec"
     destination = "/tmp/cinc/"
   }
 

@@ -10,5 +10,6 @@ iso
 chef/berkshelf
 chef/*/Berksfile.lock
 chef/*/cookbooks
-packer-*-openstack/
+packer-*-*/
 cookbooks/*
+Berksfile.lock

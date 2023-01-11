@@ -1,5 +1,0 @@
----
-name: packer_templates
-inputs:
-  - name: cleanup
-    value: false
