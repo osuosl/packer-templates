@@ -1,8 +1,9 @@
 {
   "audit": {
     "attributes": {
+      "cleanup": true,
       "openstack": true,
-      "cleanup": true
+      "packer": true
     },
     "compliance_phase": true,
     "profiles": {
@@ -17,6 +18,9 @@
     "json_file": {
       "location": "/tmp/cinc/results.json"
     }
+  },
+  "osl-unmanaged": {
+    "packer": true
   },
   "run_list": [
     "recipe[osl-unmanaged::default]",
