@@ -6,8 +6,8 @@
     },
     "compliance_phase": true,
     "profiles": {
-      "packer_templates": {
-        "path": "/tmp/cinc/inspec"
+      "osl-unmanaged": {
+        "path": "/tmp/cinc/cookbooks/osl-unmanaged/test/integration/inspec"
       }
     },
     "reporter": [
@@ -19,8 +19,8 @@
     }
   },
   "run_list": [
-    "recipe[packer_templates::default]",
-    "recipe[packer_templates::openstack]",
-    "recipe[packer_templates::cleanup]"
+    "recipe[osl-unmanaged::default]",
+    "recipe[osl-unmanaged::openstack]",
+    "recipe[osl-unmanaged::cleanup]"
   ]
 }
