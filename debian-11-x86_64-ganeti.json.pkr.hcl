@@ -37,9 +37,10 @@ source "qemu" "debian-11-ganeti" {
     ]
   boot_key_interval = "10ms"
   boot_wait        = "5s"
+  disk_compression = true
   disk_interface   = "virtio-scsi"
   disk_size        = 4096
-  format           = "raw"
+  format           = "qcow2"
   headless         = true
   http_directory   = "http"
   iso_checksum     = "file:${var.mirror}/${var.release}/amd64/iso-cd/SHA256SUMS"
