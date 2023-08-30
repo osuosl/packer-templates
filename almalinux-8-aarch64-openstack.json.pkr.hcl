@@ -14,7 +14,7 @@ source "qemu" "almalinux-8" {
   boot_command     = [
     "c<wait>",
     "linux /images/pxeboot/vmlinuz text ",
-    "inst.stage2=hd:LABEL=AlmaLinux-8-7-aarch64-dvd ",
+    "inst.stage2=hd:LABEL=AlmaLinux-8-8-aarch64-dvd ",
     "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/almalinux-8/ks-aarch64.cfg<enter>",
     "initrd /images/pxeboot/initrd.img<enter>",
     "boot<enter><wait>"]

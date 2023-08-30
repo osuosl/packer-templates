@@ -14,7 +14,7 @@ source "qemu" "almalinux-8" {
   boot_command     = [
     "c<wait5><wait10>",
     "linux /ppc/ppc64/vmlinuz ro ",
-    "inst.stage2=hd:LABEL=AlmaLinux-8-7-ppc64le-dvd ",
+    "inst.stage2=hd:LABEL=AlmaLinux-8-8-ppc64le-dvd ",
     "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/almalinux-8/ks-ppc64le.cfg<enter>",
     "initrd /ppc/ppc64/initrd.img<enter>",
     "boot<enter><wait>"
