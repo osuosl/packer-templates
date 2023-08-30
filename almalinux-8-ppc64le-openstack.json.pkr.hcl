@@ -26,7 +26,7 @@ source "qemu" "almalinux-8" {
   headless         = true
   http_directory   = "http"
   iso_checksum     = "file:https://almalinux.osuosl.org/8/isos/ppc64le/CHECKSUM"
-  iso_url          = "${var.mirror}/8/isos/ppc64le/AlmaLinux-8.7-ppc64le-minimal.iso"
+  iso_url          = "${var.mirror}/8/isos/ppc64le/AlmaLinux-8.8-ppc64le-minimal.iso"
   machine_type     = "pseries"
   qemu_binary      = "qemu-kvm"
   qemuargs         = [
