@@ -31,7 +31,7 @@ source "qemu" "almalinux-8-ganeti" {
   headless         = true
   http_directory   = "http"
   iso_checksum     = "file:https://almalinux.osuosl.org/8/isos/x86_64/CHECKSUM"
-  iso_url          = "${var.mirror}/8/isos/x86_64/AlmaLinux-8.8-x86_64-minimal.iso"
+  iso_url          = "${var.mirror}/8/isos/x86_64/AlmaLinux-8-latest-x86_64-minimal.iso"
   qemu_binary      = "qemu-kvm"
   qemuargs         = [
     [
