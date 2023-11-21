@@ -23,7 +23,7 @@ source "qemu" "almalinux-9" {
   boot_command     = [
     "c<wait5><wait10>",
     "linux /ppc/ppc64/vmlinuz ro ",
-    "inst.stage2=hd:LABEL=AlmaLinux-9-2-ppc64le-dvd ",
+    "inst.stage2=hd:LABEL=AlmaLinux-9-3-ppc64le-dvd ",
     "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/almalinux-9/ks-ppc64le.cfg<enter>",
     "initrd /ppc/ppc64/initrd.img<enter>",
     "boot<enter><wait>"
@@ -36,7 +36,7 @@ source "qemu" "almalinux-9" {
   headless         = true
   http_directory   = "http"
   iso_checksum     = "file:https://almalinux.osuosl.org/9/isos/ppc64le/CHECKSUM"
-  iso_url          = "${var.mirror}/9/isos/ppc64le/AlmaLinux-9.2-ppc64le-minimal.iso"
+  iso_url          = "${var.mirror}/9/isos/ppc64le/AlmaLinux-9.3-ppc64le-minimal.iso"
   machine_type     = "pseries"
   qemu_binary      = "qemu-kvm"
   qemuargs         = [
