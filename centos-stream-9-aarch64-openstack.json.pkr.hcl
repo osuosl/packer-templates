@@ -23,7 +23,7 @@ source "qemu" "centos-stream-9" {
   boot_command     = [
     "c<wait>",
     "linux /images/pxeboot/vmlinuz text ",
-    "inst.stage2=hd:LABEL=CentOS-Stream-9-aarch64-dvd ",
+    "inst.stage2=hd:LABEL=CentOS-Stream-9-BaseOS-aarch64 ",
     "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-stream-9/ks-aarch64.cfg<enter>",
     "initrd /images/pxeboot/initrd.img<enter>",
     "boot<enter><wait>"]
