@@ -23,7 +23,7 @@ source "qemu" "centos-stream-9" {
   boot_command     = [
     "c<wait5><wait10>",
     "linux /ppc/ppc64/vmlinuz ro ",
-    "inst.stage2=hd:LABEL=CentOS-Stream-9-ppc64le-dvd ",
+    "inst.stage2=hd:LABEL=CentOS-Stream-9-BaseOS-ppc64le ",
     "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-stream-9/ks-ppc64le.cfg<enter>",
     "initrd /ppc/ppc64/initrd.img<enter>",
     "boot<enter><wait>"
