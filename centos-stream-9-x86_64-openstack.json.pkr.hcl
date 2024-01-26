@@ -23,6 +23,7 @@ source "qemu" "centos-stream-9" {
   boot_command     = [
     "<tab> text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-stream-9/ks-x86_64.cfg<enter><wait>"
   ]
+  boot_key_interval = "10ms"
   boot_wait        = "10s"
   disk_interface   = "virtio-scsi"
   disk_size        = 4096

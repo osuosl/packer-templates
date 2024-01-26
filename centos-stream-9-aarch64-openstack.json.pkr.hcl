@@ -27,6 +27,7 @@ source "qemu" "centos-stream-9" {
     "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-stream-9/ks-aarch64.cfg<enter>",
     "initrd /images/pxeboot/initrd.img<enter>",
     "boot<enter><wait>"]
+  boot_key_interval = "10ms"
   boot_wait        = "10s"
   disk_interface   = "virtio-scsi"
   disk_size        = 4096

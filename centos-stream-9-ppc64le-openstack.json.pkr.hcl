@@ -28,6 +28,7 @@ source "qemu" "centos-stream-9" {
     "initrd /ppc/ppc64/initrd.img<enter>",
     "boot<enter><wait>"
   ]
+  boot_key_interval = "10ms"
   boot_wait        = "6s"
   disk_interface   = "virtio-scsi"
   disk_size        = 4096
