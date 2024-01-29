@@ -1,11 +1,11 @@
 variable "mirror" {
   type    = string
-  default = "http://debian.osuosl.org/debian-cdimage"
+  default = "http://cdimage.debian.org/cdimage/archive"
 }
 
 variable "release" {
   type    = string
-  default = "11.7.0"
+  default = "11.8.0"
 }
 
 variable "osuadmin_passwd" {

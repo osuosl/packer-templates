@@ -1,6 +1,6 @@
 variable "mirror" {
   type    = string
-  default = "http://debian.osuosl.org/debian-cdimage"
+  default = "http://cdimage.debian.org/cdimage/archive"
 }
 
 variable "release" {
