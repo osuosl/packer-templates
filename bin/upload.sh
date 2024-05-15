@@ -46,6 +46,7 @@ done
 [ -z "$IMG_NAME" ] && echo "Error: IMG_NAME not set. Try '$0 -h'" && exit 1
 
 openstack image create \
+  --progress \
   --file "$FILE" \
   --disk-format raw \
   --property hw_scsi_model=virtio-scsi \
