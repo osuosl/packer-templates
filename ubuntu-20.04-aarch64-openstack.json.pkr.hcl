@@ -9,7 +9,7 @@ packer {
 
 variable "mirror" {
   type    = string
-  default = "https://cdimage.ubuntu.com/ubuntu-server/focal/daily-live/current"
+  default = "https://cdimage.ubuntu.com/releases/focal/release"
 }
 
 variable "release" {
@@ -45,7 +45,7 @@ source "qemu" "ubuntu-2004" {
   headless         = true
   http_directory   = "http"
   iso_checksum     = "file:${var.mirror}/SHA256SUMS"
-  iso_url          = "${var.mirror}/focal-live-server-arm64.iso"
+  iso_url          = "${var.mirror}/ubuntu-${var.release}.5-live-server-arm64.iso"
   qemu_binary      = "qemu-kvm"
   qemuargs         = [
     [

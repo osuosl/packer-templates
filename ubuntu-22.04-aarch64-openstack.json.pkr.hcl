@@ -14,7 +14,7 @@ variable "release" {
 
 variable "mirror" {
   type    = string
-  default = "https://cdimage.ubuntu.com/ubuntu-server/jammy/daily-live/current"
+  default = "https://cdimage.ubuntu.com/releases/jammy/release"
 }
 
 variable "osuadmin_passwd" {
@@ -45,7 +45,7 @@ source "qemu" "ubuntu-2204" {
   headless         = true
   http_directory   = "http"
   iso_checksum     = "file:${var.mirror}/SHA256SUMS"
-  iso_url          = "${var.mirror}/jammy-live-server-arm64.iso"
+  iso_url          = "${var.mirror}/ubuntu-${var.release}.4-live-server-arm64.iso"
   qemu_binary      = "qemu-kvm"
   qemuargs         = [
     [
