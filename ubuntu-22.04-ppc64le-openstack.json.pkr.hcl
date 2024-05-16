@@ -25,6 +25,7 @@ variable "osuadmin_passwd" {
 
 source "qemu" "ubuntu-2204" {
   accelerator      = "kvm"
+  boot_key_interval = "10ms"
   boot_command     = [
       "<wait>",
       "c<enter>",
@@ -40,7 +41,7 @@ source "qemu" "ubuntu-2204" {
     ]
   boot_wait        = "6s"
   disk_interface   = "virtio-scsi"
-  disk_size        = 4096
+  disk_size        = 5120
   format           = "raw"
   headless         = true
   http_directory   = "http"
