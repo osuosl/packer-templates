@@ -35,7 +35,7 @@ source "qemu" "debian-12" {
       " url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-12/preseed.cfg",
       "<enter>"
     ]
-  boot_key_interval = "10ms"
+  boot_key_interval = "30ms"
   boot_wait        = "5s"
   disk_interface   = "virtio-scsi"
   disk_size        = 4096

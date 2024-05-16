@@ -28,7 +28,7 @@ source "qemu" "almalinux-9" {
     "initrd /images/pxeboot/initrd.img<enter>",
     "boot<enter><wait>"
   ]
-  boot_key_interval = "10ms"
+  boot_key_interval = "30ms"
   boot_wait        = "10s"
   disk_interface   = "virtio-scsi"
   disk_size        = 4096

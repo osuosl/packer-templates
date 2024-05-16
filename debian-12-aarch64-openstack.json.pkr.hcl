@@ -44,7 +44,7 @@ source "qemu" "debian-12" {
       "boot<enter>",
       "<wait20><right><enter>"
     ]
-  boot_key_interval = "10ms"
+  boot_key_interval = "30ms"
   boot_wait        = "10s"
   disk_interface   = "virtio-scsi"
   disk_size        = 4096

@@ -23,7 +23,7 @@ source "qemu" "almalinux-9-ganeti" {
   boot_command     = [
     "<tab> text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/almalinux-9/ks-x86_64-ganeti.cfg<enter><wait>"
   ]
-  boot_key_interval = "10ms"
+  boot_key_interval = "30ms"
   boot_wait        = "10s"
   cpu_model        = "host"
   disk_compression = true
