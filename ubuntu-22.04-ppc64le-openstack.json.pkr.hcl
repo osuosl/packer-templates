@@ -1,6 +1,20 @@
+packer {
+  required_plugins {
+    qemu = {
+      source  = "github.com/hashicorp/qemu"
+      version = "~> 1"
+    }
+  }
+}
+
 variable "mirror" {
   type    = string
   default = "https://cdimage.ubuntu.com/ubuntu-server/jammy/daily-live/current"
+}
+
+variable "release" {
+  type    = string
+  default = "22.04"
 }
 
 variable "osuadmin_passwd" {
@@ -17,7 +31,7 @@ source "qemu" "ubuntu-2204" {
       "linux /casper/vmlinux quiet",
       " autoinstall",
       " \"ds=nocloud-net",
-      ";s=http://{{.HTTPIP}}:{{.HTTPPort}}/ubuntu-22.04/\"",
+      ";s=http://{{.HTTPIP}}:{{.HTTPPort}}/ubuntu-${var.release}/\"",
       " ---",
       "<enter><wait>",
       "initrd /casper/initrd",
@@ -30,7 +44,7 @@ source "qemu" "ubuntu-2204" {
   format           = "raw"
   headless         = true
   http_directory   = "http"
-  iso_checksum     = "file:https://cdimage.ubuntu.com/ubuntu-server/jammy/daily-live/current/SHA256SUMS"
+  iso_checksum     = "file:${var.mirror}/SHA256SUMS"
   iso_url          = "${var.mirror}/jammy-live-server-ppc64el.iso"
   machine_type     = "pseries"
   qemu_binary      = "qemu-kvm"

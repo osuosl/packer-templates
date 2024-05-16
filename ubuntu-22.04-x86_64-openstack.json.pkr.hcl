@@ -1,6 +1,20 @@
+packer {
+  required_plugins {
+    qemu = {
+      source  = "github.com/hashicorp/qemu"
+      version = "~> 1"
+    }
+  }
+}
+
 variable "mirror" {
   type    = string
-  default = "https://ubuntu.osuosl.org/releases/22.04"
+  default = "https://ubuntu.osuosl.org/releases"
+}
+
+variable "release" {
+  type    = string
+  default = "22.04"
 }
 
 variable "osuadmin_passwd" {
@@ -17,7 +31,7 @@ source "qemu" "ubuntu-2204" {
       "linux /casper/vmlinuz quiet",
       " autoinstall",
       " \"ds=nocloud-net",
-      ";s=http://{{.HTTPIP}}:{{.HTTPPort}}/ubuntu-22.04/\"",
+      ";s=http://{{.HTTPIP}}:{{.HTTPPort}}/ubuntu-${var.release}/\"",
       " ---",
       "<enter><wait>",
       "initrd /casper/initrd",
@@ -30,8 +44,8 @@ source "qemu" "ubuntu-2204" {
   format           = "raw"
   headless         = true
   http_directory   = "http"
-  iso_checksum     = "file:https://ubuntu.osuosl.org/releases/22.04/SHA256SUMS"
-  iso_url          = "${var.mirror}/ubuntu-22.04.1-live-server-amd64.iso"
+  iso_checksum     = "file:${var.mirror}/${var.release}/SHA256SUMS"
+  iso_url          = "${var.mirror}/ubuntu-${var.release}.4-live-server-amd64.iso"
   qemu_binary      = "qemu-kvm"
   qemuargs         = [
     [

@@ -1,6 +1,20 @@
+packer {
+  required_plugins {
+    qemu = {
+      source  = "github.com/hashicorp/qemu"
+      version = "~> 1"
+    }
+  }
+}
+
 variable "mirror" {
   type    = string
-  default = "https://ubuntu.osuosl.org/releases/20.04"
+  default = "https://ubuntu.osuosl.org/releases"
+}
+
+variable "release" {
+  type    = string
+  default = "20.04"
 }
 
 variable "osuadmin_passwd" {
@@ -18,7 +32,7 @@ source "qemu" "ubuntu-2004" {
       "<bs><bs><bs><bs><bs><wait>",
       " autoinstall",
       " ds=nocloud-net",
-      ";s=http://{{.HTTPIP}}:{{.HTTPPort}}/ubuntu-20.04/",
+      ";s=http://{{.HTTPIP}}:{{.HTTPPort}}/ubuntu-${var.release}/",
       " ---",
       "<enter><wait5>"
     ]
@@ -28,8 +42,8 @@ source "qemu" "ubuntu-2004" {
   format           = "raw"
   headless         = true
   http_directory   = "http"
-  iso_checksum     = "file:https://ubuntu.osuosl.org/releases/20.04/SHA256SUMS"
-  iso_url          = "${var.mirror}/ubuntu-20.04.5-live-server-amd64.iso"
+  iso_checksum     = "file:${var.mirror}/${var.release}/SHA256SUMS"
+  iso_url          = "${var.mirror}/ubuntu-${var.release}.6-live-server-amd64.iso"
   qemu_binary      = "qemu-kvm"
   qemuargs         = [
     [
