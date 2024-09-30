@@ -48,10 +48,9 @@ source "qemu" "opensuse-15" {
         "strict=on"
     ]
   ]
-  shutdown_command  = "echo 'opensuse'|sudo -S /sbin/halt -h -p"
   ssh_password      = "opensuse"
   ssh_port          = 22
-  ssh_username      = "opensuse"
+  ssh_username      = "root"
   ssh_wait_timeout  = "10000s"
   vnc_bind_address  = "0.0.0.0"
   vnc_port_min      = 5901
@@ -65,7 +64,7 @@ build {
  ]
 
   provisioner "shell" {
-    execute_command = "echo 'opensuse' | {{ .Vars }} sudo -S -E sh '{{ .Path }}'"
+    execute_command = "{{ .Vars }} sudo -S -E sh '{{ .Path }}'"
     scripts         = [
         "scripts/common/sshd.sh",
         "scripts/opensuse/sudoers.sh",
