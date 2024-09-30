@@ -120,8 +120,6 @@
   </firewall>
 
   <software>
-    <image/>
-    <instsource/>
     <packages config:type="list">
       <package>autoyast2</package>
       <package>curl</package>
