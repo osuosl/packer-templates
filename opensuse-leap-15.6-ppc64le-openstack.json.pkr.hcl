@@ -9,7 +9,7 @@ packer {
 
 variable "image_name" {
   type    = string
-  default = "OpenSUSE Leap 15.5"
+  default = "OpenSUSE Leap 15.6"
 }
 
 variable "mirror" {
@@ -21,8 +21,8 @@ source "qemu" "opensuse-15" {
   boot_command      = [
     "c<wait5>",
     "linux /boot/ppc64le/linux netsetup=dhcp install=cd:/ ",
-    "lang=en_US autoyast=http://{{ .HTTPIP }}:{{ .HTTPPort }}/opensuse-leap-15.5/autoinst.xml ",
-    "install=http://download.opensuse.org/ports/ppc/distribution/leap/15.5/repo/oss/ ",
+    "lang=en_US autoyast=http://{{ .HTTPIP }}:{{ .HTTPPort }}/opensuse-leap-15.6/autoinst.xml ",
+    "install=http://download.opensuse.org/ports/ppc/distribution/leap/15.6/repo/oss/ ",
     "textmode=1<enter> ",
     "initrd /boot/ppc64le/initrd<enter> ",
     "boot<enter> "
@@ -34,8 +34,8 @@ source "qemu" "opensuse-15" {
   format           = "raw"
   headless          = true
   http_directory    = "http"
-  iso_checksum      = "file:https://download.opensuse.org/distribution/leap/15.5/iso/openSUSE-Leap-15.5-DVD-ppc64le-Media.iso.sha256"
-  iso_url           = "${var.mirror}/ports/ppc/distribution/leap/15.5/iso/openSUSE-Leap-15.5-DVD-ppc64le-Media.iso"
+  iso_checksum      = "file:https://download.opensuse.org/distribution/leap/15.6/iso/openSUSE-Leap-15.6-DVD-ppc64le-Media.iso.sha256"
+  iso_url           = "${var.mirror}/ports/ppc/distribution/leap/15.6/iso/openSUSE-Leap-15.6-DVD-ppc64le-Media.iso"
   machine_type      = "pseries"
   qemu_binary       = "qemu-kvm"
   qemuargs          = [
@@ -56,7 +56,7 @@ source "qemu" "opensuse-15" {
   vnc_bind_address  = "0.0.0.0"
   vnc_port_min      = 5901
   vnc_port_max      = 5901
-  vm_name           = "opensuse-leap-15.5"
+  vm_name           = "opensuse-leap-15.6"
 }
 
 build {

@@ -102,6 +102,7 @@
     <dns>
       <dhcp_hostname config:type="boolean">true</dhcp_hostname>
       <dhcp_resolv config:type="boolean">true</dhcp_resolv>
+      <resolv_conf_policy>auto</resolv_conf_policy>
       <domain>unassigned-domain</domain>
       <hostname>unassigned-hostname</hostname>
     </dns>
