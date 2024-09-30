@@ -209,7 +209,13 @@
   <scripts>
     <chroot-scripts config:type="list">
       <script>
-        zypper -n update
+        <chrooted config:type="boolean">true</chrooted>
+        <filename>chroot-post.sh</filename>
+        <interpreter>shell</interpreter>
+          <source><![CDATA[
+            zypper -n update
+            ]]>
+          </source>
       </script>
     </chroot-scripts>
   </scripts>
