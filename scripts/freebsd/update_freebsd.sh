@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+freebsd_update="/usr/sbin/freebsd-update --not-running-from-cron";
+
+# Update FreeBSD
+# NOTE: the install action fails if there are no updates so || true it
+env PAGER=/bin/cat "$freebsd_update" fetch || true;
+env PAGER=/bin/cat "$freebsd_update" install || true;
+env ASSUME_ALWAYS_YES=true pkg update;
