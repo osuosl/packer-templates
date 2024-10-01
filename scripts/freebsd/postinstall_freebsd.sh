@@ -11,16 +11,13 @@ loader_logo="none"
 hw.memtest.tests="0"
 LOADER_CONF
 
-echo 'Disable X11 in make.conf because Vagrants VMs are (usually) headless'
 cat >>/etc/make.conf << MAKE_CONF
 WITHOUT_X11="YES"
 WITHOUT_GUI="YES"
 MAKE_CONF
 
-echo 'Enable cloud-init'
 cat >>/etc/rc.conf << RC_CONF
 cloudinit_enable="YES"
 RC_CONF
 
-echo 'Update the locate DB'
 /etc/periodic/weekly/310.locate
