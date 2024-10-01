@@ -1,5 +1,5 @@
 DISTRIBUTIONS="base.txz kernel.txz"
-DISKSLICE=da0
+PARTITIONS=da0 gpt
 
 # Workaround for https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=203777
 export nonInteractive="YES"
@@ -9,34 +9,17 @@ HOSTNAME=freebsd
 #!/bin/sh -x
 
 ifdev=$(ifconfig | grep '^[a-z]' | cut -d: -f1 | head -n 1)
-# Partition the disk
-gpart create -s gpt $DISKSLICE
-gpart add -t freebsd-ufs -a 1m $DISKSLICE
-
-# Create UFS filesystem
-newfs -U /dev/${DISKSLICE}p1
-
-# Mount the filesystem
-mount /dev/${DISKSLICE}p1 /mnt
-
-# Install the base system
-bsdinstall distfetch
-bsdinstall distextract
-
-# Configure the system
-echo "/dev/${DISKSLICE}p1 / ufs rw 1 1" > /mnt/etc/fstab
-
 # Enable required services
-cat >> /mnt/etc/rc.conf << EOT
+cat >> /etc/rc.conf << EOT
 ifconfig_${ifdev}="dhcp"
 sshd_enable="YES"
 EOT
 
 # Set up user accounts
-echo "freebsd" | pw -V /mnt/etc useradd freebsd -h 0 -s /bin/sh -G wheel -d /home/freebsd -c "FreeBSD User"
-echo "freebsd" | pw -V /mnt/etc usermod root
+echo "freebsd" | pw -V /etc useradd freebsd -h 0 -s /bin/sh -G wheel -d /home/freebsd -c "FreeBSD User"
+echo "freebsd" | pw -V /etc usermod root
 
-mkdir -p /mnt/home/freebsd
-chown 1001:1001 /mnt/home/freebsd
+mkdir -p /home/freebsd
+chown 1001:1001 /home/freebsd
 
 reboot
