@@ -22,6 +22,7 @@ source "qemu" "freebsd-14" {
     "<wait><esc><wait>boot -s<wait><enter><wait><wait5>/bin/sh<enter><wait>",
     "mdmfs -s 100m md1 /tmp<enter><wait>mdmfs -s 100m md2 /mnt<enter><wait>",
     "dhclient -p /tmp/dhclient.vtnet0.pid -l /tmp/dhclient.lease.vtnet0 vtnet0<enter>",
+    "echo 'nameserver 8.8.8.8' >> /etc/resolv.conf<enter>",
     "<wait><wait5>fetch -o /tmp/installerconfig http://{{ .HTTPIP }}:{{ .HTTPPort }}/freebsd/installerconfig && ",
     "bsdinstall script /tmp/installerconfig<enter><wait>"
   ]

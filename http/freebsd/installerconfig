@@ -8,12 +8,6 @@ export nonInteractive="YES"
 HOSTNAME=freebsd
 
 ifdev=$(ifconfig | grep '^[a-z]' | cut -d: -f1 | head -n 1)
-# Enable required services
-cat >> /etc/rc.conf << EOT
-ifconfig_${ifdev}="dhcp"
-sshd_enable="YES"
-EOT
-
 # Partition the disk
 gpart create -s gpt $DISKSLICE
 gpart add -t freebsd-ufs -a 1m $DISKSLICE
@@ -30,6 +24,12 @@ bsdinstall distextract
 
 # Configure the system
 echo "/dev/${DISKSLICE}p1 / ufs rw 1 1" > /mnt/etc/fstab
+
+# Enable required services
+cat >> /etc/rc.conf << EOT
+ifconfig_${ifdev}="dhcp"
+sshd_enable="YES"
+EOT
 
 # Set up user accounts
 echo "freebsd" | pw -V /mnt/etc useradd freebsd -h 0 -s /bin/sh -G wheel -d /home/freebsd -c "FreeBSD User"
