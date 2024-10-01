@@ -26,7 +26,7 @@ bsdinstall distextract
 echo "/dev/${DISKSLICE}p1 / ufs rw 1 1" > /mnt/etc/fstab
 
 # Enable required services
-cat >> /etc/rc.conf << EOT
+cat >> /mnt/etc/rc.conf << EOT
 ifconfig_${ifdev}="dhcp"
 sshd_enable="YES"
 EOT
