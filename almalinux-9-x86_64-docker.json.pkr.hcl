@@ -90,9 +90,9 @@ build {
       "OSUADMIN_PASSWD=${var.osuadmin_passwd}"
     ]
     scripts         = [
+      "scripts/centos/docker.sh",
       "scripts/common/converge-cinc.sh",
       "scripts/common/remove-cinc.sh",
-      "scripts/centos/docker.sh",
       "scripts/common/minimize.sh"
     ]
   }
