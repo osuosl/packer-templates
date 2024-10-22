@@ -14,7 +14,7 @@ variable "image_name" {
 
 variable "mirror" {
   type    = string
-  default = "https://download.freebsd.org/snapshots/powerpc/powerpc64/ISO-IMAGES/15.0/"
+  default = "https://download.freebsd.org/snapshots/powerpc/powerpc64/ISO-IMAGES"
 }
 
 source "qemu" "freebsd-15" {
