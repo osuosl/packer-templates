@@ -26,8 +26,8 @@ source "qemu" "freebsd-15" {
   format            = "raw"
   headless          = true
   http_directory    = "http"
-  iso_checksum      = "file:${var.mirror}/15.0/CHECKSUM.SHA256-FreeBSD-15.0-CURRENT-powerpc-powerpc64"
-  iso_url           = "${var.mirror}/15.0/FreeBSD-15.0-CURRENT-powerpc-powerpc64-disc1.iso"
+  iso_checksum      = "file:${var.mirror}/15.0/CHECKSUM.SHA256-FreeBSD-15.0-CURRENT-powerpc-powerpc64-20241017-b88df1e893c4-273001"
+  iso_url           = "${var.mirror}/15.0/FreeBSD-15.0-CURRENT-powerpc-powerpc64-20241017-b88df1e893c4-273001-disc1.iso"
   machine_type      = "pseries"
   qemu_binary       = "qemu-kvm"
   qemuargs          = [
