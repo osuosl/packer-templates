@@ -58,6 +58,7 @@ build {
   provisioner "shell" {
     execute_command = "echo 'freebsd' | {{.Vars}} su -m root -c 'sh -eux {{.Path}}'"
     scripts         = [
+        "scripts/freebsd/libmd_fix.sh",
         "scripts/freebsd/update_freebsd.sh",
         "scripts/freebsd/postinstall_freebsd.sh",
         "scripts/freebsd/sudoers_freebsd.sh",
