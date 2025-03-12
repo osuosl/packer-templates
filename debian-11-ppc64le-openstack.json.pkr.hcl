@@ -5,7 +5,7 @@ variable "mirror" {
 
 variable "release" {
   type    = string
-  default = "11.9.0"
+  default = "11.11.0"
 }
 
 variable "osuadmin_passwd" {

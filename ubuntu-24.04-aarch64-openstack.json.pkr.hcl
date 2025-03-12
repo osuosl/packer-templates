@@ -46,7 +46,7 @@ source "qemu" "ubuntu-2404" {
   headless         = true
   http_directory   = "http"
   iso_checksum     = "file:${var.mirror}/SHA256SUMS"
-  iso_url          = "${var.mirror}/ubuntu-${var.release}-live-server-arm64.iso"
+  iso_url          = "${var.mirror}/ubuntu-${var.release}.2-live-server-arm64.iso"
   qemu_binary      = "qemu-kvm"
   qemuargs         = [
     [
