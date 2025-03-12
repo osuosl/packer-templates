@@ -8,7 +8,8 @@ autoinstall:
     password: "$6$osuadmin.$QXNHxHGhDBX1KStyKri0uqdkSObBtjUUzj31IPU1TkMl.uUu0HwB365HSm5za6bVhDoSpTvVLqjKOzKjQMCxL/"
   early-commands:
     # otherwise packer tries to connect and exceed max attempts:
-    - systemctl stop ssh
+    - systemctl stop ssh.service
+    - systemctl stop ssh.socket
     - systemctl restart systemd-timesyncd
   late-commands:
     - echo "PermitRootLogin yes" >> /target/etc/ssh/sshd_config
@@ -18,6 +19,7 @@ autoinstall:
     - curtin in-target --target=/target -- apt-get -y dist-upgrade
   ssh:
     install-server: true
+    allow-pw: yes
   refresh-installer:
     update: yes
   storage:
