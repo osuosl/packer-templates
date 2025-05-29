@@ -24,8 +24,8 @@ source "qemu" "almalinux-10" {
     "c<wait>",
     "linux /images/pxeboot/vmlinuz text ",
     "inst.stage2=hd:LABEL=AlmaLinux-10-0-x86_64-dvd ",
-    "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/almalinux-10/ks-x86_64.cfg<enter>",
-    "initrd /images/pxeboot/initrd.img<enter>",
+    "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/almalinux-10/ks-x86_64.cfg<enter><wait>",
+    "initrd /images/pxeboot/initrd.img<enter><wait>",
     "boot<enter><wait>"
   ]
   boot_key_interval = "30ms"
