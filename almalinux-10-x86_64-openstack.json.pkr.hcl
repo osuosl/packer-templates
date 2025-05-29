@@ -31,7 +31,7 @@ source "qemu" "almalinux-10" {
   format           = "raw"
   headless         = true
   http_directory   = "http"
-  iso_checksum     = "file:https://almalinux.osuosl.org/10c/isos/x86_64/CHECKSUM"
+  iso_checksum     = "file:https://almalinux.osuosl.org/10/isos/x86_64/CHECKSUM"
   iso_url          = "${var.mirror}/10/isos/x86_64/AlmaLinux-10-latest-x86_64-minimal.iso"
   qemu_binary      = "qemu-kvm"
   qemuargs         = [
