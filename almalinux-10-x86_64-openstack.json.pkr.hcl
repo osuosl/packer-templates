@@ -21,7 +21,12 @@ variable "osuadmin_passwd" {
 source "qemu" "almalinux-10" {
   accelerator      = "kvm"
   boot_command     = [
-    "<tab> text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/almalinux-10/ks-x86_64.cfg<enter><wait>"
+    "c<wait>",
+    "linux /images/pxeboot/vmlinuz text ",
+    "inst.stage2=hd:LABEL=AlmaLinux-10-0-x86_64-dvd ",
+    "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/almalinux-10/ks-x86_64.cfg<enter>",
+    "initrd /images/pxeboot/initrd.img<enter>",
+    "boot<enter><wait>"
   ]
   boot_key_interval = "30ms"
   boot_wait        = "10s"
