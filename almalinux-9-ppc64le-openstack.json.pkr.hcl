@@ -2,7 +2,7 @@ packer {
   required_plugins {
     qemu = {
       source  = "github.com/hashicorp/qemu"
-      version = "~> 1"
+      version = ">= 1.1.2"
     }
   }
 }
@@ -19,45 +19,41 @@ variable "osuadmin_passwd" {
 }
 
 source "qemu" "almalinux-9" {
-  accelerator      = "kvm"
-  boot_command     = [
-    "c<wait5><wait10>",
-    "linux /ppc/ppc64/vmlinuz ro ",
-    "inst.stage2=hd:LABEL=AlmaLinux-9-5-ppc64le-dvd ",
-    "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/almalinux-9/ks-ppc64le.cfg<enter>",
-    "initrd /ppc/ppc64/initrd.img<enter>",
-    "boot<enter><wait>"
+  accelerator       = "kvm"
+  boot_command      = [
+    "e",
+    "<down><down>",
+    "<leftCtrlOn>e<leftCtrlOff><wait><spacebar>",
+    "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/almalinux-9/ks-ppc64le.cfg",
+    "<leftCtrlOn>x<leftCtrlOff>",
   ]
   boot_key_interval = "30ms"
-  boot_wait        = "6s"
-  disk_interface   = "virtio-scsi"
-  disk_size        = 4096
-  format           = "raw"
-  headless         = true
-  http_directory   = "http"
-  iso_checksum     = "file:https://almalinux.osuosl.org/9/isos/ppc64le/CHECKSUM"
-  iso_url          = "${var.mirror}/9/isos/ppc64le/AlmaLinux-9.5-ppc64le-minimal.iso"
-  machine_type     = "pseries"
-  qemu_binary      = "qemu-kvm"
-  qemuargs         = [
-    [
-      "-m",
-      "2048M"
-    ],
+  boot_wait         = "6s"
+  cpus              = 2
+  disk_interface    = "virtio-scsi"
+  disk_size         = 4096
+  format            = "raw"
+  headless          = true
+  http_directory    = "http"
+  iso_checksum      = "file:https://almalinux.osuosl.org/9/isos/ppc64le/CHECKSUM"
+  iso_url           = "${var.mirror}/9/isos/ppc64le/AlmaLinux-9-latest-ppc64le-minimal.iso"
+  machine_type      = "pseries"
+  qemu_binary       = "qemu-kvm"
+  qemuargs          = [
     [
       "-boot",
       "strict=on"
     ]
   ]
-  shutdown_command = "/sbin/halt -h -p"
-  ssh_password     = "osuadmin"
-  ssh_port         = 22
-  ssh_username     = "root"
-  ssh_wait_timeout = "10000s"
-  vnc_bind_address = "0.0.0.0"
-  vnc_port_min     = 5901
-  vnc_port_max     = 5901
-  vm_name          = "almalinux-9"
+  shutdown_command  = "/sbin/halt -h -p"
+  ssh_password      = "osuadmin"
+  ssh_port          = 22
+  ssh_username      = "root"
+  ssh_wait_timeout  = "10000s"
+  vnc_bind_address  = "0.0.0.0"
+  vnc_port_min      = 5901
+  vnc_port_max      = 5901
+  vm_name           = "almalinux-9"
 }
 
 build {

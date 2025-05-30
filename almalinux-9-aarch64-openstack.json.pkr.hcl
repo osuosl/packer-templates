@@ -2,7 +2,7 @@ packer {
   required_plugins {
     qemu = {
       source  = "github.com/hashicorp/qemu"
-      version = "~> 1"
+      version = ">= 1.1.2"
     }
   }
 }
@@ -19,45 +19,36 @@ variable "osuadmin_passwd" {
 }
 
 source "qemu" "almalinux-9" {
-  accelerator      = "kvm"
-  boot_command     = [
-    "c<wait>",
-    "linux /images/pxeboot/vmlinuz text ",
-    "inst.stage2=hd:LABEL=AlmaLinux-9-5-aarch64-dvd ",
-    "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/almalinux-9/ks-aarch64.cfg<enter>",
-    "initrd /images/pxeboot/initrd.img<enter>",
-    "boot<enter><wait>"
+  accelerator       = "kvm"
+  boot_command      = [
+    "e",
+    "<down><down>",
+    "<leftCtrlOn>e<leftCtrlOff><wait><spacebar>",
+    "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/almalinux-9/ks-aarch64.cfg",
+    "<leftCtrlOn>x<leftCtrlOff>",
   ]
   boot_key_interval = "30ms"
-  boot_wait        = "10s"
-  disk_interface   = "virtio-scsi"
-  disk_size        = 4096
-  format           = "raw"
-  headless         = true
-  http_directory   = "http"
-  iso_checksum     = "file:https://almalinux.osuosl.org/9/isos/aarch64/CHECKSUM"
-  iso_url          = "${var.mirror}/9/isos/aarch64/AlmaLinux-9.5-aarch64-minimal.iso"
-  qemu_binary      = "qemu-kvm"
-  qemuargs         = [
-    [
-      "-m",
-      "2048M"
-    ],
-    [
-      "-machine",
-      "gic-version=max,accel=kvm"
-    ],
-    [
-      "-cpu",
-      "host"
-    ],
+  boot_wait         = "10s"
+  cpus              = 2
+  cpu_model         = "host"
+  disk_interface    = "virtio-scsi"
+  disk_size         = 4096
+  efi_boot          = true
+  efi_firmware_code = "/usr/share/AAVMF/AAVMF_CODE.fd"
+  efi_firmware_vars = "/usr/share/AAVMF/AAVMF_VARS.fd"
+  efi_drop_efivars  = true
+  format            = "raw"
+  headless          = true
+  http_directory    = "http"
+  iso_checksum      = "file:https://almalinux.osuosl.org/9/isos/aarch64/CHECKSUM"
+  iso_url           = "${var.mirror}/9/isos/aarch64/AlmaLinux-9-latest-aarch64-minimal.iso"
+  machine_type      = "virt,gic-version=max"
+  memory            = 2048
+  qemu_binary       = "qemu-kvm"
+  qemuargs          = [
     [
       "-boot",
       "strict=on"
-    ],
-    [
-      "-bios",
-      "/usr/share/AAVMF/AAVMF_CODE.fd"
     ],
     [
       "-monitor",
