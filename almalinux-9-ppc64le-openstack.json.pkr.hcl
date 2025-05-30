@@ -38,6 +38,7 @@ source "qemu" "almalinux-9" {
   iso_checksum      = "file:https://almalinux.osuosl.org/9/isos/ppc64le/CHECKSUM"
   iso_url           = "${var.mirror}/9/isos/ppc64le/AlmaLinux-9-latest-ppc64le-minimal.iso"
   machine_type      = "pseries"
+  memory            = 2048
   qemu_binary       = "qemu-kvm"
   qemuargs          = [
     [
