@@ -42,7 +42,7 @@ source "qemu" "almalinux-10" {
   http_directory    = "http"
   iso_checksum      = "file:https://almalinux.osuosl.org/10/isos/aarch64/CHECKSUM"
   iso_url           = "${var.mirror}/10/isos/aarch64/AlmaLinux-10-latest-aarch64-minimal.iso"
-  machine_type      = "gic-version=max,accel=kvm"
+  machine_type      = "virt,gic-version=max"
   memory            = 2048
   qemu_binary       = "qemu-kvm"
   qemuargs          = [
