@@ -21,11 +21,7 @@ variable "osuadmin_passwd" {
 source "qemu" "almalinux-9-ganeti" {
   accelerator       = "kvm"
   boot_command      = [
-    "e",
-    "<down><down>",
-    "<leftCtrlOn>e<leftCtrlOff><wait><spacebar>",
-    "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/almalinux-9/ks-x86_64-ganeti.cfg",
-    "<leftCtrlOn>x<leftCtrlOff>",
+    "<tab> text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/almalinux-9/ks-x86_64-ganeti.cfg<enter><wait>"
   ]
   boot_key_interval = "30ms"
   boot_wait         = "10s"

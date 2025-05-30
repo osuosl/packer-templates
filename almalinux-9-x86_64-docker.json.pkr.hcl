@@ -21,11 +21,7 @@ variable "osuadmin_passwd" {
 source "qemu" "almalinux-9-docker" {
   accelerator       = "kvm"
   boot_command      = [
-    "e",
-    "<down><down>",
-    "<leftCtrlOn>e<leftCtrlOff><wait><spacebar>",
-    "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/almalinux-9/ks-x86_64.cfg",
-    "<leftCtrlOn>x<leftCtrlOff>",
+    "<tab> text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/almalinux-9/ks-x86_64.cfg<enter><wait>"
   ]
   boot_key_interval = "30ms"
   boot_wait         = "10s"
