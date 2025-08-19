@@ -22,7 +22,9 @@ run_help() {
   exit 0
 }
 
-while getopts "hpvf:c:n:r:d:o:" opt ; do
+IMG_TYPE="raw"
+
+while getopts "hpvf:c:n:r:d:o:t:" opt ; do
   case ${opt} in
     h)
       run_help
@@ -36,8 +38,14 @@ while getopts "hpvf:c:n:r:d:o:" opt ; do
     n)
       IMG_NAME="$OPTARG"
       ;;
+    t)
+      IMG_TYPE="$OPTARG"
+      ;;
     o)
       OPTIONS="$OPTARG"
+      ;;
+    *)
+      run_help
       ;;
   esac
 done
@@ -48,7 +56,7 @@ done
 openstack image create \
   --progress \
   --file "$FILE" \
-  --disk-format raw \
+  --disk-format "$IMG_TYPE" \
   --property hw_scsi_model=virtio-scsi \
   --property hw_disk_bus=scsi \
   --property hw_qemu_guest_agent=yes \
