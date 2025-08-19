@@ -44,7 +44,7 @@ source "qemu" "windows_2019" {
     "scripts/windows/install_virtio_drivers.ps1",
   ]
   format            = "qcow2"
-  iso_checksum      = "3e4fa6d8507b554856fc9ca6079cc402df11a8b79344871669f0251535255325"
+  iso_checksum      = "6dae072e7f78f4ccab74a45341de0d6e2d45c39be25f1f5920a2ab4f51d7bcbb"
   iso_url           = "${var.iso_url}"
   iso_target_path   = local.iso_target_path
   memory            = 8192
