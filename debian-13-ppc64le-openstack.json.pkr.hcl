@@ -1,3 +1,12 @@
+packer {
+  required_plugins {
+    qemu = {
+      source  = "github.com/hashicorp/qemu"
+      version = ">= 1.1.2"
+    }
+  }
+}
+
 variable "mirror" {
   type    = string
   default = "http://debian.osuosl.org/debian-cdimage"
