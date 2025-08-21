@@ -196,7 +196,7 @@
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <Order>3</Order>
-                    <CommandLine>%windir%\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -File A:\install_virtio_drivers.ps1</CommandLine>
+                    <CommandLine>%windir%\SysWOW64\cmd.exe /c powershell -ExecutionPolicy Bypass -File A:\install_virtio_drivers.ps1</CommandLine>
                     <Description>Install VirtIO Guest Tools</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
