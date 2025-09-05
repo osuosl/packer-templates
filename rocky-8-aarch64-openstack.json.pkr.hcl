@@ -29,7 +29,7 @@ source "qemu" "rocky-8" {
     "boot<enter><wait>"]
   boot_wait        = "10s"
   disk_interface   = "virtio-scsi"
-  disk_size        = 4096
+  disk_size        = 5120
   format           = "raw"
   headless         = true
   http_directory   = "http"
