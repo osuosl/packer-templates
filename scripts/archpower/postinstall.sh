@@ -7,6 +7,8 @@ set -eux
 
 #
 # Install required packages
+# Note: chrony is not available, using ntp instead
+# Note: cloud-init installed via pip since not in repos
 #
 pacman -Syu --noconfirm
 pacman -S --noconfirm \
@@ -14,12 +16,17 @@ pacman -S --noconfirm \
     curl \
     rsync \
     vim \
-    chrony \
+    ntp \
     postfix \
     fail2ban \
-    cloud-init \
-    cloud-guest-utils \
-    powerpc-utils
+    powerpc-utils \
+    python \
+    python-pip \
+    python-yaml \
+    python-jinja \
+    python-jsonschema \
+    python-requests \
+    python-netifaces
 
 #
 # SSH Configuration (from osl-unmanaged::ssh)
@@ -79,11 +86,23 @@ cp /var/lib/osuadmin/.ssh/authorized_keys /root/.ssh/authorized_keys
 chmod 600 /root/.ssh/authorized_keys
 
 #
-# Chrony Configuration (from osl-unmanaged::chrony)
+# NTP Configuration (using ntp instead of chrony)
+# Add OSL NTP servers
 #
-grep -q '^port 0' /etc/chrony.conf || echo "port 0" >> /etc/chrony.conf
-grep -q '^cmdport 0' /etc/chrony.conf || echo "cmdport 0" >> /etc/chrony.conf
-systemctl enable chronyd
+cat > /etc/ntp.conf <<NTP
+# OSL NTP Configuration
+driftfile /var/lib/ntp/ntp.drift
+restrict default kod limited nomodify nopeer noquery notrap
+restrict 127.0.0.1
+restrict ::1
+
+# Use OSL/public NTP servers
+server time.osuosl.org iburst
+server 0.pool.ntp.org iburst
+server 1.pool.ntp.org iburst
+server 2.pool.ntp.org iburst
+NTP
+systemctl enable ntpd
 
 #
 # Postfix Configuration (from osl-unmanaged::postfix)
@@ -129,17 +148,167 @@ JAIL
 systemctl enable fail2ban
 
 #
-# Cloud-init Configuration (from osl-unmanaged::openstack)
+# Cloud-init Installation via pip
 #
+pip install --break-system-packages cloud-init
+
+# Create cloud-init directories
 mkdir -p /etc/cloud/cloud.cfg.d
+mkdir -p /var/lib/cloud
+mkdir -p /run/cloud-init
+
+# Create systemd service files for cloud-init
+cat > /usr/lib/systemd/system/cloud-init-local.service <<'SYSTEMD'
+[Unit]
+Description=Cloud-init: Local Stage (Disk Setup)
+DefaultDependencies=no
+Wants=network-pre.target
+After=hv_kvp_daemon.service
+After=systemd-remount-fs.service
+Before=NetworkManager.service
+Before=network-pre.target
+Before=shutdown.target
+Before=systemd-networkd.service
+Conflicts=shutdown.target
+RequiresMountsFor=/var/lib/cloud
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/cloud-init init --local
+RemainAfterExit=yes
+TimeoutSec=0
+StandardOutput=journal+console
+
+[Install]
+WantedBy=cloud-init.target
+SYSTEMD
+
+cat > /usr/lib/systemd/system/cloud-init.service <<'SYSTEMD'
+[Unit]
+Description=Cloud-init: Network Stage
+Wants=network-online.target cloud-init-local.service
+After=network-online.target cloud-init-local.service
+Before=shutdown.target
+Conflicts=shutdown.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/cloud-init init
+RemainAfterExit=yes
+TimeoutSec=0
+StandardOutput=journal+console
+
+[Install]
+WantedBy=cloud-init.target
+SYSTEMD
+
+cat > /usr/lib/systemd/system/cloud-config.service <<'SYSTEMD'
+[Unit]
+Description=Cloud-init: Config Stage
+Wants=network-online.target
+After=network-online.target cloud-config.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/cloud-init modules --mode=config
+RemainAfterExit=yes
+TimeoutSec=0
+StandardOutput=journal+console
+
+[Install]
+WantedBy=cloud-init.target
+SYSTEMD
+
+cat > /usr/lib/systemd/system/cloud-final.service <<'SYSTEMD'
+[Unit]
+Description=Cloud-init: Final Stage
+Wants=network-online.target cloud-config.service
+After=network-online.target cloud-config.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/cloud-init modules --mode=final
+RemainAfterExit=yes
+TimeoutSec=0
+StandardOutput=journal+console
+
+[Install]
+WantedBy=cloud-init.target
+SYSTEMD
+
+cat > /usr/lib/systemd/system/cloud-init.target <<'SYSTEMD'
+[Unit]
+Description=Cloud-init target
+After=multi-user.target
+SYSTEMD
+
+# Create basic cloud.cfg
+cat > /etc/cloud/cloud.cfg <<'CLOUDCFG'
+# Cloud-init configuration for Archpower
+users:
+  - default
+
+disable_root: false
+preserve_hostname: false
+manage_etc_hosts: true
+
+cloud_init_modules:
+  - migrator
+  - seed_random
+  - bootcmd
+  - write_files
+  - growpart
+  - resizefs
+  - disk_setup
+  - mounts
+  - set_hostname
+  - update_hostname
+  - update_etc_hosts
+  - users_groups
+  - ssh
+
+cloud_config_modules:
+  - emit_upstart
+  - ssh_import_id
+  - locale
+  - set_passwords
+  - timezone
+  - runcmd
+
+cloud_final_modules:
+  - scripts_vendor
+  - scripts_per_once
+  - scripts_per_boot
+  - scripts_per_instance
+  - scripts_user
+  - phone_home
+  - final_message
+  - power_state_change
+
+system_info:
+  default_user:
+    name: arch
+    lock_passwd: True
+    gecos: Arch Linux
+    groups: [wheel]
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+    shell: /bin/bash
+  distro: arch
+  paths:
+    cloud_dir: /var/lib/cloud
+    templates_dir: /etc/cloud/templates
+  ssh_svcname: sshd
+CLOUDCFG
+
+# Cloud-init OpenStack datasource override
 cat > /etc/cloud/cloud.cfg.d/91_openstack_override.cfg <<CLOUDINIT
 ---
 # Set the hostname in /etc/hosts so sudo doesn't complain
 manage_etc_hosts: true
 # Force only OpenStack being enabled but allow ConfigDrive and None
-datasource_list: [OpenStack, None]
+datasource_list: [OpenStack, ConfigDrive, None]
 datasource:
-  Ec2:
+  OpenStack:
     metadata_urls: ['http://169.254.169.254']
     timeout: 5
     max_wait: 10
@@ -149,11 +318,13 @@ users:
     lock_passwd: true
 CLOUDINIT
 
-# Enable cloud-init services
+# Reload systemd and enable cloud-init services
+systemctl daemon-reload
 systemctl enable cloud-init-local.service
 systemctl enable cloud-init.service
 systemctl enable cloud-config.service
 systemctl enable cloud-final.service
+systemctl enable cloud-init.target
 
 #
 # GRUB Configuration (from osl-unmanaged::openstack)
