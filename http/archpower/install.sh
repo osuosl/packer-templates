@@ -112,6 +112,7 @@ systemctl enable dhcpcd
 mkinitcpio -P
 
 # Configure and install GRUB for PPC PReP Boot
+mkdir -p /boot/grub
 grub-mkconfig -o /boot/grub/grub.cfg
 grub-install "${PREP_PART}"
 
