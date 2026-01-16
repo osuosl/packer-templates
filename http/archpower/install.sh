@@ -63,7 +63,7 @@ mount "${ROOT_PART}" "${MOUNT_POINT}"
 
 # Initialize pacman keyring
 pacman-key --init
-pacman-key --populate archlinux
+pacman-key --populate archpower
 
 # Install minimal base system for Packer to connect
 pacstrap "${MOUNT_POINT}" base linux grub openssh dhcpcd
