@@ -6,7 +6,7 @@
 set -eux
 
 # Configuration
-ROOT_DISK="/dev/vda"
+ROOT_DISK="/dev/sda"
 PREP_PART="${ROOT_DISK}1"
 ROOT_PART="${ROOT_DISK}2"
 SWAP_PART="${ROOT_DISK}3"

@@ -21,11 +21,7 @@ variable "osuadmin_passwd" {
 source "qemu" "archpower" {
   accelerator      = "kvm"
   boot_command     = [
-    # Wait for the boot menu and select default
-    "<enter><wait60>",
-    # Wait for shell prompt after boot, then login as root (no password)
-    "root<enter><wait5>",
-    # Set up networking (should be auto via DHCP on modern systems)
+    # Set up networking
     "dhcpcd<enter><wait10>",
     # Download and run install script from HTTP server
     "curl -sSfL http://{{ .HTTPIP }}:{{ .HTTPPort }}/archpower/install.sh -o /root/install.sh<enter><wait5>",
@@ -33,7 +29,7 @@ source "qemu" "archpower" {
     "bash /root/install.sh<enter>"
   ]
   boot_key_interval = "30ms"
-  boot_wait         = "10s"
+  boot_wait         = "45s"
   cpus              = 2
   disk_interface    = "virtio-scsi"
   disk_size         = 4096
@@ -41,7 +37,7 @@ source "qemu" "archpower" {
   headless          = true
   http_directory    = "http"
   iso_checksum      = "none"
-  iso_url           = "${var.mirror}/archpower-current-powerpc64le.iso"
+  iso_url           = "${var.mirror}/archpower-current-powerpc64.iso"
   machine_type      = "pseries"
   memory            = 2048
   qemu_binary       = "qemu-kvm"
