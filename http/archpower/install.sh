@@ -66,7 +66,7 @@ pacman-key --init
 pacman-key --populate archpower
 
 # Install minimal base system for Packer to connect
-pacstrap "${MOUNT_POINT}" base linux grub openssh dhcpcd
+pacstrap "${MOUNT_POINT}" base linux-ps3 grub openssh dhcpcd
 
 # Generate fstab
 genfstab -U "${MOUNT_POINT}" >> "${MOUNT_POINT}/etc/fstab"

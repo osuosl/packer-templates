@@ -22,14 +22,14 @@ source "qemu" "archpower" {
   accelerator      = "kvm"
   boot_command     = [
     # Set up networking
-    "dhcpcd<enter><wait10>",
+    "dhcpcd<enter><wait>",
     # Download and run install script from HTTP server
-    "curl -sSfL http://{{ .HTTPIP }}:{{ .HTTPPort }}/archpower/install.sh -o /root/install.sh<enter><wait5>",
+    "curl -sSfL http://{{ .HTTPIP }}:{{ .HTTPPort }}/archpower/install.sh -o /root/install.sh<enter><wait>",
     "chmod +x /root/install.sh<enter><wait>",
     "bash /root/install.sh<enter>"
   ]
   boot_key_interval = "30ms"
-  boot_wait         = "45s"
+  boot_wait         = "40s"
   cpus              = 2
   disk_interface    = "virtio-scsi"
   disk_size         = 4096
@@ -49,7 +49,7 @@ source "qemu" "archpower" {
   ssh_password      = "osuadmin"
   ssh_port          = 22
   ssh_username      = "root"
-  ssh_wait_timeout  = "10000s"
+  ssh_wait_timeout  = "20m"
   vnc_bind_address  = "0.0.0.0"
   vnc_port_min      = 5901
   vnc_port_max      = 5901
