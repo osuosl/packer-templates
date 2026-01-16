@@ -68,8 +68,11 @@ mount "${ROOT_PART}" "${MOUNT_POINT}"
 pacman-key --init
 pacman-key --populate archpower
 
-# Install minimal base system for Packer to connect
-pacstrap "${MOUNT_POINT}" base linux-ps3 grub openssh dhcpcd
+# Install minimal base system for Packer to connect (without kernel)
+pacstrap "${MOUNT_POINT}" base grub openssh dhcpcd
+
+# Install linux-ppc64 kernel from testing repo only
+arch-chroot "${MOUNT_POINT}" pacman -Sy --noconfirm --config <(cat /etc/pacman.conf; echo -e '\n[testing]\nServer = https://archlinuxpower.org/repos/testing/\$repo/os/\$arch')  linux-ppc64
 
 # Generate fstab
 genfstab -U "${MOUNT_POINT}" >> "${MOUNT_POINT}/etc/fstab"
