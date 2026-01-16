@@ -5,6 +5,9 @@
 
 set -eux
 
+# Stop SSH on the live ISO to prevent Packer from connecting prematurely
+systemctl stop sshd || true
+
 # Configuration
 ROOT_DISK="/dev/sda"
 PREP_PART="${ROOT_DISK}1"

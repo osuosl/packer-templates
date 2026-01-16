@@ -22,7 +22,7 @@ source "qemu" "archpower" {
   accelerator      = "kvm"
   boot_command     = [
     # Set up networking
-    "dhcpcd<enter><wait>",
+    "dhcpcd<enter><wait3>",
     # Download and run install script from HTTP server
     "curl -sSfL http://{{ .HTTPIP }}:{{ .HTTPPort }}/archpower/install.sh -o /root/install.sh<enter><wait>",
     "chmod +x /root/install.sh<enter><wait>",
