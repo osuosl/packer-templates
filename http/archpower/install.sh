@@ -71,8 +71,14 @@ pacman-key --populate archpower
 # Install minimal base system for Packer to connect (without kernel)
 pacstrap "${MOUNT_POINT}" base grub openssh dhcpcd
 
-# Install linux-ppc64 kernel from testing repo only
-arch-chroot "${MOUNT_POINT}" pacman -Sy --noconfirm --config <(cat /etc/pacman.conf; echo -e '\n[testing]\nServer = https://archlinuxpower.org/repos/testing/\$repo/os/\$arch')  linux-ppc64
+# Enable testing repo temporarily to install linux-ppc64 kernel
+sed -i 's/^#\[testing\]/[testing]/' "${MOUNT_POINT}/etc/pacman.conf"
+sed -i 's/^#Server = https:\/\/repo.archlinuxpower.org\/testing/Server = https:\/\/repo.archlinuxpower.org\/testing/' "${MOUNT_POINT}/etc/pacman.conf"
+arch-chroot "${MOUNT_POINT}" pacman -Sy --noconfirm linux-ppc64
+
+# Disable testing repo after kernel install
+sed -i 's/^\[testing\]/#[testing]/' "${MOUNT_POINT}/etc/pacman.conf"
+sed -i 's/^Server = https:\/\/repo.archlinuxpower.org\/testing/#Server = https:\/\/repo.archlinuxpower.org\/testing/' "${MOUNT_POINT}/etc/pacman.conf"
 
 # Generate fstab
 genfstab -U "${MOUNT_POINT}" >> "${MOUNT_POINT}/etc/fstab"
