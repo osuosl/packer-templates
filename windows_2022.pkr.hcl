@@ -13,7 +13,7 @@ packer {
 
 variable "disk_size" {
   type    = string
-  default = "51200"
+  default = "71680"
 }
 
 variable "iso_url" {
