@@ -73,7 +73,7 @@ source "qemu" "windows_2022" {
 build {
   sources = ["source.qemu.windows_2022"]
 
-  # Windows Updates and scripts
+  # Initial provisioning and app removal (non-destructive to component store)
   provisioner "powershell" {
     elevated_password = "Admin"
     elevated_user     = "Admin"
@@ -81,18 +81,45 @@ build {
       "scripts/windows/provision.ps1",
       "scripts/windows/remove-one-drive-and-teams.ps1",
       "scripts/windows/remove-apps.ps1",
-      "scripts/windows/remove-capabilities.ps1",
-      "scripts/windows/remove-features.ps1",
     ]
   }
   provisioner "windows-restart" {
     restart_timeout = "30m"
+  }
+  # Repair component store and clear update cache before patching
+  provisioner "powershell" {
+    elevated_password = "Admin"
+    elevated_user     = "Admin"
+    inline = [
+      "Write-Host 'Repairing component store...'",
+      "DISM /Online /Cleanup-Image /RestoreHealth",
+      "sfc /scannow",
+      "Write-Host 'Clearing Windows Update cache...'",
+      "Stop-Service wuauserv -Force",
+      "Stop-Service bits -Force",
+      "Remove-Item -Path C:\\Windows\\SoftwareDistribution\\Download\\* -Recurse -Force -ErrorAction SilentlyContinue",
+      "Start-Service bits",
+      "Start-Service wuauserv",
+    ]
   }
   provisioner "windows-update" {
     search_criteria = "IsInstalled=0 and IsHidden=0 and BrowseOnly=0 and AutoSelectOnWebSites=1"
     filters = [
       "exclude:$_.Title -like '*Preview*'",
       "include:$true",
+    ]
+    update_limit = 25
+  }
+  provisioner "windows-restart" {
+    restart_timeout = "30m"
+  }
+  # Remove capabilities and features AFTER updates to avoid corrupting the component store
+  provisioner "powershell" {
+    elevated_password = "Admin"
+    elevated_user     = "Admin"
+    scripts = [
+      "scripts/windows/remove-capabilities.ps1",
+      "scripts/windows/remove-features.ps1",
     ]
   }
   provisioner "windows-restart" {
