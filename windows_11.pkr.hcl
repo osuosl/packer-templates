@@ -73,26 +73,50 @@ source "qemu" "windows_11" {
 build {
   sources = ["source.qemu.windows_11"]
 
-  # Windows Updates and scripts
+  # Initial provisioning only — no component store modifications before updates
   provisioner "powershell" {
     elevated_password = "Admin"
     elevated_user     = "Admin"
     scripts = [
       "scripts/windows/provision.ps1",
-      "scripts/windows/remove-one-drive-and-teams.ps1",
-      "scripts/windows/remove-apps.ps1",
-      "scripts/windows/remove-capabilities.ps1",
-      "scripts/windows/remove-features.ps1",
     ]
   }
   provisioner "windows-restart" {
     restart_timeout = "30m"
+  }
+  # Clear Windows Update download cache before patching
+  provisioner "powershell" {
+    elevated_password = "Admin"
+    elevated_user     = "Admin"
+    inline = [
+      "Write-Host 'Clearing Windows Update cache...'",
+      "Stop-Service wuauserv -Force",
+      "Stop-Service bits -Force",
+      "Remove-Item -Path C:\\Windows\\SoftwareDistribution\\Download\\* -Recurse -Force -ErrorAction SilentlyContinue",
+      "Start-Service bits",
+      "Start-Service wuauserv",
+    ]
   }
   provisioner "windows-update" {
     search_criteria = "IsInstalled=0 and IsHidden=0 and BrowseOnly=0 and AutoSelectOnWebSites=1"
     filters = [
       "exclude:$_.Title -like '*Preview*'",
       "include:$true",
+    ]
+    update_limit = 25
+  }
+  provisioner "windows-restart" {
+    restart_timeout = "30m"
+  }
+  # All component store modifications AFTER updates to avoid corrupting WinSxS
+  provisioner "powershell" {
+    elevated_password = "Admin"
+    elevated_user     = "Admin"
+    scripts = [
+      "scripts/windows/remove-one-drive-and-teams.ps1",
+      "scripts/windows/remove-apps.ps1",
+      "scripts/windows/remove-capabilities.ps1",
+      "scripts/windows/remove-features.ps1",
     ]
   }
   provisioner "windows-restart" {
@@ -119,6 +143,7 @@ build {
     elevated_user     = "Admin"
     scripts = [
       "scripts/windows/install_cloudbase_init.ps1",
+      "scripts/windows/reset-network-profiles.ps1",
       "scripts/windows/cleanup.ps1",
       "scripts/windows/optimize.ps1"
     ]
