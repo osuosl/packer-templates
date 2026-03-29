@@ -68,7 +68,7 @@
                         <CreatePartition wcm:action="add">
                             <Type>Primary</Type>
                             <Order>1</Order>
-                            <Size>100</Size>
+                            <Size>2048</Size>
                         </CreatePartition>
                         <CreatePartition wcm:action="add">
                             <Order>2</Order>
