@@ -143,6 +143,7 @@ build {
     elevated_user     = "Admin"
     scripts = [
       "scripts/windows/install_cloudbase_init.ps1",
+      "scripts/windows/reset-network-profiles.ps1",
       "scripts/windows/cleanup.ps1",
       "scripts/windows/optimize.ps1"
     ]
