@@ -1,0 +1,49 @@
+{
+  "builders": [
+    {
+      "boot_command": [
+        "<tab> biosdevname=0 net.ifnames=0 ",
+        "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-33/ks-x86_64-openstack.cfg<enter>"
+      ],
+      "accelerator": "kvm",
+      "boot_wait": "6s",
+      "disk_size": 3584,
+      "disk_interface": "virtio-scsi",
+      "headless": true,
+      "http_directory": "http",
+      "iso_checksum": "sha256:1f1f018e78f0cc23d08db0c85952344ea5c200e67b672da5b07507c066a52ccf",
+      "iso_url": "{{user `mirror`}}/linux/releases/33/Server/x86_64/iso/Fedora-Server-netinst-x86_64-33-1.2.iso",
+      "output_directory": "packer-fedora-33-x86_64-openstack",
+      "shutdown_command": "echo 'fedora'|sudo -S shutdown -P now",
+      "qemuargs": [
+        [ "-m", "2048M" ],
+        [ "-boot", "strict=on" ]
+      ],
+      "qemu_binary": "/usr/libexec/qemu-kvm",
+      "ssh_password": "fedora",
+      "ssh_port": 22,
+      "ssh_username": "fedora",
+      "ssh_wait_timeout": "10000s",
+      "vnc_bind_address": "0.0.0.0",
+      "type": "qemu",
+      "vm_name": "packer-fedora-33-x86_64-openstack"
+    }
+  ],
+  "provisioners": [
+    {
+      "pause_before": "10s",
+      "execute_command": "echo 'fedora' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+      "scripts": [
+        "scripts/common/sshd.sh",
+        "scripts/fedora/openstack.sh",
+        "scripts/fedora/cleanup.sh",
+        "scripts/common/minimize.sh"
+      ],
+      "type": "shell"
+    }
+  ],
+  "variables": {
+    "mirror": "http://fedora.osuosl.org",
+    "image_name": "Fedora 33"
+  }
+}
