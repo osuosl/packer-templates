@@ -27,9 +27,21 @@ done
 
 [ -z "$TEMPLATE" ] && echo "Error: Template file not set" && exit 1
 
-DIR_NAME="packer-$(basename -s .json "$TEMPLATE")"
-TEMPLATE_NAME="$(basename -s .json "$TEMPLATE")"
-IMAGE_NAME=$(grep vm_name "$TEMPLATE" | awk '{print $2}' | sed -e 's/\"//g' | sed -e 's/,//g')
+TEMPLATE_NAME="$(basename "$TEMPLATE" | sed -E 's/\.(json\.pkr\.hcl|pkr\.hcl|json)$//')"
+# vm_name as the last quoted token on its line -- works for both JSON ("vm_name":
+# "x") and HCL (vm_name = "x"); the old `awk '{print $2}'` returned "=" for HCL.
+IMAGE_NAME="$(grep vm_name "$TEMPLATE" | grep -oE '"[^"]+"' | tail -1 | tr -d '"')"
+# HCL openstack templates set no output_directory, so Packer writes to
+# output-<source name>; the older .json templates set output_directory=packer-<name>.
+case "$TEMPLATE" in
+  *.pkr.hcl)
+    SRC_NAME="$(grep -oE 'source[[:space:]]+"qemu"[[:space:]]+"[^"]+"' "$TEMPLATE" | grep -oE '"[^"]+"' | tail -1 | tr -d '"')"
+    DIR_NAME="output-${SRC_NAME}"
+    ;;
+  *)
+    DIR_NAME="packer-${TEMPLATE_NAME}"
+    ;;
+esac
 FINAL_QCOW_FILE_NAME="${DIR_NAME}/${IMAGE_NAME}-compressed.qcow2"
 FINAL_RAW_FILE_NAME="${DIR_NAME}/${IMAGE_NAME}-converted.raw"
 
@@ -48,11 +60,14 @@ if [ -e "chef/${TEMPLATE_NAME}/Berksfile" ]; then
   berks vendor --delete -b "chef/${TEMPLATE_NAME}/Berksfile" "chef/${TEMPLATE_NAME}/cookbooks"
 fi
 
-# FreeBSD templates install unattended from a remastered ISO that embeds
-# /etc/installerconfig (bsdinstall auto-runs it). Build that custom ISO first.
+# FreeBSD and ArchPOWER templates install unattended from a remastered ISO (neither
+# has a preseed/kickstart-style autoinstaller). Build that custom ISO first.
 case "$(basename "$TEMPLATE")" in
   freebsd-*-openstack*)
     ./bin/remaster_freebsd_iso.sh -t "$TEMPLATE"
+    ;;
+  archpower-*-openstack*)
+    ./bin/remaster_archpower_iso.sh -t "$TEMPLATE"
     ;;
 esac
 
