@@ -12,11 +12,9 @@ variable "image_name" {
   default = "FreeBSD 15.1"
 }
 
-# Little-endian powerpc64le RELEASE media (replaces the old big-endian powerpc64
-# CURRENT snapshot path).
 variable "mirror" {
   type    = string
-  default = "https://download.freebsd.org/ftp/releases/powerpc/powerpc64le/ISO-IMAGES"
+  default = "https://download.freebsd.org/ftp/releases/amd64/amd64/ISO-IMAGES"
 }
 
 variable "release" {
@@ -26,42 +24,30 @@ variable "release" {
 
 # Custom ISO = official disc1.iso + embedded /etc/installerconfig, built by
 # bin/remaster_freebsd_iso.sh (invoked automatically by bin/build_image.sh).
-# QEMU pseries is serial-only (no VGA) so Packer's VNC boot_command cannot drive
-# it; bsdinstall instead auto-runs the embedded installerconfig at boot, so
-# boot_command is empty. See docs/freebsd.md. NOTE: builds only on a native
-# ppc64le KVM node.
+# bsdinstall auto-runs the embedded installerconfig, so boot_command is empty.
 variable "iso_url" {
   type    = string
-  default = "iso/FreeBSD-15.1-RELEASE-powerpc-powerpc64le-custom.iso"
-}
-
-# FreeBSD builds NO official powerpc64le packages, so ppc64le is a base-only image
-# (no cloud-init). Without cloud-init there is no OpenStack SSH-key injection, so
-# seed the freebsd user with a static ("unmanaged") public key to make the image
-# loginnable (sshd is hardened to key-only). Set this in your var-file, e.g.:
-#   ssh_authorized_key = "ssh-ed25519 AAAA... osl-freebsd-ppc64le"
-variable "ssh_authorized_key" {
-  type    = string
-  default = ""
+  default = "iso/FreeBSD-15.1-RELEASE-amd64-custom.iso"
 }
 
 source "qemu" "freebsd-15" {
-  qemu_binary  = "qemu-kvm"
-  machine_type = "pseries"
-  format       = "raw"
-  headless     = true
+  accelerator = "kvm"
+  qemu_binary = "qemu-kvm"
+  format      = "raw"
+  headless    = true
+  memory      = 2048
+  cpus        = 2
 
   iso_url      = var.iso_url
   iso_checksum = "none" # locally built; source ISO is verified during remaster
 
-  disk_interface = "virtio-scsi" # => guest disk da0
+  disk_interface = "virtio-scsi" # => guest disk da0 (matches OpenStack hw_disk_bus=scsi)
   net_device     = "virtio-net"  # => NIC vtnet0
   disk_size      = 6144
 
   boot_command = [] # bsdinstall auto-runs the embedded /etc/installerconfig
   qemuargs = [
-    ["-m", "2048M"],
-    ["-boot", "strict=on"] # CD on first boot only; post-install reboot boots the disk
+    ["-boot", "once=d"] # CD on first boot only; post-install reboot boots the disk
   ]
 
   ssh_username     = "freebsd"
@@ -83,15 +69,12 @@ build {
   ]
 
   provisioner "shell" {
-    execute_command  = "echo 'freebsd' | {{.Vars}} su -m root -c 'sh -eux {{.Path}}'"
-    environment_vars = ["SSH_AUTHORIZED_KEY=${var.ssh_authorized_key}"]
+    execute_command = "echo 'freebsd' | {{.Vars}} su -m root -c 'sh -eux {{.Path}}'"
     scripts = [
-      "scripts/freebsd/libmd_fix.sh",
       "scripts/freebsd/update_freebsd.sh",
       "scripts/freebsd/freebsd_update.sh",
       "scripts/freebsd/postinstall_freebsd.sh",
       "scripts/freebsd/sudoers_freebsd.sh",
-      "scripts/freebsd/seed_ssh_key.sh",
       "scripts/freebsd/cleanup_freebsd.sh",
       "scripts/freebsd/minimize_freebsd.sh",
     ]

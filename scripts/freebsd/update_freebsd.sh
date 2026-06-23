@@ -1,5 +1,12 @@
 #!/bin/sh -eux
 
-# Update FreeBSD
-# NOTE: the install action fails if there are no updates so || true it
-env ASSUME_ALWAYS_YES=true pkg update;
+# Update the pkg catalog. Skipped on powerpc64le, which has no pkg repository
+# (FreeBSD builds no official powerpc64le packages, so pkg can't bootstrap).
+case "$(uname -m)" in
+powerpc)
+  echo "powerpc64le has no pkg repo; skipping pkg update"
+  ;;
+*)
+  env ASSUME_ALWAYS_YES=true pkg update
+  ;;
+esac

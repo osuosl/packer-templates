@@ -48,6 +48,14 @@ if [ -e "chef/${TEMPLATE_NAME}/Berksfile" ]; then
   berks vendor --delete -b "chef/${TEMPLATE_NAME}/Berksfile" "chef/${TEMPLATE_NAME}/cookbooks"
 fi
 
+# FreeBSD templates install unattended from a remastered ISO that embeds
+# /etc/installerconfig (bsdinstall auto-runs it). Build that custom ISO first.
+case "$(basename "$TEMPLATE")" in
+  freebsd-*-openstack*)
+    ./bin/remaster_freebsd_iso.sh -t "$TEMPLATE"
+    ;;
+esac
+
 packer build -on-error=abort -color=false -force "$(basename "$TEMPLATE")"
 
 qemu-img convert -O qcow2 -c "${DIR_NAME}/${IMAGE_NAME}" "$FINAL_QCOW_FILE_NAME"

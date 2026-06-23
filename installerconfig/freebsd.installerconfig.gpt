@@ -1,0 +1,38 @@
+# FreeBSD bsdinstall scripted install -- GPT variant (amd64 + aarch64).
+#
+# This file is embedded at /etc/installerconfig in a remastered disc1.iso by
+# bin/remaster_freebsd_iso.sh. FreeBSD's installer auto-runs /etc/installerconfig
+# at boot with zero keystrokes (see startbsdinstall(8)) and reboots when done.
+#
+# UFS, no swap (OSL image standard), root is the only data partition (last on the
+# disk) so /etc/rc.d/growfs can expand it on first boot. bsdinstall auto-creates
+# the platform boot partitions: amd64 -> BIOS freebsd-boot + UEFI efi; arm64 -> efi.
+PARTITIONS="da0 GPT { auto freebsd-ufs / }"
+DISTRIBUTIONS="kernel.txz base.txz"
+export BSDINSTALL_DISTDIR="/usr/freebsd-dist"   # dist sets from local media, not network
+export nonInteractive="YES"
+
+#!/bin/sh
+set -e
+
+# Accounts (Packer build only; cloud-init injects the real key on deploy).
+# root password 'freebsd' is used by Packer's su-based shutdown_command.
+echo "freebsd" | pw usermod root -h 0
+echo "freebsd" | pw useradd -n freebsd -c "FreeBSD User" -m -s /bin/sh -G wheel -h 0
+
+# Networking + services
+sysrc ifconfig_DEFAULT="SYNCDHCP"   # NIC-name-agnostic; blocks boot until a lease
+sysrc sshd_enable="YES"
+sysrc clear_tmp_enable="YES"
+sysrc dumpdev="AUTO"
+
+# First-boot root filesystem growth (root is the last partition).
+sysrc growfs_enable="YES"
+touch /firstboot
+
+# Temporary password SSH so Packer can connect and provision. cleanup_freebsd.sh
+# tightens this back to key-only at the end of the build.
+printf 'PermitRootLogin yes\nPasswordAuthentication yes\nUseDNS no\n' >> /etc/ssh/sshd_config
+
+# NOTE: do NOT reboot/poweroff here -- bsdinstall reboots automatically after a
+# successful scripted install; -boot once=d makes that reboot land on the disk.
