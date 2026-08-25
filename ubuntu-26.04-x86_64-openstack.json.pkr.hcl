@@ -7,9 +7,11 @@ packer {
   }
 }
 
+# TODO: revert to https://ubuntu.osuosl.org/releases once 26.04.1 is out;
+# the GA ISO kernel (7.0.0-14) oopses in overlayfs during curtin's extract
 variable "mirror" {
   type    = string
-  default = "https://ubuntu.osuosl.org/releases"
+  default = "https://cdimage.ubuntu.com/ubuntu-server/resolute/daily-live/current"
 }
 
 variable "release" {
@@ -45,8 +47,8 @@ source "qemu" "ubuntu-2604" {
   format           = "raw"
   headless         = true
   http_directory   = "http"
-  iso_checksum     = "file:${var.mirror}/${var.release}/SHA256SUMS"
-  iso_url          = "${var.mirror}/${var.release}/ubuntu-${var.release}-live-server-amd64.iso"
+  iso_checksum     = "file:${var.mirror}/SHA256SUMS"
+  iso_url          = "${var.mirror}/resolute-live-server-amd64.iso"
   qemu_binary      = "qemu-kvm"
   qemuargs         = [
     [
