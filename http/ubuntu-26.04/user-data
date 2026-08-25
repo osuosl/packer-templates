@@ -10,7 +10,8 @@ autoinstall:
     # otherwise packer tries to connect and exceed max attempts:
     - systemctl stop ssh.service
     - systemctl stop ssh.socket
-    - systemctl restart systemd-timesyncd
+    # 26.04 uses chrony instead of systemd-timesyncd
+    - systemctl restart chrony.service || systemctl restart systemd-timesyncd || true
   late-commands:
     - echo "PermitRootLogin yes" >> /target/etc/ssh/sshd_config
     - curtin in-target --target=/target -- passwd -q -u root
