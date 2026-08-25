@@ -27,7 +27,7 @@ variable "osuadmin_passwd" {
 
 source "qemu" "ubuntu-2604" {
   accelerator      = "kvm"
-  boot_key_interval = "60ms"
+  boot_key_interval = "100ms"
   boot_command     = [
       "<wait>",
       "c<enter>",
