@@ -51,7 +51,7 @@ source "qemu" "ubuntu-2604" {
   qemuargs         = [
     [
       "-m",
-      "2048M"
+      "4096M"
     ],
     [
       "-boot",
