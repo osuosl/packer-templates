@@ -83,7 +83,7 @@ build {
   }
 
   provisioner "shell" {
-    execute_command = "{{ .Vars }} sudo -S -E bash '{{ .Path }}'"
+    execute_command = "{{ .Vars }} bash '{{ .Path }}'"
     scripts         = [
       "scripts/common/install-cinc.sh"
     ]
@@ -105,7 +105,7 @@ build {
   }
 
   provisioner "shell" {
-    execute_command = "{{ .Vars }} sudo -S -E bash '{{ .Path }}'"
+    execute_command = "{{ .Vars }} bash '{{ .Path }}'"
     environment_vars = [
       "OSUADMIN_PASSWD=${var.osuadmin_passwd}"
     ]
