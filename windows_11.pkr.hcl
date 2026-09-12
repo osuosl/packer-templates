@@ -18,6 +18,7 @@ variable "disk_size" {
 
 variable "iso_url" {
   type    = string
+  # Evaluation media: see docs/windows.md for the 90-day licensing caveat
   # Download url's found at https://www.microsoft.com/en-us/evalcenter/download-windows-11-enterprise
   default = "https://software-static.download.prss.microsoft.com/dbazure/888969d5-f34g-4e03-ac9d-1f9786c66749/26100.1742.240906-0331.ge_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
 }
