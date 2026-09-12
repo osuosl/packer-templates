@@ -124,18 +124,11 @@ catch
     }
 }
 
-# NB even after cleaning up the WinSxS folder the "Backups and Disabled Features"
-#    field of the analysis report will display a non-zero number because the
-#    disabled features packages are still on disk. you can remove them with:
-try {
-    Get-WindowsOptionalFeature -Online | Where-Object {$_.State -eq 'Disabled'} | ForEach-Object {
-        Write-Host "Removing feature $($_.FeatureName)..."
-        dism.exe /Online /Quiet /Disable-Feature "/FeatureName:$($_.FeatureName)" /Remove
-    }
-}
-catch { }
+# Fail the build if any feature we expect to be installable later had its payload stripped
+$stripped = Get-WindowsOptionalFeature -Online |
+    Where-Object { $_.FeatureName -in 'Containers','Microsoft-Hyper-V','Microsoft-Hyper-V-All' -and $_.State -eq 'DisabledWithPayloadRemoved' }
+if ($stripped) { throw "Feature payload missing: $($stripped.FeatureName -join ', ')" }
 
-#    NB a removed feature can still be installed from other sources (e.g. windows update).
 Write-Host 'Analyzing the WinSxS folder...'
 try {
     dism.exe /Online /Cleanup-Image /AnalyzeComponentStore
