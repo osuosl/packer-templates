@@ -103,7 +103,6 @@ build {
       "exclude:$_.Title -like '*Preview*'",
       "include:$true",
     ]
-    update_limit = 25
   }
   provisioner "windows-restart" {
     restart_timeout = "30m"
@@ -147,5 +146,9 @@ build {
       "scripts/windows/cleanup.ps1",
       "scripts/windows/optimize.ps1"
     ]
+  }
+
+  post-processor "shell-local" {
+    inline = ["qemu-img convert -O qcow2 -c output-windows_2019/windows_2019 output-windows_2019/windows_2019-compressed.qcow2"]
   }
 }
