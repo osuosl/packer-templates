@@ -43,13 +43,6 @@ Write-Host 'Clean all of the event logs'
     wevtutil clear-log $_
 }
 
-Write-Host "Cleaning Temp Files..."
-try {
-  Takeown /d Y /R /f "C:\Windows\Temp\*"
-  Icacls "C:\Windows\Temp\*" /GRANT:r administrators:F /T /c /q  2>&1
-  Remove-Item "C:\Windows\Temp\*" -Recurse -Force -ErrorAction SilentlyContinue
-} catch { }
-
 #
 # remove temporary files.
 # NB we ignore the packer generated files so it won't complain in the output.
@@ -135,7 +128,7 @@ try {
 }
 catch { }
 
-Write-Host 'Remove pagefile, it will get created on boot next time.'
+Write-Host 'Dropping the pagefile so the zero-fill can reclaim its space; finalize.ps1 restores it after the reboot.'
 try {
     New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management' -Name PagingFiles -Value '' -Force
 }

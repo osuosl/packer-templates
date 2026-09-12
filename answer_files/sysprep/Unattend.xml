@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Sysprep answer file shared by the Windows Server 2022/2019 and Windows 11 templates.
+  Uploaded to C:\Windows\Setup\Scripts\sysprep-unattend.xml and used by the template shutdown_command.
+  The specialize command is copied from cloudbase-init's shipped conf\Unattend.xml; the OOBE block
+  mirrors answer_files/*/Autounattend.xml because cloudbase-init's file lacks the client-SKU OOBE skips.
+  Only components that exist on both Server and client SKUs may be used here.
+-->
+<unattend xmlns="urn:schemas-microsoft-com:unattend" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <settings pass="generalize">
+        <component name="Microsoft-Windows-PnpSysprep" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+            <!-- true keeps the virtio NIC through generalize so Packer's WinRM session survives; KVM to KVM needs no re-detection -->
+            <PersistAllDeviceInstalls>true</PersistAllDeviceInstalls>
+            <DoNotCleanUpNonPresentDevices>false</DoNotCleanUpNonPresentDevices>
+        </component>
+    </settings>
+    <settings pass="specialize">
+        <component name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+            <RunSynchronous>
+                <RunSynchronousCommand wcm:action="add">
+                    <Order>1</Order>
+                    <Path>cmd.exe /c ""C:\Program Files\Cloudbase Solutions\Cloudbase-Init\Python\Scripts\cloudbase-init.exe" --config-file "C:\Program Files\Cloudbase Solutions\Cloudbase-Init\conf\cloudbase-init-unattend.conf" &amp;&amp; exit 1 || exit 2"</Path>
+                    <Description>Run Cloudbase-Init to set the hostname</Description>
+                    <WillReboot>OnRequest</WillReboot>
+                </RunSynchronousCommand>
+            </RunSynchronous>
+        </component>
+    </settings>
+    <settings pass="oobeSystem">
+        <component name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+            <InputLocale>en-US</InputLocale>
+            <SystemLocale>en-US</SystemLocale>
+            <UILanguage>en-US</UILanguage>
+            <UserLocale>en-US</UserLocale>
+        </component>
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+            <OOBE>
+                <HideEULAPage>true</HideEULAPage>
+                <HideLocalAccountScreen>true</HideLocalAccountScreen>
+                <HideOEMRegistrationScreen>true</HideOEMRegistrationScreen>
+                <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
+                <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
+                <NetworkLocation>Work</NetworkLocation>
+                <ProtectYourPC>3</ProtectYourPC>
+                <SkipMachineOOBE>true</SkipMachineOOBE>
+                <SkipUserOOBE>true</SkipUserOOBE>
+                <VMModeOptimizations>
+                    <SkipAdministratorProfileRemoval>true</SkipAdministratorProfileRemoval>
+                    <SkipNotifyUILanguageChange>true</SkipNotifyUILanguageChange>
+                    <SkipWinREInitialization>true</SkipWinREInitialization>
+                </VMModeOptimizations>
+            </OOBE>
+            <TimeZone>UTC</TimeZone>
+        </component>
+    </settings>
+</unattend>

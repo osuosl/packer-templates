@@ -58,8 +58,9 @@ source "qemu" "windows_11" {
     ["-drive", "file=output-{{ .Name }}/{{ .Name }},if=virtio,cache=writeback,discard=ignore,format=qcow2,index=1"],
     ["-boot", "order=c,order=d"]
   ]
-  shutdown_command  = "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\""
-  shutdown_timeout  = "15m"
+  # Sysprep must be the last WinRM command: after generalize WinRM refuses new shells, but the one running sysprep keeps working
+  shutdown_command  = "C:\\Windows\\System32\\Sysprep\\sysprep.exe /generalize /oobe /shutdown /quiet /unattend:C:\\Windows\\Setup\\Scripts\\sysprep-unattend.xml"
+  shutdown_timeout  = "30m"
   vm_name           = "windows_11"
   headless          = true
   vnc_port_min      = 5901
@@ -142,9 +143,29 @@ build {
     elevated_user     = "Admin"
     scripts = [
       "scripts/windows/install_cloudbase_init.ps1",
-      "scripts/windows/reset-network-profiles.ps1",
       "scripts/windows/cleanup.ps1",
-      "scripts/windows/optimize.ps1"
+    ]
+  }
+  # Reboot so the pagefile dropped by cleanup.ps1 is gone before optimize.ps1 zero-fills
+  provisioner "windows-restart" {
+    restart_timeout = "30m"
+  }
+  # Hardens WinRM on the first boot of each deployed instance (see the script header)
+  provisioner "file" {
+    source      = "scripts/windows/SetupComplete.cmd"
+    destination = "C:\\Windows\\Setup\\Scripts\\SetupComplete.cmd"
+  }
+  # Shared sysprep answer file used by the shutdown_command
+  provisioner "file" {
+    source      = "answer_files/sysprep/Unattend.xml"
+    destination = "C:\\Windows\\Setup\\Scripts\\sysprep-unattend.xml"
+  }
+  provisioner "powershell" {
+    elevated_password = "Admin"
+    elevated_user     = "Admin"
+    scripts = [
+      "scripts/windows/optimize.ps1",
+      "scripts/windows/finalize.ps1",
     ]
   }
 
