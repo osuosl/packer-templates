@@ -18,6 +18,7 @@ variable "disk_size" {
 
 variable "iso_url" {
   type    = string
+  # Evaluation media: see docs/windows.md for the 180-day licensing caveat
   # Download url's found at https://www.microsoft.com/en-us/evalcenter/download-windows-server-2019
   default = "https://software-static.download.prss.microsoft.com/dbazure/988969d5-f34g-4e03-ac9d-1f9786c66749/17763.3650.221105-1748.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_en-us.iso"
 }
@@ -58,8 +59,9 @@ source "qemu" "windows_2019" {
     ["-drive", "file=output-{{ .Name }}/{{ .Name }},if=virtio,cache=writeback,discard=ignore,format=qcow2,index=1"],
     ["-boot", "order=c,order=d"]
   ]
-  shutdown_command  = "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\""
-  shutdown_timeout  = "15m"
+  # Sysprep must be the last WinRM command: after generalize WinRM refuses new shells, but the one running sysprep keeps working
+  shutdown_command  = "C:\\Windows\\System32\\Sysprep\\sysprep.exe /generalize /oobe /shutdown /quiet /unattend:C:\\Windows\\Setup\\Scripts\\sysprep-unattend.xml"
+  shutdown_timeout  = "30m"
   vm_name           = "windows_2019"
   headless          = true
   vnc_port_min      = 5901
@@ -103,7 +105,6 @@ build {
       "exclude:$_.Title -like '*Preview*'",
       "include:$true",
     ]
-    update_limit = 25
   }
   provisioner "windows-restart" {
     restart_timeout = "30m"
@@ -143,9 +144,33 @@ build {
     elevated_user     = "Admin"
     scripts = [
       "scripts/windows/install_cloudbase_init.ps1",
-      "scripts/windows/reset-network-profiles.ps1",
       "scripts/windows/cleanup.ps1",
-      "scripts/windows/optimize.ps1"
     ]
+  }
+  # Reboot so the pagefile dropped by cleanup.ps1 is gone before optimize.ps1 zero-fills
+  provisioner "windows-restart" {
+    restart_timeout = "30m"
+  }
+  # Hardens WinRM on the first boot of each deployed instance (see the script header)
+  provisioner "file" {
+    source      = "scripts/windows/SetupComplete.cmd"
+    destination = "C:\\Windows\\Setup\\Scripts\\SetupComplete.cmd"
+  }
+  # Shared sysprep answer file used by the shutdown_command
+  provisioner "file" {
+    source      = "answer_files/sysprep/Unattend.xml"
+    destination = "C:\\Windows\\Setup\\Scripts\\sysprep-unattend.xml"
+  }
+  provisioner "powershell" {
+    elevated_password = "Admin"
+    elevated_user     = "Admin"
+    scripts = [
+      "scripts/windows/optimize.ps1",
+      "scripts/windows/finalize.ps1",
+    ]
+  }
+
+  post-processor "shell-local" {
+    inline = ["qemu-img convert -O qcow2 -c output-windows_2019/windows_2019 output-windows_2019/windows_2019-compressed.qcow2"]
   }
 }

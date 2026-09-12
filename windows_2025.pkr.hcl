@@ -19,8 +19,8 @@ variable "disk_size" {
 variable "iso_url" {
   type    = string
   # Evaluation media: see docs/windows.md for the 180-day licensing caveat
-  # Download url's found at https://www.microsoft.com/en-us/evalcenter/download-windows-server-2022
-  default = "https://software-static.download.prss.microsoft.com/sg/download/888969d5-f34g-4e03-ac9d-1f9786c66749/SERVER_EVAL_x64FRE_en-us.iso"
+  # Download url's found at https://www.microsoft.com/en-us/evalcenter/download-windows-server-2025
+  default = "https://software-static.download.prss.microsoft.com/dbazure/998969d5-f34g-4e03-ac9d-1f9786c66749/26100.32230.260111-0550.lt_release_svc_refresh_SERVER_EVAL_x64FRE_en-us.iso"
 }
 
 variable "winrm_timeout" {
@@ -29,10 +29,10 @@ variable "winrm_timeout" {
 }
 
 locals {
-  iso_target_path = "${path.root}/builds/iso/windows-2022-${substr(sha256(var.iso_url), 0, 8)}.iso"
+  iso_target_path = "${path.root}/builds/iso/windows-2025-${substr(sha256(var.iso_url), 0, 8)}.iso"
 }
 
-source "qemu" "windows_2022" {
+source "qemu" "windows_2025" {
   accelerator       = "kvm"
   boot_wait         = "10s"
   cpus              = 4
@@ -41,15 +41,15 @@ source "qemu" "windows_2022" {
   disk_interface    = "virtio-scsi"
   disk_size         = "${var.disk_size}"
   floppy_files          = [
-    "answer_files/2022/Autounattend.xml",
+    "answer_files/2025/Autounattend.xml",
     "scripts/windows/install_virtio_drivers.ps1",
   ]
   format            = "qcow2"
-  iso_checksum      = "3e4fa6d8507b554856fc9ca6079cc402df11a8b79344871669f0251535255325"
+  iso_checksum      = "7b052573ba7894c9924e3e87ba732ccd354d18cb75a883efa9b900ea125bfd51"
   iso_url           = "${var.iso_url}"
   iso_target_path   = local.iso_target_path
   memory            = 8192
-  output_directory  = "output-windows_2022"
+  output_directory  = "output-windows_2025"
   qemu_binary       = "qemu-kvm"
   qemuargs          = [
     ["-device", "qemu-xhci"],
@@ -62,7 +62,7 @@ source "qemu" "windows_2022" {
   # Sysprep must be the last WinRM command: after generalize WinRM refuses new shells, but the one running sysprep keeps working
   shutdown_command  = "C:\\Windows\\System32\\Sysprep\\sysprep.exe /generalize /oobe /shutdown /quiet /unattend:C:\\Windows\\Setup\\Scripts\\sysprep-unattend.xml"
   shutdown_timeout  = "30m"
-  vm_name           = "windows_2022"
+  vm_name           = "windows_2025"
   headless          = true
   vnc_port_min      = 5901
   vnc_port_max      = 5901
@@ -73,7 +73,7 @@ source "qemu" "windows_2022" {
 }
 
 build {
-  sources = ["source.qemu.windows_2022"]
+  sources = ["source.qemu.windows_2025"]
 
   # Initial provisioning only — no component store modifications before updates
   provisioner "powershell" {
@@ -171,6 +171,6 @@ build {
   }
 
   post-processor "shell-local" {
-    inline = ["qemu-img convert -O qcow2 -c output-windows_2022/windows_2022 output-windows_2022/windows_2022-compressed.qcow2"]
+    inline = ["qemu-img convert -O qcow2 -c output-windows_2025/windows_2025 output-windows_2025/windows_2025-compressed.qcow2"]
   }
 }

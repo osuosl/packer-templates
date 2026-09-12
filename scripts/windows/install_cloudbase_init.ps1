@@ -49,15 +49,13 @@ try {
 # /qn           - Quiet mode, no UI
 # /L*v          - Verbose logging
 # LOGGINGSERIALPORTNAME="COM1" - Sets the serial port for logging (for OpenStack console)
-# RUNSERVICEASLOCALSYSTEM=1    - Runs the service under the LocalSystem account
-# SYSPREP_INSTALL=1            - Integrates with Sysprep for image generalization
+# RUN_SERVICE_AS_LOCAL_SYSTEM=1 - Runs the service under the LocalSystem account
 # REBOOT=ReallySuppress        - Suppresses reboots during installation
 $msiArgs = @(
     "/qn"
     "/L*v `"$env:TEMP\CloudbaseInit_InstallLog.log`""
     "LOGGINGSERIALPORTNAME=`"COM1`""
-    "RUNSERVICEASLOCALSYSTEM=1"
-    "SYSPREP_INSTALL=1"
+    "RUN_SERVICE_AS_LOCAL_SYSTEM=1"
     "REBOOT=ReallySuppress"
 )
 
