@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Sysprep answer file shared by the Windows Server 2022/2019 and Windows 11 templates.
+  Sysprep answer file shared by the Windows Server 2025/2022/2019 and Windows 11 templates.
   Uploaded to C:\Windows\Setup\Scripts\sysprep-unattend.xml and used by the template shutdown_command.
   The specialize command is copied from cloudbase-init's shipped conf\Unattend.xml; the OOBE block
   mirrors answer_files/*/Autounattend.xml because cloudbase-init's file lacks the client-SKU OOBE skips.

@@ -1,6 +1,7 @@
 # Windows images
 
-Templates: `windows_2022.pkr.hcl`, `windows_2019.pkr.hcl`, `windows_11.pkr.hcl`.
+Templates: `windows_2025.pkr.hcl`, `windows_2022.pkr.hcl`, `windows_2019.pkr.hcl`,
+`windows_11.pkr.hcl`.
 They share `answer_files/<version>/Autounattend.xml` and everything under
 `scripts/windows/`.
 
@@ -33,7 +34,7 @@ Upload with the qcow2 disk format and the Windows-specific properties:
 
 ## Licensing: these are evaluation images
 
-All three templates install from Microsoft's public **evaluation** ISOs with no
+All four templates install from Microsoft's public **evaluation** ISOs with no
 product key and activation skipped. Evaluation installs are licensed for 180 days on Server and 90 days on Windows 11.
 After that Windows warns, then shuts the VM down every hour. `slmgr /rearm` can
 extend the period a limited number of times, but this is not a production license.
@@ -91,7 +92,7 @@ is in `C:\Windows\System32\Sysprep\Panther\setuperr.log` (the MRTGeneralize
 - All provisioned Appx packages are removed during the build (`remove-apps.ps1`)
   and `finalize.ps1` removes the per-user copies so sysprep does not refuse to
   run. On Windows 11 that means no Store, winget, Terminal or Notepad in the
-  image; Server 2022/2019 ship no Store apps so they are unaffected.
+  image; Server 2025/2022/2019 ship no Store apps so they are unaffected.
 - Sysprep generalize consumes one rearm, which also restarts the evaluation
   clock on each deployed instance.
 - Windows 11 is the Enterprise evaluation; there is no edition conversion path
