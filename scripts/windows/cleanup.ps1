@@ -43,13 +43,6 @@ Write-Host 'Clean all of the event logs'
     wevtutil clear-log $_
 }
 
-Write-Host "Cleaning Temp Files..."
-try {
-  Takeown /d Y /R /f "C:\Windows\Temp\*"
-  Icacls "C:\Windows\Temp\*" /GRANT:r administrators:F /T /c /q  2>&1
-  Remove-Item "C:\Windows\Temp\*" -Recurse -Force -ErrorAction SilentlyContinue
-} catch { }
-
 #
 # remove temporary files.
 # NB we ignore the packer generated files so it won't complain in the output.
@@ -124,25 +117,18 @@ catch
     }
 }
 
-# NB even after cleaning up the WinSxS folder the "Backups and Disabled Features"
-#    field of the analysis report will display a non-zero number because the
-#    disabled features packages are still on disk. you can remove them with:
-try {
-    Get-WindowsOptionalFeature -Online | Where-Object {$_.State -eq 'Disabled'} | ForEach-Object {
-        Write-Host "Removing feature $($_.FeatureName)..."
-        dism.exe /Online /Quiet /Disable-Feature "/FeatureName:$($_.FeatureName)" /Remove
-    }
-}
-catch { }
+# Fail the build if any feature we expect to be installable later had its payload stripped
+$stripped = Get-WindowsOptionalFeature -Online |
+    Where-Object { $_.FeatureName -in 'Containers','Microsoft-Hyper-V','Microsoft-Hyper-V-All' -and $_.State -eq 'DisabledWithPayloadRemoved' }
+if ($stripped) { throw "Feature payload missing: $($stripped.FeatureName -join ', ')" }
 
-#    NB a removed feature can still be installed from other sources (e.g. windows update).
 Write-Host 'Analyzing the WinSxS folder...'
 try {
     dism.exe /Online /Cleanup-Image /AnalyzeComponentStore
 }
 catch { }
 
-Write-Host 'Remove pagefile, it will get created on boot next time.'
+Write-Host 'Dropping the pagefile so the zero-fill can reclaim its space; finalize.ps1 restores it after the reboot.'
 try {
     New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management' -Name PagingFiles -Value '' -Force
 }

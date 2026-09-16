@@ -30,3 +30,6 @@ Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters
 
 Write-Host 'Disabling the Windows Boot Manager menu...'
 bcdedit /set '{bootmgr}' displaybootmenu no
+
+Write-Host 'Creating the Setup\Scripts directory for SetupComplete.cmd...'
+New-Item -ItemType Directory -Force -Path "$env:windir\Setup\Scripts" | Out-Null
